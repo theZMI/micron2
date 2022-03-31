@@ -1,0 +1,21 @@
+{
+  "name": "micron/php",
+  "description": "Micron composer libs",
+  "require": {
+    "php": ">=7.4",
+    "ext-mbstring": "*",
+    "ext-json": "*",
+    "ext-simplexml": "*",
+    "ext-curl": "*",
+    "ext-zlib": "*",
+    "nyholm/dsn": "^2.0",
+    "thezmi/image-orientation-fix": "dev-master",
+    "thezmi/dbsimple": "dev-master",
+    "thezmi/dbsimple-models": "dev-master",
+    "thezmi/output-formats": "dev-master",
+    "thezmi/filesys": "dev-master",
+    "thezmi/filelogger": "dev-master",
+    "smottt/wideimage": "^1.1",
+    "cbschuld/browser.php": "^1.9"
+  }
+}

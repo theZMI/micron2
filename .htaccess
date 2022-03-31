@@ -1,0 +1,30 @@
+# Выключить обработку модулем mod_charset
+<IfModule mod_charset.c>
+    CharsetDisable On
+</IfModule>
+
+# Выставить кодировку по умолчанию стандартными средствами apache
+AddDefaultCharset UTF-8
+
+# Не показывать файлы в пустом каталоге
+Options -Indexes
+
+# Запрещаем запуск CGI-скриптов
+Options -ExecCGI -Indexes
+
+# По умолчанию запускать index.php в папке
+DirectoryIndex index.php
+
+# Все запросы (кроме заданного списка исключений) вести через /index.php
+RewriteEngine on
+RewriteBase /
+RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|api/.*)
+RewriteRule ^(.*)$ /index.php?micron_query=$1 [L,QSA]
+
+# Максимальный размер файла для загрузки - 50Мб
+php_value upload_max_filesize 50M
+php_value post_max_size 50M
+
+# Удаляю заголовок запрещающий загружать страницу в iframe
+# Header always unset X-Frame-Options
+# Header set X-App-Special-Timer "Request loaded at %D microseconds"

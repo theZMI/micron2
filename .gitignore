@@ -1,0 +1,14 @@
+*~
+.DS_Store
+composer.lock
+.idea
+/_env.php
+/tmp/*
+/upl/*
+/vendor
+/db_backups/*
+/i/ts/package-lock.json
+/i/ts/node_modules
+/i/webpack/dist
+/i/webpack/package-lock.json
+/i/webpack/node_modules

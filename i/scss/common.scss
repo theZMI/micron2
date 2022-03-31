@@ -1,0 +1,136 @@
+@import "includes";
+
+
+// Устанавливаем основные настройки по шрифтам
+body {
+  font-family: $font-regular;
+
+  h1, h2, h3 {
+    font-family: $font-condensed;
+  }
+}
+
+
+// Стили страницы что бы меню было в самом верху, а футер внизу
+html {
+  height: 100%;
+  min-width: $site-min-width;
+
+  body {
+    height: 100%;
+    padding-top: $site-menu-height;
+    min-width: $site-min-width;
+    overflow-y: scroll;
+  }
+}
+
+#wrapper {
+  min-height: 100%;
+
+  // Если нужно что бы футер был ниже страницы и для его просмотра требовалось чуть-чуть мотнуть страницу
+  height: auto;
+  margin: 0 auto;
+
+  // Если нужно что бы футер был не ниже контента, а просто всегда внизу страницы:
+  //margin: 0 auto -1 * $site-footer-height;
+  //padding-bottom: $site-footer-height + 1px;
+}
+
+#footer {
+  min-height: $site-footer-height;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 1px solid #EEE;
+  background: #FFF;
+  font-size: 13px;
+  color: $gray-600;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+
+  a {
+    color: $gray-600;
+    transition: all 150ms linear;
+    text-decoration: none;
+    display: inline-block;
+    padding: 2.5px 0;
+    margin: 2.5px 15px 2.5px 0;
+
+    > span {
+      border-top: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+    }
+
+    &:hover, &:active, &:focus {
+      color: #000;
+      text-decoration: none;
+      border-bottom: 1px solid;
+    }
+  }
+}
+
+
+// На больших экранах сделать отступ больше для меню и футера
+@include media-breakpoint-up(lg) {
+  .container-fluid {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+
+// Главное меню
+#navbarMainMenu {
+  transition: all 250ms linear;
+  background: #FFF;
+  border-bottom: 1px solid #EEE;
+
+  &.menu-in-move,
+  &.menu-is-open {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &.bg-light {
+    background-color: $site-background !important;
+
+    .nav-link {
+      color: #000;
+      word-spacing: 3px;
+      min-width: 55px;
+      text-align: left;
+      outline: none !important;
+      box-shadow: none;
+
+      @include media-breakpoint-down(lg) {
+        margin-top: 7.5px;
+        margin-bottom: 7.5px;
+      }
+
+      @include media-breakpoint-up(lg) {
+        padding-right: 30px;
+      }
+
+      > span {
+        border-top: 1px solid #FFF;
+        border-bottom: 1px solid #FFF;
+        padding-top: 7.5px;
+        padding-bottom: 7.5px;
+        transition: all 150ms linear;
+      }
+
+      .badge {
+        min-width: 20px;
+        font-size: 11px;
+        right: -2px !important;
+      }
+
+      &.is-important {
+        color: $danger;
+      }
+
+      &.active, &:hover, &:active, &:focus {
+        > span {
+          border-bottom: 1px solid;
+        }
+      }
+    }
+  }
+}
