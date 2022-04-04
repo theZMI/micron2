@@ -1,6 +1,6 @@
 <?php
 
-echo "micron2:";
-
-Xmp( GetDefaultDb()->query("SHOW TABLES") );
-die;
+//echo "micron2:";
+//
+//Xmp( GetDefaultDb()->query("SHOW TABLES") );
+//die;
