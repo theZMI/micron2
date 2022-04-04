@@ -1,47 +1,38 @@
 const path = require('path')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetWebpackPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserWebpackPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
-const onceImporter = require('node-sass-once-importer')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const CssExtractor = require('mini-css-extract-plugin')
+const CssMinimizer = require('css-minimizer-webpack-plugin') // Minify css
+const TerserWebpackPlugin = require('terser-webpack-plugin') // Minify js
+const { CleanWebpackPlugin } = require('clean-webpack-plugin') // Clean old compiled files
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer') // Analyze of compiled files
 
-const isDev = process.env.NODE_ENV === 'development'
-const isProd = !isDev
+const isProduction = process.env.NODE_ENV === 'production'
 
 const optimization = () => {
     const config = {
-        splitChunks: {
-            chunks: 'all'
-        }
-    }
-
-    if (isProd) {
-        config.minimizer = [
-            new OptimizeCssAssetWebpackPlugin(),
-            new TerserWebpackPlugin()
+        minimize: true,
+        minimizer: [
+            new CssMinimizer()
         ]
     }
-
+    if (isProduction) {
+        config.minimizer.push(
+            new TerserWebpackPlugin()
+        )
+    }
     return config
 }
 
 const cssLoaders = extra => {
     const loaders = [
-        {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-                hmr: isDev,
-                reloadAll: true
-            },
-        },
+        'style-loader',
+        CssExtractor.loader,
         'css-loader',
         {
             loader: 'postcss-loader',
             options: {
                 postcssOptions: {
-                    plugins: function () {
+                    plugins: () => {
                         return [
                             require('autoprefixer')
                         ]
@@ -50,60 +41,55 @@ const cssLoaders = extra => {
             }
         }
     ]
-
     if (extra) {
         loaders.push(extra)
     }
-
     return loaders
 }
 
 const babelOptions = preset => {
     const opts = {
         presets: [
-            '@babel/preset-env'
+            [
+                '@babel/preset-env',
+                {
+                    targets: {
+                        node: '8'
+                    }
+                }
+            ]
         ],
         plugins: [
             '@babel/plugin-proposal-class-properties'
         ]
     }
-
     if (preset) {
         opts.presets.push(preset)
     }
-
     return opts
 }
 
-const jsLoaders = () => {
-    const loaders = [{
+const jsLoaders = preset => {
+    return [{
         loader: 'babel-loader',
-        options: babelOptions()
+        options: babelOptions(preset)
     }]
-
-    if (isDev) {
-        loaders.push('eslint-loader')
-    }
-
-    return loaders
 }
 
 const plugins = () => {
     const plugins = [
         new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
+            $: 'jquery',
+            jQuery: 'jquery'
         }),
         new CleanWebpackPlugin(),
-        new MiniCssExtractPlugin({
+        new CssExtractor({
             filename: `[name].css`
         })
     ]
-
-    if (isProd) {
+    if (isProduction) {
         plugins.push(new BundleAnalyzerPlugin())
     }
-
     return plugins
 }
 
@@ -133,11 +119,6 @@ module.exports = {
         }
     },
     optimization: optimization(),
-    devServer: {
-        port: 4200,
-        hot: isDev
-    },
-    devtool: isDev ? 'source-map' : '',
     plugins: plugins(),
     module: {
         rules: [
@@ -151,14 +132,7 @@ module.exports = {
             },
             {
                 test: /\.s[ac]ss$/,
-                use: cssLoaders({
-                    loader: 'sass-loader',
-                    options: {
-                        sassOptions: {
-                            importer: onceImporter()
-                        }
-                    }
-                })
+                use: cssLoaders('sass-loader')
             },
             {
                 test: /\.js$/,
@@ -168,10 +142,7 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                loader: {
-                    loader: 'babel-loader',
-                    options: babelOptions('@babel/preset-typescript')
-                }
+                use: jsLoaders('@babel/preset-typescript'),
             },
             {
                 test: /\.(png|jpg|jpeg|svg|gif)$/,

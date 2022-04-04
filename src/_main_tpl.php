@@ -19,13 +19,8 @@ array_walk(
 AutoTitle($content);
 
 $cssFiles = [
-    'i/webpack/dist/vendors~app.css',
     'i/webpack/dist/app.css'
 ];
-$cssFiles = array_filter($cssFiles, fn($file) => is_readable(BASEPATH . $file));
-
 $jsFiles = [
-    'i/webpack/dist/vendors~app.js',
     'i/webpack/dist/app.js'
 ];
-$jsFiles = array_filter($jsFiles, fn($file) => is_readable(BASEPATH . $file));
