@@ -9,7 +9,6 @@
     "ext-curl": "*",
     "ext-zlib": "*",
     "nyholm/dsn": "^2.0",
-    "thezmi/image-orientation-fix": "dev-master",
     "thezmi/dbsimple": "dev-master",
     "thezmi/dbsimple-models": "dev-master",
     "thezmi/output-formats": "dev-master",
