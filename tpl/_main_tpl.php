@@ -2,17 +2,18 @@
 <html lang="<?= LANG ?>" dir="ltr"<?= $htmlAttrs ?>>
 <head>
     <!-- Document charset -->
-    <meta charset="<?= $g_config['charset'] ?>" />
-    <meta http-equiv="Content-Type" content="text/html; charset=<?= $g_config['charset'] ?>" />
+    <meta charset="<?= Config('charset') ?>"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=<?= Config('charset') ?>"/>
 
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';" />
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"/>
 
     <!-- IE render mode -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
 
     <!-- SEO -->
     <title><?= L('m_title') ?></title>
-    <meta name="apple-mobile-web-app-title" content="<?= L('m_shortTitle') ?>" />
+    <meta name="apple-mobile-web-app-title" content="<?= L('m_shortTitle') ?>"/>
     <?php if (!empty(L('m_description'))): ?>
         <meta name="description" content="<?= L('m_description') ?>" />
     <?php endif ?>

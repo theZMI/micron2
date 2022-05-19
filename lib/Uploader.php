@@ -9,15 +9,12 @@ class Uploader extends CI_Upload
 
     protected $thumbPaths = [];
 
-
     public function getFinalConfig($config = [])
     {
-        global $g_config;
-        $finalConfig = $g_config['uploader']['default_config'];
+        $finalConfig = Config('uploader')['default_config'];
         foreach ($config as $k => $v) {
             $finalConfig[$k] = $v;
         }
-
         return $finalConfig;
     }
 
@@ -29,7 +26,6 @@ class Uploader extends CI_Upload
         $image->resize($w, $h, 'fill', 'down')
             ->crop('center', 'center', $w, $h)
             ->saveToFile($thumbs);
-
         return $thumbs;
     }
 

@@ -7,4 +7,4 @@ EngineQueryManager::tryAllBranches(GetQuery());
 BrowserDataCache::notCache();
 
 new Php(); // Настройка php и включение профилирования ошибок
-header('Content-type: text/html; charset=' . $g_config['charset']);
+header('Content-type: text/html; charset=' . Config('charset'));

@@ -912,8 +912,7 @@ class CI_Upload
             $this->mimes = $mimes;
         }
 
-        global $g_config;
-        $this->mimes = array_merge($g_config['mime_types'], $this->mimes);
+        $this->mimes = array_merge(Config('mime_types'), $this->mimes);
 
         return (!isset($this->mimes[$mime])) ? false : $this->mimes[$mime];
     }

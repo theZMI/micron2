@@ -7,8 +7,6 @@ class MyDebug_ErrorHook_TextNotifier extends Debug_ErrorHook_TextNotifier
 {
     protected function _notifyText($subject, $body)
     {
-        global $g_config;
-
         // Подготовка сообщения ошибки
         $msg = PHP_EOL .
             "Text notification:" . PHP_EOL .
@@ -17,10 +15,10 @@ class MyDebug_ErrorHook_TextNotifier extends Debug_ErrorHook_TextNotifier
             PHP_EOL;
 
         // Запись ошибки в лог-файл
-        ( FileLogger::create($g_config['logErrors']['logFile']) )->error($msg);
+        (FileLogger::create(Config('logErrors')['logFile']))->error($msg);
 
         // Вывод ошибки на экран
-        if ($g_config['phpIni']['display_errors']) {
+        if (Config('phpIni')['display_errors']) {
             echo "<pre>$msg</pre>";
         } else {
             IncludeCom('500');

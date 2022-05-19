@@ -1,14 +1,14 @@
 <?php
 
-$g_config['dbSimple'] = [
-    'logDbInfo'  => DEBUG_MODE, // Логгировать ли все запросы к БД? (по умолчанию можно посмотреть в DebugPanel)
+Config('dbSimple', [
+    'logDbInfo' => DEBUG_MODE, // Логгировать ли все запросы к БД? (по умолчанию можно посмотреть в DebugPanel)
     'logDbError' => true, // Логгировать запросы в которых произошла ошибка (по умолчанию в dbLogFile складываются)
-    'dbLogFile'  => BASEPATH . 'tmp/db_errors.log',
+    'dbLogFile' => BASEPATH . 'tmp/db_errors.log',
 
-    'databases'  => [
+    'databases' => [
         'db' => [
-            'dsn'        => AppConfig::DATABASE_DSN,
+            'dsn' => EnvConfig::DATABASE_DSN,
             'pCacheFunc' => ['MyDataBaseCache', 'Cache'], // Перед запросом который в кеш отправиться нужно написать "-- CACHE: 1h 5m 15" затем ENTER. Здесь h/m/цифра это часы/минут/секунды соответственно
         ]
     ]
-];
+]);

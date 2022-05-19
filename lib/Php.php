@@ -82,9 +82,8 @@ class Php
 
     private function debugErrorHook()
     {
-        global $g_config;
         static $errorListener = null;
-        $loggerConfig   = $g_config['logErrors'];
+        $loggerConfig = Config('logErrors');
         $debugClassName = $loggerConfig['classNotifier'];
 
         FileSys::makeDir(dirname($loggerConfig['repeatTmp']));
@@ -115,10 +114,9 @@ class Php
 
     public function __construct()
     {
-        global $g_config;
-
+        $ini = Config('phpIni');
         array_walk(
-            $g_config['phpIni'],
+            $ini,
             fn($v, $k) => ini_set($k, $v)
         );
 
@@ -126,11 +124,11 @@ class Php
         date_default_timezone_set('Europe/London');
 
         if (function_exists("mb_internal_encoding") && function_exists("mb_regex_encoding")) {
-            mb_internal_encoding($g_config['charset']);
-            mb_regex_encoding($g_config['charset']);
+            mb_internal_encoding(Config('charset'));
+            mb_regex_encoding(Config('charset'));
         }
 
-        if ($g_config['useDebugErrorHook']) {
+        if (Config('useDebugErrorHook')) {
             $this->debugErrorHook();
         }
     }

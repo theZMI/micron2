@@ -26,10 +26,9 @@ class Input
     {
         // Если не отключена защита от XSS
         if (!($secureFlags & M_XSS_FILTER_OFF)) {
-            global $g_config;
             static $cleaner = null;
             if (is_null($cleaner)) {
-                $cleaner = new InputClean($g_config['charset']);
+                $cleaner = new InputClean(Config('charset'));
             }
             $value = $cleaner->_clean_input_data($value);
         }

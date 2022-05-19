@@ -43,12 +43,9 @@ class Output
      */
     public function getContent($c)
     {
-        global $g_config;
-
-        foreach ($g_config['prepareFunctions'] as $func) {
+        foreach (Config('prepareFunctions') as $func) {
             $c = call_user_func($func, $c);
         }
-
         return $c;
     }
 }

@@ -8,7 +8,7 @@ unset($newGet['micron_query']);
 
 $params     = http_build_query($newGet);
 $requestURI = GetQuery() . (strlen($params) ? "?$params" : '');
-$requestURI = $requestURI === $g_config['defaultComponent'] ? '/' : "/{$requestURI}";
+$requestURI = $requestURI === Config('defaultComponent') ? '/' : "/{$requestURI}";
 
 $isHttps       = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
 $protocol      = $isHttps ? 'https' : 'http';
@@ -17,7 +17,7 @@ $curUrl        = $input->clean("{$protocol}://" . $_SERVER['SERVER_NAME'] . "{$r
 $urlWithWWW    = $input->clean("{$protocol}://www.{$serverName}{$requestURI}", 0);
 $urlWithoutWWW = $input->clean("{$protocol}://{$serverName}{$requestURI}", 0);
 
-if ($g_config['is_www']) {
+if (Config('is_www')) {
     if (strpos($curUrl, "{$protocol}://www") !== 0) {
         UrlRedirect::go($urlWithWWW, 301);
     }

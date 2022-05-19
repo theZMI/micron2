@@ -7,7 +7,7 @@
  */
 function RequireOnceAll($dir)
 {
-    global $g_config, $g_lang, $g_user, $g_admin;
+    global $g_lang, $g_user, $g_admin;
 
     // Если в папке есть файл main.php то включаем его 1-ым
     if (is_readable($dir . '/main.php')) {

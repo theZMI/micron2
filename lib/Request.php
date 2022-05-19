@@ -38,19 +38,17 @@ class Request
      */
     public function getQuery($q = null)
     {
-        global $g_config;
-
-        $langs   = array_keys($g_config['langs']);
-        $defPage = $g_config['defaultComponent'];
-        $q       = is_null($q) ? empty($_GET['micron_query']) ? $defPage : trim($_GET['micron_query'], "/") : $q;
-        $q       = _StrReplaceFirst('&', '?', $q);
-        $parse   = parse_url($q);
-        $q       = FileSys::filenameSecurity($parse['path']);
+        $langs = array_keys(Config('langs'));
+        $defPage = Config('defaultComponent');
+        $q = is_null($q) ? empty($_GET['micron_query']) ? $defPage : trim($_GET['micron_query'], "/") : $q;
+        $q = _StrReplaceFirst('&', '?', $q);
+        $parse = parse_url($q);
+        $q = FileSys::filenameSecurity($parse['path']);
 
         if (isset($parse['query'])) {
             foreach (explode('&', $parse['query']) as $elem) {
                 if (strpos($elem, '=') !== false) {
-                    $elem           = explode('=', $elem);
+                    $elem = explode('=', $elem);
                     $_GET[$elem[0]] = isset($elem[1]) ? $elem[1] : null;
                 }
             }
@@ -67,7 +65,7 @@ class Request
             $q = implode('/', array_splice($parts, 1));
         }
 
-        return empty($q) ? $defPage : (new InputClean($g_config['charset']))->_clean_input_data($q);
+        return empty($q) ? $defPage : (new InputClean(Config('charset')))->_clean_input_data($q);
     }
 
     public function getCurUrl($_pars = '')

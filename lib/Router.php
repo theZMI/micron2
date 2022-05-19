@@ -6,8 +6,7 @@ class Router
 
     private function __construct()
     {
-        global $g_config;
-        $this->rules = $g_config['router_rules'];
+        $this->rules = Config('router_rules');
     }
 
     public static function getInstance()

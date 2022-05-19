@@ -1,16 +1,16 @@
 <?php
 
-$g_config['mime_types'] = [
-    'aif'   => 'audio/x-aiff',
-    'aiff'  => 'audio/x-aiff',
-    'arc'   => 'application/octet-stream',
-    'arj'   => 'application/octet-stream',
-    'art'   => 'image/x-jg',
-    'asf'   => 'video/x-ms-asf',
-    'asx'   => 'video/x-ms-asf',
-    'avi'   => 'video/avi',
-    'bin'   => 'application/octet-stream',
-    'bm'    => 'image/bmp',
+Config('mime_types', [
+    'aif' => 'audio/x-aiff',
+    'aiff' => 'audio/x-aiff',
+    'arc' => 'application/octet-stream',
+    'arj' => 'application/octet-stream',
+    'art' => 'image/x-jg',
+    'asf' => 'video/x-ms-asf',
+    'asx' => 'video/x-ms-asf',
+    'avi' => 'video/avi',
+    'bin' => 'application/octet-stream',
+    'bm' => 'image/bmp',
     'bmp'   => 'image/bmp',
     'bz2'   => 'application/x-bzip2',
     'css'   => 'text/css',
@@ -69,14 +69,14 @@ $g_config['mime_types'] = [
     'word'  => 'application/msword',
     'eot'   => 'application/vnd.ms-fontobject',
     'svg'   => 'image/svg+xml',
-    'ttf'   => 'application/x-font-ttf',
-    'otf'   => 'application/x-font-opentype',
-    'woff'  => 'application/font-woff',
+    'ttf' => 'application/x-font-ttf',
+    'otf' => 'application/x-font-opentype',
+    'woff' => 'application/font-woff',
     'woff2' => 'application/font-woff2',
-    'mp4'   => 'video/mp4',
-    'mkv'   => 'video/webm',
-    'webm'  => 'video/webm',
-    'webp'  => 'image/webp',
-    'json'  => 'application/json',
-    'apk'   => 'application/octet-stream'
-];
+    'mp4' => 'video/mp4',
+    'mkv' => 'video/webm',
+    'webm' => 'video/webm',
+    'webp' => 'image/webp',
+    'json' => 'application/json',
+    'apk' => 'application/octet-stream'
+]);

@@ -1,4 +1,4 @@
 <?php
 
-$g_config['admin_menu']       = [];
-$g_config['admin_menu_right'] = [];
+Config('admin_menu', []);
+Config('admin_menu_right', []);

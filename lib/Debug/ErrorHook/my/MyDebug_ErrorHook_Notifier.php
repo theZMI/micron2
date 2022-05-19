@@ -12,17 +12,17 @@ class MyDebug_ErrorHook_Notifier implements Debug_ErrorHook_INotifier
 {
     public function notify($errno, $errstr, $errfile, $errline, $trace)
     {
-        global $g_config, $g_lang, $g_user;
+        global $g_lang, $g_user;
 
         $displayErrors = ini_get('display_errors');
 
-        $needStop = in_array($errno, ['E_WARNING', 'E_NOTICE', 'E_USER_WARNING', 'E_USER_NOTICE']) ? $g_config['stopIfError'] : $errno;
-        $browser  = new Browser();
-        $logger   = new ErrorLoggerModel();
+        $needStop = in_array($errno, ['E_WARNING', 'E_NOTICE', 'E_USER_WARNING', 'E_USER_NOTICE']) ? Config('stopIfError') : $errno;
+        $browser = new Browser();
+        $logger = new ErrorLoggerModel();
 
-        $logger->create_time     = time();
-        $logger->_get            = serialize($_GET);
-        $logger->_post           = serialize($_POST);
+        $logger->create_time = time();
+        $logger->_get = serialize($_GET);
+        $logger->_post = serialize($_POST);
         $logger->_cookie         = serialize($_COOKIE);
         $logger->_session        = isset($_SESSION) ? serialize($_SESSION) : '';
         $logger->_server         = serialize($_SERVER);
@@ -33,9 +33,9 @@ class MyDebug_ErrorHook_Notifier implements Debug_ErrorHook_INotifier
         $logger->browser         = $browser->getBrowser();
         $logger->browser_version = $browser->getVersion();
         $logger->platform        = $browser->getPlatform();
-        $logger->aol             = $browser->isAol() ? $browser->getAolVersion() : '';
-        $logger->g_config        = serialize($g_config);
-        $logger->g_lang          = serialize($g_lang);
+        $logger->aol = $browser->isAol() ? $browser->getAolVersion() : '';
+        $logger->g_config = serialize(Config());
+        $logger->g_lang = serialize($g_lang);
         $logger->g_user          = method_exists($g_user, 'getData') ? json_encode($g_user->getData()) : null;
         $logger->errno           = $errno;
         $logger->errstr          = $errstr;

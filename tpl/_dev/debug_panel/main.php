@@ -13,7 +13,7 @@
         </li>
         <li>
             <span class="icon time"></span>
-            <?= number_format(floatval(microtime(true) - $g_config['startExecTime']), 3); ?> s
+            <?= number_format(floatval(microtime(true) - Config('startExecTime')), 3); ?> s
         </li>
         <li>
             <span class="icon mem"></span>
@@ -132,7 +132,7 @@
             <table>
                 <tr>
                     <td>Language</td>
-                    <td><?= $g_config['langs'][LANG]['name'] ?> <strong>(<?= LANG ?>)</strong></td>
+                    <td><?= Config('langs')[LANG]['name'] ?> <strong>(<?= LANG ?>)</strong></td>
                 </tr>
                 <tr>
                     <td>Current url</td>
@@ -142,7 +142,7 @@
                     <td>Query</td>
                     <td><?= GetQuery(); ?></td>
                 </tr>
-                <?php foreach ($g_config['phpIni'] as $k => $v): ?>
+                <?php foreach (Config('phpIni') as $k => $v): ?>
                     <tr>
                         <td><?= $k ?></td>
                         <td><?= VarDump($v); ?></td>

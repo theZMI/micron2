@@ -33,7 +33,7 @@ function _StrReplaceFirst($search, $replace, $subject, $offset = 0)
  */
 function IncludeCom($_micron_file, $_micron_params = [])
 {
-    global $g_config, $g_lang, $g_user, $g_admin;
+    global $g_lang, $g_user, $g_admin;
 
     $_micron_file = GetQuery($_micron_file);
     foreach ($_micron_params as $micron_name => $micron_value) {
@@ -41,8 +41,8 @@ function IncludeCom($_micron_file, $_micron_params = [])
     }
 
     $micron_request = Request::getInstance();
-    $micron_has     = 0;
-    $micron_files   = [ // Список всех файлов которые требуется подключить
+    $micron_has = 0;
+    $micron_files = [ // Список всех файлов которые требуется подключить
         BASEPATH . 'lang/' . DEF_LANG . "/{$_micron_file}.php",
         BASEPATH . 'lang/' . $micron_request->getLastLangDetected() . "/{$_micron_file}.php",
         BASEPATH . "src/{$_micron_file}.php",
@@ -112,8 +112,6 @@ function Root($uri = '')
  */
 function SiteRoot($uri = '')
 {
-    global $g_config;
-
     $lang = LANG == DEF_LANG ? '' : (LANG . '/');
     $ret  = $lang || $uri ? "/?micron_query={$lang}{$uri}" : '';
     $ret  = empty($ret) ? '/' : $ret;
@@ -121,18 +119,18 @@ function SiteRoot($uri = '')
 
     // Делаем замену вставлено URL на тот что в роутинге по правилу (если есть конечно)
     $router = Router::getInstance();
-    $ret    = AppConfig::SITE_ROOT_URL . $router->getNewQuery(substr($ret, 1));
+    $ret = EnvConfig::SITE_ROOT_URL . $router->getNewQuery(substr($ret, 1));
 
     // Заменяем начальную страницу в URL на просто корень сайта
     $ret = in_array(
-                $ret,
-                [
-                    AppConfig::SITE_ROOT_URL . $g_config['defaultComponent'],
-                    AppConfig::SITE_ROOT_URL . '?micron_query=' . $g_config['defaultComponent'],
-                ]
-           )
-           ? AppConfig::SITE_ROOT_URL
-           : $ret;
+        $ret,
+        [
+            EnvConfig::SITE_ROOT_URL . Config('defaultComponent'),
+            EnvConfig::SITE_ROOT_URL . '?micron_query=' . Config('defaultComponent'),
+        ]
+    )
+        ? EnvConfig::SITE_ROOT_URL
+        : $ret;
 
     return $ret;
 }

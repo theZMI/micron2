@@ -1,25 +1,17 @@
 <?php
 
-$g_config = [
-    'charset'          => 'utf-8',
-    'mainTpl'          => '_main_tpl',
-    'defaultComponent' => 'home',
-    'isLoadInMainTpl'  => true,
-    'startExecTime'    => microtime(true)
-];
-
-$g_output = Output::getInstance();
-
-// Ф-ии пост-обработки выводимого в браузер контента
-$g_config['prepareFunctions'] = [
-    [$g_output, 'htmlValidate'], // Объединяет множественные head-ы в один
-    [$g_output, 'addDebug'] // Добавляет debug-информацию если это DEBUG_MODE и в запросе есть debug_panel=1
-];
-
-// Параметры которые подставятся в главный <html>
-$g_config['htmlContainerAttrs'] = [
+Config('charset', 'utf-8');
+Config('mainTpl', '_main_tpl');
+Config('defaultComponent', 'home');
+Config('isLoadInMainTpl', true);
+Config('startExecTime', microtime(true));
+Config('prepareFunctions', [ // Ф-ии пост-обработки выводимого в браузер контента
+    [Output::getInstance(), 'htmlValidate'], // Объединяет множественные head-ы в один
+    [Output::getInstance(), 'addDebug'] // Добавляет debug-информацию если это DEBUG_MODE и в запросе есть debug_panel=1
+]);
+Config('htmlContainerAttrs', [ // Параметры которые подставятся в главный <html>
     'class' => 'is-usually-page'
-];
+]);
 
-// Чтобы ф-ии SiteRoot и Root работали с роутером в остальных файлах
+// Подключаем файл роутинга, чтобы ф-ии SiteRoot и Root работали уже в остальных файлах
 require_once BASEPATH . 'core/config/router.php';

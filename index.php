@@ -24,23 +24,22 @@ require_once BASEPATH . 'core/core.php';
 // Include current page
 ob_start();
     header(Php::status(200));
-    $g_config['isControllerLoad'] = IncludeCom(GetQuery());
+Config('isControllerLoad', IncludeCom(GetQuery()));
 $content = ob_get_clean();
 
 // If current page not found => show 404
-if (!$g_config['isControllerLoad']) {
+if (!Config('isControllerLoad')) {
     ob_start();
-        IncludeCom('404');
+    IncludeCom('404');
     $content = ob_get_clean();
 }
 
 // If it is regular page of our site, we show it into main_template
-if ($g_config['isLoadInMainTpl']) {
+if (Config('isLoadInMainTpl')) {
     ob_start();
-        IncludeCom($g_config['mainTpl'], ['content' => $content]);
+    IncludeCom(Config('mainTpl'), ['content' => $content]);
     $content = ob_get_clean();
 }
 
 // Show ready content
-$output = Output::getInstance();
-echo $output->getContent($content);
+echo (Output::getInstance())->getContent($content);

@@ -6,7 +6,6 @@ import "bootstrap" // All js of bootstrap5
 //import "@js/_dev/jquery.stayInWebApp" // Stay in fullscreen mode if site setup as app on IOS
 
 import "@scss/all" // All sites styles
-import "@less/test"
 
 //import { MainMenu } from "@ts/MainMenu";
 //(new MainMenu()).init();

@@ -4,10 +4,9 @@ class Downloader
 {
     private static function secure($file)
     {
-        global $g_config;
         $file = strtr($file, ['..' => '']); // Что бы запретить попытки возврата вверх по файлам
         $file = realpath($file);
-        $ext  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (!file_exists($file)) {
             trigger_error("File {$file} not exists!", E_USER_ERROR);
@@ -17,14 +16,14 @@ class Downloader
             trigger_error("Can not download directory!", E_USER_ERROR);
         }
 
-        if (!in_array('*', $g_config['download_allow_filetypes'])) {
-            if (!in_array($ext, $g_config['download_allow_filetypes'])) {
+        if (!in_array('*', Config('download_allow_filetypes'))) {
+            if (!in_array($ext, Config('download_allow_filetypes'))) {
                 trigger_error("Not allowed file type ($file -> $ext) for Downloader!", E_USER_ERROR);
             }
         }
 
         $isInAllowDir = false;
-        foreach ($g_config['download_allow_dirs'] as $dir) {
+        foreach (Config('download_allow_dirs') as $dir) {
             if (stripos($file, $dir) !== false) {
                 $isInAllowDir = true;
                 break;
@@ -39,12 +38,11 @@ class Downloader
 
     public function download($file, $downloadName = '')
     {
-        global $g_config;
         $file         = self::secure($file);
         $ext          = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         $downloadName = empty($downloadName) ? basename($file) : $downloadName;
-        $mimes        = $g_config['browserdatacache_mime_types'] ?? [];
-        $mime         = $mimes[$ext] ?? 'application/octet-stream';
+        $mimes = Config('browserdatacache_mime_types') ?: [];
+        $mime = $mimes[$ext] ?? 'application/octet-stream';
         $isIE         = isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], "MSIE");
 
         header("Content-Type: {$mime}");

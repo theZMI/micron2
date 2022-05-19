@@ -93,18 +93,17 @@ class BrowserDataCache
 
     private static function secure($file)
     {
-        global $g_config;
         $file = strtr($file, ['..' => '']); // Что бы запретить попытки возврата вверх по файлам
         $file = realpath($file);
         $file = str_replace("\\", "/", $file);
         $ext  = self::ext($file);
 
-        if (!in_array($ext, $g_config['browserdatacache_allow_filetypes'])) {
+        if (!in_array($ext, Config('browserdatacache_allow_filetypes'))) {
             trigger_error("Not allowed file type ($file -> $ext) for BrowserDataCache!", E_USER_ERROR);
         }
 
         $isInAllowDir = false;
-        foreach ($g_config['browserdatacache_allow_dirs'] as $dir) {
+        foreach (Config('browserdatacache_allow_dirs') as $dir) {
             if (stripos($file, $dir) !== false) {
                 $isInAllowDir = true;
                 break;
@@ -127,11 +126,10 @@ class BrowserDataCache
      */
     public static function outFile($file, $pPrepareOutFile = null)
     {
-        global $g_config;
-
         // Если это файл и он доступен для чтения
         if (is_file($file) && is_readable($file)) {
             $file = self::secure($file);
+            $exts = Config('browserdatacache_mime_types');
 
             header('HTTP/1.0 200 OK');
 
@@ -156,10 +154,10 @@ class BrowserDataCache
                 header('Content-Type: application/octet-stream');
                 header('Content-Disposition: attachment; filename="' . basename($file) . '"');
                 header('Content-Transfer-Encoding: binary');
-            } elseif (isset($g_config['browserdatacache_mime_types'][$ext])) {
-                header('Content-type: ' . $g_config['browserdatacache_mime_types'][$ext]);
+            } elseif (isset($exts[$ext])) {
+                header("Content-type: {$exts[$ext]}");
             }
-            header('X-App-Content-Output-From: BrowserDataCache');
+            header('X-AppConfig-Content-Output-From: BrowserDataCache');
 
             // Выводим содержимое файла
             if ($pPrepareOutFile != null) // Если установлена ф-я вывода, то выводим через неё

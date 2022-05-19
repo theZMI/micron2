@@ -2,11 +2,12 @@
 
 // Оборачиваем главный контент
 $htmlAttrs = '';
-array_walk(
-    $g_config['htmlContainerAttrs'],
+array_filter(
+    Config('htmlContainerAttrs'),
     function ($v, $k) use (&$htmlAttrs) {
         $htmlAttrs .= " $k='{$v}'";
-    }
+    },
+    ARRAY_FILTER_USE_BOTH
 );
 
 // Если мы в пользовательском кабинете, то у него ещё свой внутренний шаблон
