@@ -1,7 +1,6 @@
 <?php
 
 Config('charset', 'utf-8');
-Config('mainTpl', '_main_tpl');
 Config('defaultComponent', 'home');
 Config('isLoadInMainTpl', true);
 Config('startExecTime', microtime(true));

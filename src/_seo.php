@@ -1,5 +1,5 @@
 <?php
 
-if (DEBUG_MODE) {
+if (EnvConfig::DEBUG_MODE) {
     ExitCom();
 }

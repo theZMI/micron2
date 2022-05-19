@@ -1,7 +1,7 @@
 <?php
 
 Config('dbSimple', [
-    'logDbInfo' => DEBUG_MODE, // Логгировать ли все запросы к БД? (по умолчанию можно посмотреть в DebugPanel)
+    'logDbInfo' => EnvConfig::DEBUG_MODE, // Логгировать ли все запросы к БД? (по умолчанию можно посмотреть в DebugPanel)
     'logDbError' => true, // Логгировать запросы в которых произошла ошибка (по умолчанию в dbLogFile складываются)
     'dbLogFile' => BASEPATH . 'tmp/db_errors.log',
 

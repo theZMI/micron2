@@ -24,9 +24,9 @@ class Output
     public function getDebug()
     {
         $ret = '';
-        if (DEBUG_MODE && intval(Get('debug_panel'))) {
+        if (EnvConfig::DEBUG_MODE && Get('debug_panel')) {
             ob_start();
-                IncludeCom('_dev/debug_panel/main');
+            IncludeCom('_dev/debug_panel/main');
             $ret = ob_get_clean();
         }
 
