@@ -4,7 +4,7 @@
 define('DEBUG_MODE', true);
 
 // All environment variables must be here
-class AppConfig
+class EnvConfig
 {
     const DATABASE_DSN  = 'mysqli://user:pass@mariadb/appdb?charset=UTF8';
     const SITE_ROOT_URL = 'http://localhost:81/';
