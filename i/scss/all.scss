@@ -1,3 +1,4 @@
 @import "includes";
-@import "common"; // Основные стили сайта (html, body, главный шаблон и пр.)
-@import "page_status"; // Страница 404, 403 или любая другая с информацией о каком-то статусе (500-ая другая)
+@import "common";
+@import "main_menu";
+@import "page_status";
