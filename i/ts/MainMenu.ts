@@ -5,6 +5,7 @@ export class MainMenu {
 
     private movePage() {
         let menu = $(this.MENU_SELECTOR);
+        // @ts-ignore
         $(window).scrollTop() > 1
             ? menu.addClass('menu-in-move')
             : menu.removeClass('menu-in-move');
@@ -74,4 +75,3 @@ export class MainMenu {
         });
     }
 }
-
