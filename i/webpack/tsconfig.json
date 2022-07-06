@@ -2,13 +2,50 @@
   "compilerOptions": {
     "baseUrl": "..",
     "paths": {
-      "@/*": ["./*"],
-      "@js/*": ["./js/*"],
-      "@ts/*": ["./ts/*"],
-      "@css/*": ["./css/*"],
-      "@less/*": ["./less/*"],
-      "@scss/*": ["./scss/*"],
-      "@image/*": ["./image/*"]
-    }
+      "@/*": [
+        "./*"
+      ],
+      "@js/*": [
+        "./js/*"
+      ],
+      "@ts/*": [
+        "./ts/*"
+      ],
+      "@css/*": [
+        "./css/*"
+      ],
+      "@less/*": [
+        "./less/*"
+      ],
+      "@scss/*": [
+        "./scss/*"
+      ],
+      "@image/*": [
+        "./image/*"
+      ]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": [
+      "es2020",
+      "dom"
+    ]
   }
 }

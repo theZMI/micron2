@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const CssExtractor = require('mini-css-extract-plugin')
 const CssMinimizer = require('css-minimizer-webpack-plugin') // Minify css
 const TerserWebpackPlugin = require('terser-webpack-plugin') // Minify js
@@ -7,15 +6,18 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin') // Clean old comp
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer') // Analyze of compiled files
 
 const isProduction = process.env.NODE_ENV === 'production'
+const isDevelopment = !isProduction
 
 const optimization = () => {
-    const config = {
-        minimize: true,
-        minimizer: [
-            new CssMinimizer()
-        ]
-    }
+    let config = {};
     if (isProduction) {
+        config = merge({
+            minimize: true,
+            minimizer: [
+                new CssMinimizer()
+            ]
+        })
+
         config.minimizer.push(
             new TerserWebpackPlugin()
         )
@@ -26,8 +28,18 @@ const optimization = () => {
 const cssLoaders = extra => {
     const loaders = [
         'style-loader',
-        CssExtractor.loader,
-        'css-loader',
+        {
+            loader: CssExtractor.loader,
+            options: {
+                esModule: false,
+            }
+        },
+        {
+            loader: 'css-loader',
+            options: {
+                url: true
+            }
+        },
         {
             loader: 'postcss-loader',
             options: {
@@ -51,12 +63,7 @@ const babelOptions = preset => {
     const opts = {
         presets: [
             [
-                '@babel/preset-env',
-                {
-                    targets: {
-                        node: '8'
-                    }
-                }
+                '@babel/preset-env'
             ]
         ],
         plugins: [
@@ -78,10 +85,6 @@ const jsLoaders = preset => {
 
 const plugins = () => {
     const plugins = [
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery'
-        }),
         new CleanWebpackPlugin(),
         new CssExtractor({
             filename: `[name].css`
@@ -95,20 +98,19 @@ const plugins = () => {
 
 module.exports = {
     context: path.resolve(__dirname, '.'),
-    mode: 'development',
     entry: {
-        app: ['@babel/polyfill', './index.ts']
+        app: ['./index.ts']
     },
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: `[name].js`
     },
+    plugins: plugins(),
+    optimization: optimization(),
     resolve: {
         extensions: ['.ts', '.js', '.json', '.scss', '.less', '.css'],
         alias: {
-            'jquery': path.resolve(__dirname, '/node_modules/jquery/dist/jquery.min.js'),
-
-            // Нужно дублировать в tsconfig.json что бы phpstorm понимал
+            // Need duplicate into tsconfig.json for phpstorm's highlight
             '@': path.resolve(__dirname, '..'),
             '@js': path.resolve(__dirname, '../js'),
             '@ts': path.resolve(__dirname, '../ts'),
@@ -116,10 +118,9 @@ module.exports = {
             '@less': path.resolve(__dirname, '../less'),
             '@scss': path.resolve(__dirname, '../scss'),
             '@image': path.resolve(__dirname, '../image'),
-        }
+        },
+        roots: [__dirname, path.resolve(__dirname, '../..')],
     },
-    optimization: optimization(),
-    plugins: plugins(),
     module: {
         rules: [
             {
@@ -142,24 +143,15 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                use: jsLoaders('@babel/preset-typescript'),
+                use: jsLoaders('@babel/preset-typescript')
             },
             {
-                test: /\.(png|jpg|jpeg|svg|gif)$/,
-                use: ['file-loader']
-            },
-            {
-                test: /\.(ttf|woff|woff2|eot)$/,
-                use: ['file-loader']
-            },
-            {
-                test: /\.xml$/,
-                use: ['xml-loader']
-            },
-            {
-                test: /\.csv$/,
-                use: ['csv-loader']
+                test: require.resolve('jquery'),
+                loader: 'expose-loader',
+                options: {
+                    exposes: ['$', 'jQuery']
+                }
             }
         ]
     }
-}
+};

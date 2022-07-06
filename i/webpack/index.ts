@@ -1,11 +1,13 @@
-"use strict"
+"use strict";
 
-import $ from "jquery" // For available use $ as jQuery
-import "bootstrap" // All js of bootstrap5
-//import "viewport-extra" // For min-width in viewport
-//import "@js/_dev/jquery.stayInWebApp" // Stay in fullscreen mode if site setup as app on IOS
+import "@scss/all.scss";
 
-import "@scss/all" // All sites styles
+import $ from "jquery";
+import "viewport-extra"; // For switch on min-width in viewport-tag
+import {MainMenu} from "@ts/MainMenu";
 
-//import { MainMenu } from "@ts/MainMenu";
-//(new MainMenu()).init();
+let g_mainMenu = new MainMenu();
+
+$(function () {
+    g_mainMenu.init();
+})
