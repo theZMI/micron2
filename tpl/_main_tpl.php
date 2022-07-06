@@ -22,12 +22,13 @@
     <?php endif ?>
 
     <!-- Off cache for requests -->
-    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache"/>
 
     <!-- View at mobile devices -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui, min-width=320" />
-    <meta name="MobileOptimized" content="320" />
-    <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, min-width=320"/>
+    <meta name="MobileOptimized" content="320"/>
+    <meta name="HandheldFriendly" content="true"/>
 
     <!-- Favicon -->
     <link rel="icon" href="<?= Root('favicon.ico') ?>" type="image/x-icon" />
@@ -47,24 +48,23 @@
 
     <!-- Либы и код собранные через webpack -->
     <?php foreach ($cssFiles as $file): ?>
-        <link rel="stylesheet" type="text/css" href="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>"/>
+    <?php endforeach; ?>
+    <?php foreach ($jsFiles as $file): ?>
+        <script type="text/javascript" src="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>"></script>
     <?php endforeach; ?>
 
     <?php IncludeCom('_seo') ?>
 </head>
 <body>
-    <?php IncludeCom('_main_tpl/menu') ?>
+<?php IncludeCom('_main_tpl/menu') ?>
 
-    <div id="wrapper">
-        <div id="content">
-            <?= $content ?>
-        </div>
+<div id="wrapper">
+    <div id="content">
+        <?= $content ?>
+    </div>
     </div>
 
     <?php IncludeCom('_main_tpl/footer') ?>
-
-    <?php foreach ($jsFiles as $file): ?>
-        <script type="text/javascript" src="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>"></script>
-    <?php endforeach; ?>
 </body>
 </html>
