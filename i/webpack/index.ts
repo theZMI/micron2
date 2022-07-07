@@ -1,7 +1,7 @@
 "use strict";
 
 import "@scss/all.scss";
-
+import "bootstrap";
 import $ from "jquery";
 import "viewport-extra"; // For switch on min-width in viewport-tag
 import {MainMenu} from "@ts/MainMenu";
