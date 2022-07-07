@@ -33,7 +33,10 @@ export class MainMenu {
                             () => {
                                 otherMenus.fadeIn();
                             }
-                        );
+                        ).animate({
+                        padding: "0.5rem"
+                    });
+                    $(this.MENU_SELECTOR).removeClass('menu-is-open');
                 } else {
                     otherMenus.fadeOut(
                         'normal',
@@ -43,11 +46,13 @@ export class MainMenu {
                                 .show()
                                 .animate({
                                     opacity: 1,
-                                    width: "100%"
+                                    width: "100%",
+                                    padding: "5rem 0.5rem"
                                 })
-                                .trigger('focus');
+                                .find('input').trigger('focus');
                         }
                     );
+                    $(this.MENU_SELECTOR).addClass('menu-is-open');
                 }
 
             }
