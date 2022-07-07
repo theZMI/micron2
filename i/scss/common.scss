@@ -1,5 +1,3 @@
-@import "includes";
-
 // Устанавливаем основные настройки по шрифтам
 body {
   font-family: $font-regular;
@@ -71,4 +69,14 @@ html {
     padding-left: 30px;
     padding-right: 30px;
   }
+}
+
+// Overwrite default bootstrap styles:
+.badge {
+  min-height: 21px;
+  min-width: 21px;
+  font-weight: normal;
+  display: inline-block;
+  font-size: 11px;
+  padding: 4px 0 0 0;
 }
