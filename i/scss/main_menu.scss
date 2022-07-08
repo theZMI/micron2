@@ -5,8 +5,19 @@
   &.bg-light {
     background-color: $site-background !important;
 
+    .navbar-brand {
+      font-size: 1rem;
+      color: $site-text-color;
+
+      @include media-breakpoint-down(md) {
+        display: none;
+      }
+    }
+
     .navbar-toggler {
-      border-color: transparent;
+      padding: 0.25rem;
+      margin: 0;
+      border-color: $site-border-color;
 
       &-icon {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
@@ -116,5 +127,44 @@
   &-body {
     position: relative;
     padding: 0;
+  }
+
+  &-menu-list {
+    padding: 1rem;
+
+    > ul {
+      > li {
+        padding-bottom: 15px;
+
+        > a {
+          color: #000;
+          transition: all 150ms linear;
+          text-decoration: none;
+          display: block;
+          padding: 7.5px 0;
+
+          > span {
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
+
+            padding-top: 7.5px;
+            padding-bottom: 7.5px;
+            transition: all 150ms linear;
+          }
+
+          &.active, &:hover, &:active, &:focus {
+            > span {
+              border-bottom: 1px solid;
+            }
+          }
+        }
+
+        &:first-child {
+          > a {
+            padding-top: 7.5px;
+          }
+        }
+      }
+    }
   }
 }

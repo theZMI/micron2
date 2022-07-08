@@ -27,4 +27,3 @@ php_value post_max_size 50M
 
 # Удаляю заголовок запрещающий загружать страницу в iframe
 Header always unset X-Frame-Options
-Header set X-App-Special-Timer "Request loaded at %D microseconds"

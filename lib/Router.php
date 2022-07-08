@@ -28,6 +28,7 @@ class Router
             foreach ($this->rules as $rule) {
                 if ($rule->to === $query) {
                     $ret = $rule->from;
+                    break;
                 }
             }
         }
@@ -45,6 +46,7 @@ class Router
             foreach ($this->rules as $rule) {
                 if ($rule->from === $query) {
                     $ret = $rule->to;
+                    break;
                 }
             }
         }

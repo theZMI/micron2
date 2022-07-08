@@ -157,7 +157,6 @@ class BrowserDataCache
             } elseif (isset($exts[$ext])) {
                 header("Content-type: {$exts[$ext]}");
             }
-            header('X-AppConfig-Content-Output-From: BrowserDataCache');
 
             // Выводим содержимое файла
             if ($pPrepareOutFile != null) // Если установлена ф-я вывода, то выводим через неё

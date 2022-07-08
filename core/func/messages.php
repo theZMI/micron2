@@ -3,7 +3,7 @@
 function Msg($message, $css = 'alert-info')
 {
     ob_start();
-        IncludeCom('_dev/msg', ['message' => $message, 'css' => $css]);
+    IncludeCom('_dev/message', ['message' => $message, 'css' => $css]);
     return ob_get_clean();
 }
 

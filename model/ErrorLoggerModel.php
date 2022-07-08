@@ -25,7 +25,6 @@ class ErrorLoggerModel extends \Models\ModelExtends
                 `browser` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
                 `browser_version` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
                 `platform` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
-                `aol` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
                 `g_config` longtext CHARACTER SET utf8,
                 `g_lang` longtext CHARACTER SET utf8,
                 `g_user` longtext CHARACTER SET utf8,

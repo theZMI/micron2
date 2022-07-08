@@ -1,9 +1,9 @@
 <?php
 
 Config('admin_sector', [
-    'salt' => "GKJHKAsbfkASBJDqicnzxOxc",
-    'after_login_page' => '_admin/home',
+    'salt'              => "HcAqldda!@#sdfxc--ax!3=XHOp",
+    'after_login_page'  => '_admin/home',
     'after_logout_page' => '_admin/login',
-    'def_login' => 'admin',
-    'def_pwd' => 'admin',
+    'def_login'         => 'admin',
+    'def_pwd'           => 'admin',
 ]);

@@ -23,7 +23,7 @@ export class MainMenu {
             'click',
             () => {
                 let searchPanel = $('.search-panel');
-                let otherMenus = $('.menu-left-part, .menu-right-part');
+                let otherMenus = $('.navbar-brand, .navbar-toggler:visible, .menu-left-part, .menu-right-part');
                 let isSearchPanelOpen = searchPanel.is(':visible');
 
                 if (isSearchPanelOpen) {

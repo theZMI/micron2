@@ -5,11 +5,11 @@
 <div style="clear: both"></div>
 
 <div id="i-debug-panel">
-    <span class="icon show-profile" id="i-show-profile" onclick="DebugPanel_ShowHidePanel()"></span>
+    <span class="icon show-profile" id="i-show-profile" onclick="g_debug.togglePanel()"></span>
 
     <ul id="i-debug-panel-list" style="display: none;">
         <li class="show-hide-elem">
-            <span class="icon hide-profile" onclick="DebugPanel_ShowHidePanel()"></span>
+            <span class="icon hide-profile" onclick="g_debug.togglePanel()"></span>
         </li>
         <li>
             <span class="icon time"></span>
@@ -21,23 +21,25 @@
         </li>
         <li>
             <span class="icon db"></span>
-            <a href="javascript:DebugPanel_Toggle('i-databasa-log')">SQL</a>
+            <a href="javascript:g_debug.toggle('i-databasa-log')">SQL</a>
         </li>
         <li>
             <span class="icon vars"></span>
-            <a href="javascript:DebugPanel_Toggle('i-vars-log')">Vars <span class="small">(G: <?= count($_GET); ?> / P: <?= count($_POST); ?> / C: <?= count($_COOKIE); ?> / F: <?= count($_FILES); ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-vars-log')">Vars <span
+                        class="small">(G: <?= count($_GET); ?> / P: <?= count($_POST); ?> / C: <?= count($_COOKIE); ?> / F: <?= count($_FILES); ?>)</span></a>
         </li>
         <li>
             <span class="icon files"></span>
-            <a href="javascript:DebugPanel_Toggle('i-files')">Files <span class="small">(<?= count($debug->files()); ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-files')">Files <span
+                        class="small">(<?= count($debug->files()); ?>)</span></a>
         </li>
         <li>
             <span class="icon engine"></span>
-            <a href="javascript:DebugPanel_Toggle('i-engine')">Engine</a>
+            <a href="javascript:g_debug.toggle('i-engine')">Engine</a>
         </li>
         <li>
             <span class="icon ini-values"></span>
-            <a href="javascript:DebugPanel_Toggle('i-ini-values')">Ini + Exts</a>
+            <a href="javascript:g_debug.toggle('i-ini-values')">Ini + Exts</a>
         </li>
     </ul>
 
@@ -59,14 +61,16 @@
                 </li>
                 <?php if (session_id()): ?>
                     <li>
-                        <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SESSION', 'link' => 'i-session-log', 'arr' => $_SESSION]); ?>
+                        <?php IncludeCom('_dev/debug_panel/var_panel',
+                            ['head' => '$_SESSION', 'link' => 'i-session-log', 'arr' => $_SESSION]); ?>
                     </li>
                 <?php endif ?>
                 <li>
-                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SERVER', 'link' => 'i-server-log', 'arr' => $_SERVER]); ?>
+                    <?php IncludeCom('_dev/debug_panel/var_panel',
+                        ['head' => '$_SERVER', 'link' => 'i-server-log', 'arr' => $_SERVER]); ?>
                 </li>
                 <li>
-                    <a href="javascript:DebugPanel_Toggle('i-files-log')">$_FILES <span>(<?= count($_FILES); ?>)</span></a>
+                    <a href="javascript:g_debug.toggle('i-files-log')">$_FILES <span>(<?= count($_FILES); ?>)</span></a>
                     <div id="i-files-log" style="display: none;">
                         <table>
                             <tr>
@@ -156,7 +160,7 @@
             <ul class="exts">
                 <?php foreach (get_loaded_extensions() as $v): ?>
                     <li>
-                        <a href="javascript:DebugPanel_ShowExtensionFuncs('i-ext-<?= md5($v); ?>')">
+                        <a href="javascript:g_debug.showExtensionFuncs('i-ext-<?= md5($v); ?>')">
                             <?= $v ?>
                         </a>
                         <div style="display:none" id="i-ext-<?= md5($v); ?>">

@@ -14,13 +14,15 @@
     </table>
     <br>
     <div>
-        <button type="button" onclick="$('#i-backtrace-wrapper').slideToggle()" class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span> &nbsp; Backtrace</button>
+        <button type="button" onclick="$('#i-backtrace-wrapper').slideToggle();" class="btn btn-default"><span
+                    class="glyphicon glyphicon-chevron-down"></span> &nbsp; Backtrace
+        </button>
         <div id="i-backtrace-wrapper" class="backtrace-wrapper">
             <pre class="text-left"><?= htmlspecialchars($logger->backtrace) ?></pre>
         </div>
 
         <div class="debug-panel-wrapper">
-            <?= $debugPanel ?>
+            <?php IncludeCom('_dev/debug_panel/main') ?>
         </div>
     </div>
 </div>

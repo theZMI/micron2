@@ -41,7 +41,7 @@ class Uploader extends CI_Upload
         if ($ret && is_array($finalConfig['thumbs'])) {
             $inf = $this->data();
             foreach ($finalConfig['thumbs'] as $v) {
-                $newDir = isset($v['path']) ? $v['path'] : ($finalConfig['upload_path'] . $v['width'] . 'x' . $v['height'] . '/');
+                $newDir = $v['path'] ?? ($finalConfig['upload_path'] . $v['width'] . 'x' . $v['height'] . '/');
                 $thumbs = $newDir . $inf['file_name'];
 
                 self::createThumbs($inf['full_path'], $thumbs, $v['width'], $v['height']);
