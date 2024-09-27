@@ -10,6 +10,6 @@ console.log(this_is_a_ts_test());
 console.log(this_is_a_js_test());
 setTimeout(() => {
     $('#wrapper')
-        .append('<div class="this-is-css-test">This is a CSS test</div>')
-        .append('<div class="this-is-less-test">This is a LESS test</div>');
-}, 2500);
+        .append('<div class="this-is-a-css-test">This is a CSS test</div>')
+        .append('<div class="this-is-a-less-test">This is a LESS test</div>');
+}, 1000);
