@@ -1,5 +1,6 @@
 #i-debug-panel {
     float: right;
+    text-align: left;
     background: #181818 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAAAAACMmsGiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABdJREFUCB1jUlGRkWH6CQRMf//y8oJZAFUaCmUwcfODAAAAAElFTkSuQmCC");
     font-size: 12px;
     color: #AAA;
@@ -76,6 +77,7 @@
     border-collapse: collapse;
     margin: 10px auto;
     width: 100%;
+    min-width: 1200px;
 }
 
 #i-debug-panel table pre {

@@ -1,16 +1,17 @@
 <?php
 
 // Параметры какие защиты отключать
-define('M_HTML_FILTER_OFF', 2); // Выкл. защиту от HTML текста
-define('M_XSS_FILTER_OFF', 4); // Выкл. защиту от XSS вставок
-define('M_DELETE_PARAM', 'micron_not_use_this_param__98gmkhgKfdg');
+const M_HTML_FILTER_OFF = 2; // Выключить защиту от HTML текста
+const M_XSS_FILTER_OFF  = 4; // Выключить защиту от XSS вставок
+const M_DELETE_PARAM    = 'remove_p4923fam0';
 
 
 // Производит замену только первого вхождения подстроки в строку
 function _StrReplaceFirst($search, $replace, $subject, $offset = 0)
 {
-    $ret = $subject;
-    $pos = strpos($subject, $search, $offset);
+    $subject = empty($subject) ? '' : $subject;
+    $ret     = $subject;
+    $pos     = strpos($subject, $search, $offset);
     if ($pos !== false) {
         $ret = substr_replace($subject, $replace, $pos, strlen($search));
     }
@@ -26,7 +27,7 @@ function _StrReplaceFirst($search, $replace, $subject, $offset = 0)
  * @param string $_micron_file - URI запроса т.е. подключаемый файл или строка вида file_name&par1=a&par2=b
  * @param array $_micron_params - массив параметров которые необходимо создать до подключения
  *
- * @return int - вовзращает кол-во подключенных файлов этого компонента
+ * @return int - возвращает кол-во подключенных файлов этого компонента
  * @global array $g_config
  *
  * @global array $g_lang
@@ -40,11 +41,10 @@ function IncludeCom($_micron_file, $_micron_params = [])
         $$micron_name = $micron_value;
     }
 
-    $micron_request = Request::getInstance();
-    $micron_has = 0;
+    $micron_has   = 0;
     $micron_files = [ // Список всех файлов которые требуется подключить
         BASEPATH . 'lang/' . DEF_LANG . "/{$_micron_file}.php",
-        BASEPATH . 'lang/' . $micron_request->getLastLangDetected() . "/{$_micron_file}.php",
+        BASEPATH . 'lang/' . Request::getInstance()->getLastLang() . "/{$_micron_file}.php",
         BASEPATH . "src/{$_micron_file}.php",
         BASEPATH . "tpl/{$_micron_file}.php",
     ];
@@ -67,8 +67,15 @@ function IncludeCom($_micron_file, $_micron_params = [])
     return $micron_has;
 }
 
+function TryIncludeCom($uri, $params = [], $component404 = '404'): void
+{
+    if (!IncludeCom($uri, $params)) {
+        IncludeCom($component404);
+    }
+}
+
 /**
- * Фунция выхода из компонента что бы дальше файлы не подключала
+ * Ф-я выхода из компонента чтобы дальше файлы не подключались
  */
 function ExitCom()
 {
@@ -80,7 +87,7 @@ function ExitCom()
  */
 function GetQuery($q = null)
 {
-    return (Request::getInstance())->getQuery($q);
+    return Request::getInstance()->getQuery($q);
 }
 
 /**
@@ -96,7 +103,7 @@ function DefineLang()
  */
 function GetCurUrl($pars = '')
 {
-    return (Request::getInstance())->getCurUrl($pars);
+    return Request::getInstance()->getCurUrl($pars);
 }
 
 /**
@@ -104,6 +111,7 @@ function GetCurUrl($pars = '')
  */
 function Root($uri = '')
 {
+    $uri = _StrReplaceFirst('&', '?', $uri);
     return "/{$uri}";
 }
 
@@ -116,23 +124,17 @@ function SiteRoot($uri = '')
     $ret  = $lang || $uri ? "/?micron_query={$lang}{$uri}" : '';
     $ret  = empty($ret) ? '/' : $ret;
     $ret  = _StrReplaceFirst('/?micron_query=', '/', _StrReplaceFirst('&', '?', $ret));
-
-    // Делаем замену вставлено URL на тот что в роутинге по правилу (если есть конечно)
-    $router = Router::getInstance();
-    $ret = EnvConfig::SITE_ROOT_URL . $router->getNewQuery(substr($ret, 1));
+    $ret  = EnvConfig::SITE_ROOT_URL . substr($ret, 1);
 
     // Заменяем начальную страницу в URL на просто корень сайта
-    $ret = in_array(
+    $isDefaultComponent = in_array(
         $ret,
         [
             EnvConfig::SITE_ROOT_URL . Config('defaultComponent'),
             EnvConfig::SITE_ROOT_URL . '?micron_query=' . Config('defaultComponent'),
         ]
-    )
-        ? EnvConfig::SITE_ROOT_URL
-        : $ret;
-
-    return $ret;
+    );
+    return $isDefaultComponent ? EnvConfig::SITE_ROOT_URL : $ret;
 }
 
 /**
@@ -150,18 +152,6 @@ function Post($name, $def = false, $secureFlags = 0)
 {
     return (Input::getInstance())->post($name, $def, $secureFlags);
 }
-
-/**
- * Добавляем функцию автозагрузки классов (библиотек и моделей)
- */
-spl_autoload_register(function ($className) {
-    if (is_readable(BASEPATH . "lib/{$className}.php")) {
-        require_once BASEPATH . "lib/{$className}.php";
-    }
-    if (is_readable(BASEPATH . "model/{$className}.php")) {
-        require_once BASEPATH . "model/{$className}.php";
-    }
-});
 
 /**
  * Возвращает параметр из языкового массива

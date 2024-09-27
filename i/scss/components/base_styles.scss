@@ -1,0 +1,76 @@
+// Стили страницы что бы меню было в самом верху, а футер внизу
+html {
+  height: 100%;
+  min-width: $site-min-width;
+  background: $site-backstage-bg;
+
+  body {
+    height: 100%;
+    padding-top: $site-menu-height;
+    min-width: $site-min-width;
+    overflow-y: scroll;
+    background: $site-backstage-bg;
+  }
+}
+
+#wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100%;
+  background: $site-wrapper-bg;
+
+  // Если нужно что бы футер был ниже страницы и для его просмотра требовалось чуть-чуть мотнуть страницу
+  height: auto;
+  margin: 0 auto;
+
+  // Если нужно что бы футер был не ниже контента, а просто всегда внизу страницы:
+  //margin: 0 auto -1 * $site-footer-height;
+  //padding-bottom: $site-footer-height + 1px;
+}
+
+
+// Overwrite дефолтных стилей
+body {
+  font-family: $font-regular;
+  font-weight: 300;
+  color: $body-color;
+
+  h1, h2, h3, .headers-font {
+    font-family: $font-condensed;
+    font-weight: 400;
+  }
+
+  b, strong {
+    font-weight: bold;
+  }
+
+  a, .btn-link {
+    text-decoration: none !important;
+  }
+
+  .btn-min-width {
+    min-width: 185px;
+  }
+
+  .badge {
+    font-weight: normal;
+  }
+
+  .btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
+    color: #FFF;
+  }
+
+  .text-muted {
+    color: rgba(0, 0, 0, 0.25) !important;
+  }
+}
+
+// На больших экранах сделать отступ больше для меню и футера
+@include media-breakpoint-up(lg) {
+  .container-fluid {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}

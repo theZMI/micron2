@@ -1,39 +1,39 @@
-<ul class="pagination">
+<ul class="pagination <?= $css ?? '' ?>">
     <?php if (empty($arrowLeft)): ?>
-        <li class="disabled"><span>&laquo;</span></li>
+        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-double-left"></i></span></li>
     <?php else: ?>
-        <li><a href="<?= $arrowLeft ?>" title="Previous page">&laquo;</a></li>
+        <li class="page-item"><a class="page-link" href="<?= $arrowLeft ?>" title="Previous page"><i class="bi bi-chevron-double-left"></i></a></li>
     <?php endif; ?>
 
     <?php foreach ($pagesLeft as $p): ?>
-        <li><a href="<?= $p["href"] ?>" title="Go to page <?= $p["page"] ?>"><?= $p["page"] ?></a></li>
+        <li class="page-item"><a class="page-link" href="<?= $p["href"] ?>" title="Go to page <?= $p["page"] ?>"><?= $p["page"] ?></a></li>
     <?php endforeach; ?>
 
     <?php if (!empty($pagesLeft)): ?>
-        <li><span>..</span></li>
+        <li class="page-item"><span>..</span></li>
     <?php endif; ?>
 
 
     <?php foreach ($pagesCenter as $p): ?>
         <?php if ($p["is_active"]): ?>
-            <li class="active"><span title="Current page is <?= $p["page"] ?>"><?= $p["page"] ?></span></li>
+            <li class="page-item active"><span class="page-link" title="Current page is <?= $p["page"] ?>"><?= $p["page"] ?></span></li>
         <?php else: ?>
-            <li><a href="<?= $p["href"] ?>" title="Go to page <?= $p["page"] ?>"><?= $p["page"] ?></a></li>
+            <li class="page-item"><a class="page-link" href="<?= $p["href"] ?>" title="Go to page <?= $p["page"] ?>"><?= $p["page"] ?></a></li>
         <?php endif; ?>
     <?php endforeach; ?>
 
 
     <?php if (!empty($pagesRight)): ?>
-        <li><span>..</span></li>
+        <li class="page-item"><span class="page-link">..</span></li>
     <?php endif; ?>
 
     <?php foreach ($pagesRight as $p): ?>
-        <li><a href="<?= $p["href"] ?>" title="Go to page <?= $p["page"] ?>"><?= $p["page"] ?></a></li>
+        <li class="page-item"><a class="page-link" href="<?= $p["href"] ?>" title="Go to page <?= $p["page"] ?>"><?= $p["page"] ?></a></li>
     <?php endforeach; ?>
 
     <?php if (empty($arrowRight)): ?>
-        <li class="disabled"><span>&raquo;</span></li>
+        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-double-right"></i></span></li>
     <?php else: ?>
-        <li><a href="<?= $arrowRight ?>" title="Next page">&raquo;</a></li>
+        <li class="page-item"><a class="page-link" href="<?= $arrowRight ?>" title="Next page"><i class="bi bi-chevron-double-right"></i></a></li>
     <?php endif; ?>
 </ul>

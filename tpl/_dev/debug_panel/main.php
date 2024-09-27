@@ -25,13 +25,11 @@
         </li>
         <li>
             <span class="icon vars"></span>
-            <a href="javascript:g_debug.toggle('i-vars-log')">Vars <span
-                        class="small">(G: <?= count($_GET); ?> / P: <?= count($_POST); ?> / C: <?= count($_COOKIE); ?> / F: <?= count($_FILES); ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-vars-log')">Vars <span class="small">(G: <?= count($_GET); ?> / P: <?= count($_POST); ?> / C: <?= count($_COOKIE); ?> / F: <?= count($_FILES); ?>)</span></a>
         </li>
         <li>
             <span class="icon files"></span>
-            <a href="javascript:g_debug.toggle('i-files')">Files <span
-                        class="small">(<?= count($debug->files()); ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-files')">Files <span class="small">(<?= count($debug->files()); ?>)</span></a>
         </li>
         <li>
             <span class="icon engine"></span>
@@ -61,13 +59,11 @@
                 </li>
                 <?php if (session_id()): ?>
                     <li>
-                        <?php IncludeCom('_dev/debug_panel/var_panel',
-                            ['head' => '$_SESSION', 'link' => 'i-session-log', 'arr' => $_SESSION]); ?>
+                        <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SESSION', 'link' => 'i-session-log', 'arr' => $_SESSION]); ?>
                     </li>
                 <?php endif ?>
                 <li>
-                    <?php IncludeCom('_dev/debug_panel/var_panel',
-                        ['head' => '$_SERVER', 'link' => 'i-server-log', 'arr' => $_SERVER]); ?>
+                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SERVER', 'link' => 'i-server-log', 'arr' => $_SERVER]); ?>
                 </li>
                 <li>
                     <a href="javascript:g_debug.toggle('i-files-log')">$_FILES <span>(<?= count($_FILES); ?>)</span></a>
@@ -179,9 +175,7 @@
                                         </tr>
                                     <?php endforeach ?>
                                 </table>
-                            <?php
-                            endif;
-                            ?>
+                            <?php endif; ?>
                         </div>
                     </li>
                 <?php endforeach ?>
@@ -197,18 +191,14 @@
                     <th>Local val</th>
                     <th>Access</th>
                 </tr>
-                <?php
-                foreach (ini_get_all() as $k => $v) {
-                    ?>
+                <?php foreach (ini_get_all() as $k => $v): ?>
                     <tr>
                         <td><?= $k ?></td>
                         <td><?= VarDump($v['global_value']); ?></td>
                         <td><?= VarDump($v['local_value']); ?></td>
                         <td><?= DebugPanel::showPhpIniAccess($v['access']); ?></td>
                     </tr>
-                    <?php
-                }
-                ?>
+                <?php endforeach; ?>
             </table>
         </div>
     </div>

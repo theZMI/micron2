@@ -23,7 +23,7 @@ class Uploader extends CI_Upload
         $aThumbs = pathinfo($thumbs);
         FileSys::makeDir($aThumbs['dirname']);
         $image = \WideImage\WideImage::load($source);
-        $image->resize($w, $h, 'fill', 'down')
+        $image->resize($w, $h, 'inside', 'down')
             ->crop('center', 'center', $w, $h)
             ->saveToFile($thumbs);
         return $thumbs;

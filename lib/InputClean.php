@@ -131,7 +131,7 @@ class InputClean
 
         // 901119URL5918AMP18930PROTECT8198
 
-        $str = preg_replace('|\&([a-z\_0-9]+)\=([a-z\_0-9]+)|i', $this->xss_hash() . "\\1=\\2", $str);
+        $str = $str ? preg_replace('|\&([a-z\_0-9]+)\=([a-z\_0-9]+)|i', $this->xss_hash() . "\\1=\\2", $str) : '';
 
         /*
         * Validate standard character entities
@@ -392,7 +392,7 @@ class InputClean
 
         do {
             $cleaned = $str;
-            $str     = preg_replace($non_displayables, '', $str);
+            $str     = $str ? preg_replace($non_displayables, '', $str) : '';
         } while ($cleaned != $str);
 
         return $str;
@@ -441,6 +441,10 @@ class InputClean
         if (stristr($str, '&') === false) {
             return $str;
         }
+
+        return html_entity_decode($str, ENT_COMPAT, $charset);
+
+        // TODO: Разобраться с кодом от CI ниже (не подходим модификатор ~e для новой php)
 
         // The reason we are not using html_entity_decode() by itself is because
         // while it is not technically correct to leave out the semicolon

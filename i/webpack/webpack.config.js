@@ -9,14 +9,17 @@ const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
 
 const optimization = () => {
-    let config = {};
+    let config = {}
     if (isProduction) {
-        config = merge({
-            minimize: true,
-            minimizer: [
-                new CssMinimizer()
-            ]
-        })
+        config = Object.assign(
+            config,
+            {
+                minimize: true,
+                minimizer: [
+                    new CssMinimizer()
+                ]
+            }
+        )
 
         config.minimizer.push(
             new TerserWebpackPlugin()
@@ -115,9 +118,11 @@ module.exports = {
             '@js': path.resolve(__dirname, '../js'),
             '@ts': path.resolve(__dirname, '../ts'),
             '@css': path.resolve(__dirname, '../css'),
+            '@data': path.resolve(__dirname, '../data'),
             '@less': path.resolve(__dirname, '../less'),
             '@scss': path.resolve(__dirname, '../scss'),
             '@image': path.resolve(__dirname, '../image'),
+            '@webpack': path.resolve(__dirname, '../webpack'),
         },
         roots: [__dirname, path.resolve(__dirname, '../..')],
     },
@@ -154,4 +159,4 @@ module.exports = {
             }
         ]
     }
-};
+}

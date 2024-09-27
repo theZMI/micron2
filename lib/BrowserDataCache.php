@@ -30,7 +30,7 @@ class BrowserDataCache
      *
      * @static
      */
-    public static function notCache()
+    public static function offCachePage()
     {
         header("Expires: Sun, 1 Jan 2000 12:00:00 GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
@@ -65,7 +65,7 @@ class BrowserDataCache
         header('Content-Length: ' . filesize($file));
     }
 
-    private static function chkCache($file, $ETag)
+    private static function checkCache($file, $ETag)
     {
         if (function_exists('getallheaders')) {
             $headers = getallheaders();
@@ -136,7 +136,7 @@ class BrowserDataCache
             // Если файлы в кеше нужно помечать ETag-ами для сверки
             if (self::USE_ETAGS) {
                 $ETag = self::getFileETag($file);
-                self::chkCache($file, $ETag);
+                self::checkCache($file, $ETag);
             }
             self::toCache($file, self::USE_ETAGS ? $ETag : false);
 
@@ -159,13 +159,11 @@ class BrowserDataCache
             }
 
             // Выводим содержимое файла
-            if ($pPrepareOutFile != null) // Если установлена ф-я вывода, то выводим через неё
-            {
+            if ($pPrepareOutFile != null) { // Если установлена ф-я вывода, то выводим через неё
                 call_user_func($pPrepareOutFile, $file);
             } else {
                 readfile($file);
             }
-
             exit();
         } else {
             return false;

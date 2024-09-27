@@ -30,7 +30,7 @@ class HtmlValidate
             return $html;
         }
 
-        // Заменяем первый head с атрибутами на обычный что бы проще было искать
+        // Заменяем первый head с атрибутами на обычный, чтобы проще было искать
         $headAttrs = isset($m[1]) ? $m[1] : ''; // Атрибуты главного head-а если были
         $html      = $m[0] === '<head>' ? $html : _StrReplaceFirst($m[0], '<head>', $html);
 
@@ -46,7 +46,7 @@ class HtmlValidate
                 }
             } while (!$isInnerOpen && $nextOpen !== false);
 
-            // Если следущего head-а не было, то значит от того head-а который взяли вложенных не стояло, потому просто выходим
+            // Если следующего head-а не было, то значит от того head-а который взяли вложенных не стояло, потому просто выходим
             if ($nextOpen === false) {
                 break;
             }
@@ -72,9 +72,7 @@ class HtmlValidate
         } while (true);
 
         // Возвращаем доп. теги в главный head если они были
-        $ret = _StrReplaceFirst("<head>", "<head{$headAttrs}>", $html);
-
-        return $ret;
+        return _StrReplaceFirst("<head>", "<head{$headAttrs}>", $html);
     }
 
     /**

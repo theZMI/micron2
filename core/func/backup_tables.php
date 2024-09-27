@@ -1,6 +1,6 @@
 <?php
 
-function BackupTables($backUpDir, $host, $user, $pass, $dbname, $tables = '*')
+function backup_tables($backUpDir, $host, $user, $pass, $dbname, $tables = '*')
 {
     $link = mysqli_connect($host, $user, $pass, $dbname);
 
@@ -46,7 +46,7 @@ function BackupTables($backUpDir, $host, $user, $pass, $dbname, $tables = '*')
 
                 //Over fields
                 for ($j = 0; $j < $num_fields; $j++) {
-                    $row[$j] = addslashes($row[$j]);
+                    $row[$j] = addslashes(strval($row[$j]));
                     $row[$j] = str_replace("\n", "\\n", $row[$j]);
                     if (isset($row[$j])) {
                         $return .= '"' . $row[$j] . '"';

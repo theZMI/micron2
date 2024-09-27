@@ -2,18 +2,7 @@
 
 class Output
 {
-    private function __construct()
-    {
-    }
-
-    public static function getInstance()
-    {
-        static $o = null;
-        if (is_null($o)) {
-            $o = new self();
-        }
-        return $o;
-    }
+    use SingletonTrait;
 
     public function htmlValidate($c)
     {
@@ -23,18 +12,16 @@ class Output
     // Возвращает debug-панель располагаемую внизу страницу
     public function getDebug()
     {
-        $ret = '';
-        if (EnvConfig::DEBUG_MODE && Get('debug_panel')) {
-            ob_start();
-            IncludeCom('_dev/debug_panel/main');
-            $ret = ob_get_clean();
-        }
-
-        return $ret;
+        ob_start();
+        IncludeCom('_dev/debug_panel/main');
+        return ob_get_clean();
     }
 
     public function addDebug($c)
     {
+        if (!EnvConfig::DEBUG_MODE) {
+            return $c;
+        }// && Get('debug_panel')) {
         return $c . $this->getDebug();
     }
 
@@ -47,5 +34,44 @@ class Output
             $c = call_user_func($func, $c);
         }
         return $c;
+    }
+
+    public function extraPackerPrepare($c)
+    {
+        require_once BASEPATH . 'lib/ExtraPacker/Config.php';
+        require_once BASEPATH . 'lib/ExtraPacker/ExtraPacker.php';
+
+        $conf           = Config('extraPacker');
+        $packedFilesDir = BASEPATH . 'tmp/' . $conf['dir'];
+        $extraPacker    = new ExtraPacker(
+            ['ExtraPacker_Config', 'getPathJsFileFromUrl'],
+            ['ExtraPacker_Config', 'getPathCssFileFromUrl'],
+            ['ExtraPacker_Config', 'getAddrJsPackFile'],
+            ['ExtraPacker_Config', 'getAddrCssPackFile'],
+            null,
+            null,
+            $packedFilesDir . '/js/inf.txt',
+            $packedFilesDir . '/js/js.js',
+            $packedFilesDir . '/js/trans.txt',
+            $packedFilesDir . '/css/inf.txt',
+            $packedFilesDir . '/css/css.css',
+            $packedFilesDir . '/css/trans.txt',
+            $conf['packHtml'],
+            $conf['packCss'],
+            $conf['packJs'],
+            true,
+            true,
+            $conf['arrExceptions_js'],
+            $conf['arrExceptionsNotAdd_js'],
+            $conf['arrExceptions_css'],
+            $conf['arrExceptionsNotAdd_css'],
+            $conf['buffering'],
+            ['ExtraPacker_Config', 'prepareEachFile'],
+            ['ExtraPacker_Config', 'prepareAllCss'],
+            ['ExtraPacker_Config', 'prepareAllJs'],
+            $conf['statFilePath']
+        );
+
+        return $extraPacker->pack($c);
     }
 }

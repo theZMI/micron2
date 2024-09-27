@@ -1,4 +1,4 @@
 <?php
 
-const SUPPORT_PHONE = '+7(999)255-06-93';
-const SUPPORT_EMAIL = 'zmigpost@gmail.com';
+define('SUPPORT_PHONE', L('g_support_phone'));
+define('SUPPORT_EMAIL', L('g_support_email'));

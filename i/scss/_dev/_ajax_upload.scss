@@ -1,0 +1,15 @@
+@import "@scss/_variables";
+
+.ajax-upload-form {
+  .progress-wrapper {
+    .progress {
+      margin-top: 7px;
+    }
+  }
+
+  &-button {
+    &-red {
+      color: $danger;
+    }
+  }
+}

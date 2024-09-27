@@ -7,16 +7,18 @@
             <th>key</th>
             <th>value</th>
         </tr>
-        <?php if (count($arr)): ?>
-            <?php $i = 0;
+        <?php
+        if (count($arr)):
+            $i = 0;
             foreach ($arr as $k => $v): ?>
                 <tr>
                     <td class="num"><?= ++$i ?></td>
                     <td><?= $k ?></td>
                     <td><?= VarDump($v); ?></td>
                 </tr>
-            <?php endforeach ?>
-        <?php else: ?>
+            <?php
+            endforeach;
+        else: ?>
             <tr>
                 <td colspan="3" class="center">Empty</td>
             </tr>

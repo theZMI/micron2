@@ -2,62 +2,42 @@
 
 class ErrorLoggerModel extends \Models\ModelExtends
 {
-    public function __construct($id = null)
-    {
-        parent::__construct('error_logger', $id);
-    }
+    const PAGE_LIMIT = 25;
 
     public function createTable()
     {
-        $this->db->query(
+        return $this->db->query(
             "CREATE TABLE IF NOT EXISTS ?# (
-                `id` int(11) NOT NULL AUTO_INCREMENT,
-                `create_time` int(11) DEFAULT NULL,
-                `_get` longtext CHARACTER SET utf8,
-                `_post` longtext CHARACTER SET utf8,
-                `_cookie` longtext CHARACTER SET utf8,
-                `_session` longtext CHARACTER SET utf8,
-                `_server` longtext CHARACTER SET utf8,
-                `_files` longtext CHARACTER SET utf8,
-                `backtrace` longtext CHARACTER SET utf8,
-                `sql` longtext CHARACTER SET utf8,
-                `ip` int(11) DEFAULT NULL,
-                `browser` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
-                `browser_version` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
-                `platform` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
-                `g_config` longtext CHARACTER SET utf8,
-                `g_lang` longtext CHARACTER SET utf8,
-                `g_user` longtext CHARACTER SET utf8,
-                `errno` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
-                `errstr` text CHARACTER SET utf8,
-                `errfile` varchar(2048) CHARACTER SET utf8 DEFAULT NULL,
-                `errline` int(11) DEFAULT NULL,
+                `id` INT NOT NULL AUTO_INCREMENT,
+                `_get` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `_post` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `_cookie` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `_session` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `_server` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `_files` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `backtrace` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `sql` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `ip` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `browser` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `browser_version` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `platform` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `g_config` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `g_lang` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `g_user` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `errno` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `errstr` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `errfile` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `errline` INT DEFAULT NULL,
+                `create_time` INT DEFAULT NULL,
                 PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1",
+            ) ENGINE = InnoDB",
             $this->table
         );
     }
 
-    public static function ipAddress()
+    public function __construct($id = null)
     {
-        $ipaddress = '';
-        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            $ipaddress = ip2long($_SERVER['HTTP_CLIENT_IP']);
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipaddress = ip2long($_SERVER['HTTP_X_FORWARDED_FOR']);
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
-            $ipaddress = ip2long($_SERVER['HTTP_X_FORWARDED']);
-        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-            $ipaddress = ip2long($_SERVER['HTTP_FORWARDED_FOR']);
-        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
-            $ipaddress = ip2long($_SERVER['HTTP_FORWARDED']);
-        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            $ipaddress = ip2long($_SERVER['REMOTE_ADDR']);
-        } else {
-            $ipaddress = -1;
-        }
-
-        return $ipaddress;
+        parent::__construct('error_logger', $id);
     }
 
     public function count()
@@ -65,7 +45,7 @@ class ErrorLoggerModel extends \Models\ModelExtends
         return $this->db->selectCell("SELECT COUNT(*) FROM ?#", $this->table);
     }
 
-    public function deleteAll()
+    public function clear()
     {
         $this->db->query("TRUNCATE TABLE ?#", $this->table);
     }

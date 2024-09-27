@@ -1,6 +1,6 @@
 <?php
 
-header(Php::Status(503));
+header(Php::status(503));
 
 ob_start();
     IncludeCom('_reconstruction');

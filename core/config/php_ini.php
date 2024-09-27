@@ -1,15 +1,15 @@
 <?php
 
+const DEFAULT_TIME_ZONE = 'Europe/Kaliningrad';
+
 Config('phpIni', [
-    'error_reporting'    => E_ALL ^ E_DEPRECATED,
-    // Выдавать все ошибки за исключением нотайсов об устаревшем коде
-    'display_errors'     => EnvConfig::DEBUG_MODE,
-    // Выводить ли ошибки в браузер
-    'memory_limit'       => '32M',
-    // Максимальное количество памяти на выполнение скрипта
-    'max_execution_time' => '15',
-    // Максимальное время выполнения скрипта
-    'max_input_time'     => '15'
-    // Время в течении которого скрипту разрешено получать данные
+    'error_reporting'        => E_ALL, // Выдавать все ошибки
+    'display_errors'         => EnvConfig::DEBUG_MODE, // Выводить ли ошибки в браузер
+    'log_errors'             => true,
+    'ignore_repeated_errors' => true,
+    'error_log'              => BASEPATH . 'tmp/php_errors.log',
+    'memory_limit'           => '32M', // Максимальное количество памяти на выполнение скрипта
+    'max_execution_time'     => '15', // Максимальное время выполнения скрипта
+    'max_input_time'         => '15' // Время в течении которого скрипту разрешено получать данные
     // "upload_max_filesize" и "post_max_size" - Для изменения размера загружаемых данных (файлов или POST) но задавать нужно через "php.ini | .htaccess | httpd.conf"
 ]);

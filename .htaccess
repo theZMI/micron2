@@ -18,7 +18,7 @@ DirectoryIndex index.php
 # Все запросы (кроме заданного списка исключений) вести через /index.php
 RewriteEngine on
 RewriteBase /
-RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|api/.*)
+RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|tmp/.*|lib/.*)
 RewriteRule ^(.*)$ /index.php?micron_query=$1 [L,QSA]
 
 # Максимальный размер файла для загрузки - 50Мб

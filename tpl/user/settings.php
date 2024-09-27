@@ -1,0 +1,1 @@
+<?php IncludeCom('_close_area', ['message' => 'Раздел закрыт', 'icon' => 'bi-x']); ?>

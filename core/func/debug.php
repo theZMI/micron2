@@ -1,9 +1,18 @@
 <?php
 
-// Распечатает строку, массив или объект отображая html теги
+// Print something and show html tags like a text
 function Xmp($a)
 {
-    printf("<xmp>%s</xmp>", print_r($a, true));
+    echo "<xmp>";
+    print_r($a);
+    echo "</xmp>";
+}
+
+// Simple save something into log-file
+function ToLog($msg, $path = '')
+{
+    $path = $path ?: (BASEPATH . 'tmp/from_toLog_function.log');
+    FileLogger::Create($path)->Message($msg);
 }
 
 function VarDump($var)
@@ -16,17 +25,11 @@ function VarDump($var)
         $ret = 'null';
     } else {
         ob_start();
-            var_dump($var);
+        var_dump($var);
         $data = ob_get_clean();
         $data = preg_replace('/=>\n\s+/', ' => ', $data);
         $data = htmlspecialchars($data);
         $ret  = "<pre>{$data}</pre>";
     }
-
     return $ret;
-}
-
-function ToLog($msg, $path = '')
-{
-    (FileLogger::Create(BASEPATH . 'tmp/from_toLog_function.log'))->Message($msg);
 }

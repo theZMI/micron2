@@ -1,0 +1,1 @@
+<?php IncludeCom('_close_area'); ?>

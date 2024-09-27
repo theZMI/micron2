@@ -1,0 +1,14 @@
+.jcrop-form {
+  &-preview {
+    display: flex;
+    justify-content: center;
+    background: #CACACA;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  &-actions {
+    text-align: center;
+    margin-top: 1rem;
+  }
+}

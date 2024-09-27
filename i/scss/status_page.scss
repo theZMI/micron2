@@ -1,0 +1,10 @@
+.status-page {
+  @include form-by-center();
+
+  &-icon {
+    display: block;
+    font-size: 125px;
+    font-family: $font-condensed;
+    color: #CCC;
+  }
+}

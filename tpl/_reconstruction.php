@@ -1,14 +1,15 @@
-<div class="text-center">
-    <span class="glyphicon glyphicon glyphicon-refresh header-icon"></span>
-    <p class="lead">Обновление...</p>
-    <br>
-    <p>
-        Извините, но прямо сейчас мы обновляем сайт.
+<div class="page text-center">
+    <div class="mb-3">
+        <i class="bi bi-arrow-repeat" style="font-size: 50px;"></i>
+        <br>
+        <p class="lead">Обновление...</p>
+    </div>
+    <p class="mb-5 text-black-50">
+        Прямо сейчас мы обновляем сайт.<br>
+        Возможно вы будете первым кто увидит изменения :-)
     </p>
-    <br>
     <div>
-        <a href="mailto:<?= SUPPORT_EMAIL ?>" class="btn btn-link"><?= SUPPORT_EMAIL ?></a>
-        &nbsp;
-        <a href="tel:<?= PhoneFilter(SUPPORT_PHONE) ?>" class="btn btn-link"><?= SUPPORT_PHONE ?></a>
+        <a href="mailto:<?= SUPPORT_EMAIL ?>" class="btn btn-primary rounded-pill ps-4 pe-4 m-2"><?= SUPPORT_EMAIL ?></a>
+        <a href="tel:<?= PhoneFilter(SUPPORT_PHONE) ?>" class="btn btn-primary rounded-pill ps-4 pe-4 m-2 "><?= SUPPORT_PHONE ?></a>
     </div>
 </div>

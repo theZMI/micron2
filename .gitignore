@@ -5,8 +5,8 @@ composer.lock
 /_env.php
 /tmp/*
 /upl/*
-/vendor
 /db_backups/*
+/vendor
 /i/ts/package-lock.json
 /i/ts/node_modules
 /i/webpack/dist

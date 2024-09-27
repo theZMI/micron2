@@ -1,0 +1,229 @@
+@color_1: #BBB;
+@color_2: #666;
+@color_3: #B9BDB6;
+@color_4: #fff;
+@color_5: #d74242;
+@color_6: #E0E8FF;
+@color_7: #5d636f;
+@color_8: #799e6c;
+@color_9: #c164d2;
+@color_10: #5BA1CF;
+@color_11: #c99c6e;
+@color_12: #B35E4D;
+@color_13: #669199;
+@color_14: #999;
+@color_15: #FFF;
+@color_16: #AAA;
+@font_family_1: monospace;
+@background_color_1: #292c33;
+
+.syntaxhighlighter {
+  font-family: @font_family_1 !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+  color: @color_1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.33) !important;
+  background-color: @background_color_1 !important;
+  padding: 0;
+  margin: 0 !important;
+  position: relative;
+  border-radius: 7px;
+  border: none !important;
+
+  div {
+    font-family: @font_family_1 !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+
+  code {
+    font-family: @font_family_1 !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+
+  table {
+    font-family: @font_family_1 !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+
+    td {
+      font-family: @font_family_1 !important;
+      font-size: 11px !important;
+      line-height: 1.5 !important;
+    }
+
+    tr {
+      font-family: @font_family_1 !important;
+      font-size: 11px !important;
+      line-height: 1.5 !important;
+    }
+
+    tbody {
+      font-family: @font_family_1 !important;
+      font-size: 11px !important;
+      line-height: 1.5 !important;
+    }
+  }
+
+  .toolbar {
+    border: none !important;
+    display: none !important;
+    background-color: @background_color_1 !important;
+
+    .item.copyToClipboard {
+      display: none !important;
+    }
+
+    .item.about {
+      display: none !important;
+    }
+
+    .item.printSource {
+      display: none !important;
+    }
+
+    a {
+      color: @color_5 !important;
+
+      &:hover {
+        color: @color_6 !important;
+      }
+    }
+  }
+
+  .lines {
+    padding: 7px 5px !important;
+  }
+
+  .line {
+    .number {
+      color: @color_2 !important;
+      font-size: 12px !important;
+    }
+
+    .content {
+      border-left: 1px dotted #333 !important;
+      color: @color_3 !important;
+    }
+  }
+
+  .line.alt1 {
+    background-color: @background_color_1 !important;
+  }
+
+  .line.alt2 {
+    background-color: @background_color_1 !important;
+  }
+
+  .line.highlighted {
+    .number {
+      background-color: @background_color_1 !important;
+      color: @color_4 !important;
+    }
+  }
+
+  .line.highlighted.alt1 {
+    background-color: @background_color_1 !important;
+  }
+
+  .line.highlighted.alt2 {
+    background-color: @background_color_1 !important;
+  }
+
+  .plain {
+    color: @color_3 !important;
+
+    a {
+      color: @color_3 !important;
+    }
+  }
+
+  .comments {
+    color: @color_7 !important;
+
+    a {
+      color: @color_7 !important;
+    }
+  }
+
+  .string {
+    color: @color_8 !important;
+
+    a {
+      color: @color_8 !important;
+    }
+  }
+
+  .keyword {
+    color: @color_9 !important;
+  }
+
+  .preprocessor {
+    color: @color_10 !important;
+  }
+
+  .variable {
+    color: @color_11 !important;
+  }
+
+  .value {
+    color: @color_12 !important;
+  }
+
+  .functions {
+    color: @color_13 !important;
+  }
+
+  .constants {
+    color: @color_5 !important;
+  }
+
+  .script {
+    background-color: @background_color_1 !important;
+  }
+
+  .color1 {
+    color: @color_14 !important;
+
+    a {
+      color: @color_14 !important;
+    }
+  }
+
+  .color2 {
+    color: @color_15 !important;
+
+    a {
+      color: @color_15 !important;
+    }
+  }
+
+  .color3 {
+    color: @color_12 !important;
+
+    a {
+      color: @color_12 !important;
+    }
+  }
+
+  .highlighter-lang-indicator {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    background: #000 !important;
+    color: @color_16;
+    border-radius: 0 7.5px 0 5px;
+    padding: 4px 7px !important;
+    text-transform: uppercase;
+    line-height: 1 !important;
+  }
+}
+
+.syntaxhighlighter.printing {
+  .line {
+    .content {
+      border: 0 !important;
+    }
+  }
+}

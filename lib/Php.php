@@ -1,20 +1,7 @@
 <?php
 
-$path = dirname(__FILE__) . '/Debug/ErrorHook/';
-require_once $path . 'Listener.php';
-require_once $path . 'Catcher.php';
-require_once $path . 'INotifier.php';
-require_once $path . 'Util.php';
-require_once $path . 'TextNotifier.php';
-require_once $path . 'MailNotifier.php';
-require_once $path . 'RemoveDupsWrapper.php';
-require_once $path . 'my/MyDebug_ErrorHook_Notifier.php';
-require_once $path . 'my/MyDebug_ErrorHook_TextNotifier.php';
-
-
 class Php
 {
-    // Массив с перечнем кодов ответов от сервера
     private static $codes = [
         '200' => 'OK',
         '201' => 'Created',
@@ -66,50 +53,18 @@ class Php
             return false;
         }
 
-        $text           = self::$codes[$code];
-        $serverProtocol = $_SERVER['SERVER_PROTOCOL'] ?? false;
+        $text     = self::$codes[$code];
+        $protocol = $_SERVER['SERVER_PROTOCOL'] ?? false;
 
         if (substr(php_sapi_name(), 0, 3) == 'cgi') {
             $ret = "Status: {$code} {$text}";
-        } elseif ($serverProtocol == 'HTTP/1.1' or $serverProtocol == 'HTTP/1.0') {
-            $ret = $serverProtocol . " {$code} {$text}";
+        } elseif (in_array($protocol, ['HTTP/1.1', 'HTTP/1.0'])) {
+            $ret = "{$protocol} {$code} {$text}";
         } else {
             $ret = "HTTP/1.1 {$code} {$text}";
         }
 
         return $ret;
-    }
-
-    private function debugErrorHook()
-    {
-        static $errorListener = null;
-        $loggerConfig = Config('logErrors');
-        $debugClassName = $loggerConfig['classNotifier'];
-
-        FileSys::makeDir(dirname($loggerConfig['repeatTmp']));
-
-        if (is_null($errorListener)) {
-            $errorListener  = new Debug_ErrorHook_Listener();
-        }
-        $errorListener->addNotifier( new $debugClassName(Debug_ErrorHook_TextNotifier::LOG_ALL) );
-
-        // Если есть email куда отправлять ошибки устанавливаем логгер на него
-        if (!empty($loggerConfig['email'])) {
-            $errorListener->addNotifier
-            (
-                new Debug_ErrorHook_RemoveDupsWrapper
-                (
-                    new Debug_ErrorHook_MailNotifier
-                    (
-                        $loggerConfig['email'],
-                        Debug_ErrorHook_MailNotifier::LOG_ALL
-                    ),
-
-                    $loggerConfig['repeatTmp'] . "/email/",
-                    $loggerConfig['emailTimeRepeat']
-                )
-            );
-        }
     }
 
     public function __construct()
@@ -121,15 +76,11 @@ class Php
         );
 
         setlocale(LC_ALL, "en_US.UTF-8", "English");
-        date_default_timezone_set('Europe/London');
+        date_default_timezone_set(DEFAULT_TIME_ZONE);
 
-        if (function_exists("mb_internal_encoding") && function_exists("mb_regex_encoding")) {
+        if (function_exists('mb_internal_encoding') && function_exists('mb_regex_encoding')) {
             mb_internal_encoding(Config('charset'));
             mb_regex_encoding(Config('charset'));
-        }
-
-        if (Config('useDebugErrorHook')) {
-            $this->debugErrorHook();
         }
     }
 }

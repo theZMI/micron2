@@ -1,0 +1,41 @@
+.table-extra-condensed {
+  font-size: 13px;
+  margin-bottom: 0;
+  border: 1px solid #F5F5F5;
+  border-collapse: collapse;
+
+  &-wrapper {
+    padding: 3px;
+    background: #F5F5F5;
+    border-radius: 5px;
+    min-height: 100px;
+    display: flex;
+  }
+
+  th {
+    background: #F5F5F5;
+    white-space: nowrap;
+  }
+
+  th, td {
+    vertical-align: middle;
+    padding: 2px 3px;
+    border: 1px solid #F5F5F5;
+  }
+
+  &-filters {
+    td, th {
+      padding: 0;
+
+      input, select {
+        font-size: 12px;
+        padding: 2px 3px;
+        position: relative;
+
+        &:focus, &:active {
+          z-index: 2;
+        }
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ function RequireOnceAll($dir)
 {
     global $g_lang, $g_user, $g_admin;
 
-    // Если в папке есть файл main.php то включаем его 1-ым
+    // Если в папке есть файл main.php, то включаем его 1-ым
     if (is_readable($dir . '/main.php')) {
         require_once $dir . '/main.php';
     }

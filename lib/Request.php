@@ -5,20 +5,9 @@
  */
 class Request
 {
+    use SingletonTrait;
+
     private $lastLangDetect = null;
-
-    private function __construct()
-    {
-    }
-
-    public static function getInstance()
-    {
-        static $o = null;
-        if (is_null($o)) {
-            $o = new self();
-        }
-        return $o;
-    }
 
     public function isAjax()
     {
@@ -28,9 +17,9 @@ class Request
     /**
      * Получает строку запроса к движку
      *
-     * Так же данная функция занимается созданием параметров в $_GET если они были переданны в q и созданием константы LANG если ее еще не было
+     * Так же данная функция занимается созданием параметров в $_GET если они были переданы в micron_query и созданием константы LANG если ее еще не было
      *
-     * @param string $q - строка запроса при ее отсутвии то что было в $_GET[q]
+     * @param string $q - строка запроса при ее отсутствии то что было в $_GET[micron_query]
      *
      * @return string
      * @global array $g_config
@@ -38,18 +27,20 @@ class Request
      */
     public function getQuery($q = null)
     {
-        $langs = array_keys(Config('langs'));
+        $langs   = array_keys(Config('langs'));
         $defPage = Config('defaultComponent');
-        $q = is_null($q) ? empty($_GET['micron_query']) ? $defPage : trim($_GET['micron_query'], "/") : $q;
-        $q = _StrReplaceFirst('&', '?', $q);
-        $parse = parse_url($q);
-        $q = FileSys::filenameSecurity($parse['path']);
+        $q       = is_null($q)
+            ? (empty($_GET['micron_query']) ? $defPage : trim($_GET['micron_query'], "/"))
+            : $q;
+        $q       = _StrReplaceFirst('&', '?', $q);
+        $parse   = parse_url($q);
+        $q       = FileSys::filenameSecurity($parse['path']);
 
         if (isset($parse['query'])) {
             foreach (explode('&', $parse['query']) as $elem) {
-                if (strpos($elem, '=') !== false) {
-                    $elem = explode('=', $elem);
-                    $_GET[$elem[0]] = isset($elem[1]) ? $elem[1] : null;
+                if (str_contains($elem, '=')) {
+                    $elem           = explode('=', $elem);
+                    $_GET[$elem[0]] = $elem[1] ?? null;
                 }
             }
         }
@@ -97,7 +88,7 @@ class Request
         return SiteRoot($this->getQuery() . $pars);
     }
 
-    public function getLastLangDetected()
+    public function getLastLang()
     {
         return $this->lastLangDetect;
     }

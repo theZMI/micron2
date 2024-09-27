@@ -1,0 +1,48 @@
+@import "@webpack/node_modules/bootstrap/scss/functions";
+@import "@webpack/node_modules/bootstrap/scss/variables";
+@import "@webpack/node_modules/bootstrap/scss/variables-dark";
+@import "@webpack/node_modules/bootstrap/scss/maps";
+@import "@webpack/node_modules/bootstrap/scss/mixins";
+
+.ms-ctn.ms-ctn-focus {
+  color: $input-focus-color;
+  background-color: $input-focus-bg;
+  border-color: $input-focus-border-color;
+  outline: 0;
+  @if $enable-shadows {
+    @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+  } @else {
+    // Avoid using mixin so we can pass custom focus shadow properly
+    box-shadow: $input-focus-box-shadow;
+  }
+}
+
+.ms-ctn {
+  .ms-sel-item {
+    background: #000;
+    color: #FFF;
+    font-size: 13px;
+    padding: 1px 5px 1px 10px;
+    border-radius: 11px;
+    border: 1px solid #000;
+    margin: 2px 5px 1px 0;
+    text-shadow: none;
+  }
+
+  .ms-trigger {
+    border-left-color: transparent;
+
+    &:hover {
+      right: 0;
+      width: 25px;
+    }
+  }
+}
+
+.ms-res-ctn {
+  left: 0;
+}
+
+.ms-helper {
+  display: none !important;
+}

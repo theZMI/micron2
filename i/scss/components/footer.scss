@@ -1,0 +1,35 @@
+#footer {
+  min-height: $site-footer-height;
+  background: $site-backstage-bg;
+  color: #FFF;
+
+  .footer-logo {
+    img {
+      height: 43px;
+      display: inline-block;
+    }
+  }
+
+  a {
+    color: #FFF;
+    transition: all 150ms linear;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 15px;
+
+    > span {
+      padding: 7.5px 0;
+      border-top: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+    }
+
+    &:hover, &:active, &:focus {
+      color: $primary;
+      text-decoration: none;
+
+      > span {
+        border-bottom-color: $primary;
+      }
+    }
+  }
+}

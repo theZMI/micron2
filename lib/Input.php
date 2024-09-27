@@ -2,24 +2,7 @@
 
 class Input
 {
-    private function __construct()
-    {
-    }
-
-    public static function getInstance()
-    {
-        static $o = null;
-        if (is_null($o)) {
-            $o = new self();
-        }
-        return $o;
-    }
-
-    // Очистка от html вставок
-    private function htmlClean(&$value)
-    {
-        $value = htmlspecialchars($value);
-    }
+    use SingletonTrait;
 
     // Очищает входные данные
     public function clean($value, $secureFlags)
@@ -36,8 +19,8 @@ class Input
         // Если не отключена защита от HTML
         if (!($secureFlags & M_HTML_FILTER_OFF)) {
             is_array($value)
-                ? array_walk_recursive($value, [$this, "HtmlClean"])
-                : $this->htmlClean($value);
+                ? array_walk_recursive($value, fn(&$v) => $v = htmlspecialchars($v))
+                : $value = htmlspecialchars($value);
         }
 
         return $value;
@@ -62,7 +45,6 @@ class Input
     public function lang($name)
     {
         global $g_lang;
-
         return $g_lang[$name] ?? $name;
     }
 }

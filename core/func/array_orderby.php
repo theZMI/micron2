@@ -2,11 +2,16 @@
 
 /**
  * Сортировка массива по одному из его параметров
- * Пример: $sorted = array_orderby($dataArray, 'pos', SORT_DESC);
- *
+ * Пример:
+ *  $dataArray = [
+ *     ['name' => 'Second', 'pos' => 2],
+ *     ['name' => 'First',  'pos' => 1],
+ *     ['name' => 'Third',  'pos' => 3],
+ *  ];
+ *  $sorted = ArrayOrderBy($dataArray, 'pos', SORT_DESC);
  * @return array
  */
-function array_orderby()
+function ArrayOrderBy()
 {
     $args = func_get_args();
     $data = array_shift($args);
