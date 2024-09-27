@@ -1,3 +1,3 @@
-export function this_is_js_test() {
-    return 'This is test of JavaScript';
+export function this_is_a_js_test() {
+    return 'This is a test of JavaScript';
 }

@@ -1,5 +1,5 @@
 {
-  "name": "micron/site",
+  "name": "micron-site",
   "description": "Micron site",
   "require": {
     "php": ">=8.0.2",
