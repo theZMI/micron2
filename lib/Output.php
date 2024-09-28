@@ -19,9 +19,9 @@ class Output
 
     public function addDebug($c)
     {
-        if (!EnvConfig::DEBUG_MODE) {
+        if (!Env('DEBUG_MODE')) {
             return $c;
-        }// && Get('debug_panel')) {
+        }
         return $c . $this->getDebug();
     }
 

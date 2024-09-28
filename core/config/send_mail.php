@@ -16,5 +16,5 @@ Config('sendmail', [
         'email'  => $email,
         'pwd'    => $emailPassword
     ],
-    'send_to_file' => EnvConfig::DEBUG_MODE
+    'send_to_file' => Env('DEBUG_MODE')
 ]);

@@ -80,7 +80,7 @@ function _SendMail($to, $subject, $message, $additionalHeaders, $files, $priorit
 
 function SendMail($to, $subject, $message, $config = [], $additionalHeaders = '', $files = [])
 {
-    if (EnvConfig::DEBUG_MODE && strlen($additionalHeaders)) { // TODO
+    if (Env('DEBUG_MODE') && strlen($additionalHeaders)) { // TODO
         trigger_error("Sorry, additional headers not work at this moment", E_USER_ERROR);
     }
     if (!is_array($to)) {

@@ -58,8 +58,8 @@ trait AuthTrait
         if ($uid) {
             $u = new self($uid);
             if ($u->login == $login && $u->pwd_hash == $pwd_hash) {
-                setcookie($config['cookie_login_param'], $login, time() + self::REMEMBER_PERIOD, '/', EnvConfig::DOMAIN_COOKIE);
-                setcookie($config['cookie_password_param'], $pwd_hash, time() + self::REMEMBER_PERIOD, '/', EnvConfig::DOMAIN_COOKIE);
+                setcookie($config['cookie_login_param'], $login, time() + self::REMEMBER_PERIOD, '/', Env('DOMAIN_COOKIE'));
+                setcookie($config['cookie_password_param'], $pwd_hash, time() + self::REMEMBER_PERIOD, '/', Env('DOMAIN_COOKIE'));
                 $ret = true;
             }
         }
@@ -70,7 +70,7 @@ trait AuthTrait
     public function logout()
     {
         $config = self::getConfig();
-        setcookie($config['cookie_login_param'], '', -1, '/', EnvConfig::DOMAIN_COOKIE);
-        setcookie($config['cookie_password_param'], '', -1, '/', EnvConfig::DOMAIN_COOKIE);
+        setcookie($config['cookie_login_param'], '', -1, '/', Env('DOMAIN_COOKIE'));
+        setcookie($config['cookie_password_param'], '', -1, '/', Env('DOMAIN_COOKIE'));
     }
 }

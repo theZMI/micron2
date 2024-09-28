@@ -124,17 +124,17 @@ function SiteRoot($uri = '')
     $ret  = $lang || $uri ? "/?micron_query={$lang}{$uri}" : '';
     $ret  = empty($ret) ? '/' : $ret;
     $ret  = _StrReplaceFirst('/?micron_query=', '/', _StrReplaceFirst('&', '?', $ret));
-    $ret  = EnvConfig::SITE_ROOT_URL . substr($ret, 1);
+    $ret  = Env('SITE_ROOT_URL') . substr($ret, 1);
 
     // Заменяем начальную страницу в URL на просто корень сайта
     $isDefaultComponent = in_array(
         $ret,
         [
-            EnvConfig::SITE_ROOT_URL . Config('defaultComponent'),
-            EnvConfig::SITE_ROOT_URL . '?micron_query=' . Config('defaultComponent'),
+            Env('SITE_ROOT_URL') . Config('defaultComponent'),
+            Env('SITE_ROOT_URL') . '?micron_query=' . Config('defaultComponent'),
         ]
     );
-    return $isDefaultComponent ? EnvConfig::SITE_ROOT_URL : $ret;
+    return $isDefaultComponent ? Env('SITE_ROOT_URL') : $ret;
 }
 
 /**
