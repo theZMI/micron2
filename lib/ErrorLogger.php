@@ -76,11 +76,12 @@ class ErrorLogger
             return $logger;
         };
         $logInFile         = function ($errno, $errstr, $errfile, $errline, $trace) use ($backtraceToString) {
-            return FileLogger::create(ini_get('error_log'))->error(
+            FileLogger::create(ini_get('error_log'))->error(
                 "Message: $errstr($errno)\n" .
                 "File: $errfile($errline)\n" .
                 "Backtrace: " . $backtraceToString($trace)
             );
+            return true;
         };
         $errorHandler      = $func ?: function ($errno, $errstr, $errfile, $errline, $trace) use ($logInDb, $logInFile) {
             $dbLogger = null;
@@ -93,8 +94,20 @@ class ErrorLogger
                 $isWriteIntoLogFile = $logInFile($errno, $errstr, $errfile, $errline, $trace);
             }
 
+            $logger = $dbLogger;
+            if (!$logger) {
+                $logger = (object)[
+                    'id'        => 'No id',
+                    'errstr'    => $errstr,
+                    'errno'     => $errno,
+                    'errfile'   => $errfile,
+                    'errline'   => $errline,
+                    'backtrace' => 'Wrote into DB: ' . ($dbLogger ? 'yes' : 'no') . PHP_EOL .
+                                   'Wrote into File: ' . ($isWriteIntoLogFile ? 'yes' : 'no'),
+                ];
+            }
             ob_start();
-            IncludeCom(ini_get('display_errors') ? '_dev/error_logger_show' : '500', ['logger' => $dbLogger]);
+            IncludeCom(ini_get('display_errors') ? '_dev/error_logger_show' : '500', ['logger' => $logger]);
             $infoAboutError = ob_get_clean();
 
             IncludeCom('_dev/main_tpl_for_stop_info', ['content' => $infoAboutError, 'title' => '500 | Site error :-(']);

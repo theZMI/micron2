@@ -8,12 +8,14 @@ ini_set('display_errors', true);
 
 define('BASEPATH', dirname(__FILE__) . '/');
 
-require_once BASEPATH . '_env.php'; // Include environment variables
-ini_set('display_errors', EnvConfig::DEBUG_MODE); // Now we know site's mode, and we can change mode of show/log errors
-
 if (is_readable(BASEPATH . 'vendor/autoload.php')) {
     require_once BASEPATH . 'vendor/autoload.php';
 }
+
+$dotenv = \Dotenv\Dotenv::createImmutable(BASEPATH);
+$_ENV = array_merge($_ENV, $dotenv->load()); // Include environment variables
+
+ini_set('display_errors', $_ENV('DEBUG_MODE')); // Now we know site's mode, and we can change mode of show/log errors
 
 require_once BASEPATH . 'core/core.php'; // Include engine (it replace display_errors mode)
 
