@@ -5,12 +5,6 @@ function IsValidEmail($email)
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
-function PhoneFilter($phone)
-{
-    $ret = preg_replace("~[^\+|^0-9]~is", '', $phone);
-    return str_replace("+8", "+7", $ret);
-}
-
 function IsValidPhone($phone)
 {
     $phone1         = PhoneFilter($phone);
@@ -62,4 +56,10 @@ function IsValidUrl($url)
     preg_match($regExp, $url, $m);
 
     return !empty($m);
+}
+
+function PhoneFilter($phone)
+{
+    $ret = preg_replace("~[^\+|^0-9]~is", '', $phone);
+    return str_replace("+8", "+7", $ret);
 }

@@ -22,6 +22,3 @@ $g_lang['m_defaultTitle'] = L('m_title');
 
 RequireOnceAll(BASEPATH . 'core/config');
 RequireOnceAll(BASEPATH . 'core/init');
-
-// Разрешаем ajax-запросы откуда угодно
-Cors();

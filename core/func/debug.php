@@ -11,7 +11,7 @@ function Xmp($a)
 // Simple save something into log-file
 function ToLog($msg, $path = '')
 {
-    $path = $path ?: (BASEPATH . 'tmp/from_toLog_function.log');
+    $path = $path ?: (BASEPATH . 'tmp/from_toLog_function__jj1sdjbxaj1JGFGAixkqP.log');
     FileLogger::Create($path)->Message($msg);
 }
 

@@ -1,20 +1,26 @@
-@import "@scss/_variables";
 // Defined site's variables and overwritten bootstrap variables
-@import "@webpack/node_modules/bootstrap/scss/bootstrap";
+@import "@scss/_variables";
+
 // Bootstrap 5
-@import "@webpack/node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "@webpack/node_modules/bootstrap/scss/bootstrap";
+
 // Bootstrap 5 icons
-@import "@scss/components/base_styles";
+@import "@webpack/node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
 // Common site styles (html, body, overwrites and bonus classes)
+@import "@scss/components/common";
+
+// Special font to site
 @import url("https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
 @import "@scss/components/main_menu";
 @import "@scss/components/footer";
 @import "@scss/components/form_by_center";
 @import "@scss/components/switcher_sizes";
 @import "@scss/components/table_extra_condensed";
 @import "@scss/status_page";
-// 404, 403 and others status pages
 @import "@scss/login_form";
 @import "@scss/registration_form";
 @import "@scss/password_forgot_form";
+@import "@scss/user_cabinet";
 @import "@scss/home_page";

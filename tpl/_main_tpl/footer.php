@@ -3,8 +3,6 @@
         <div class="row mt-4 mb-3">
             <div class="col">
                 <a href="<?= SiteRoot() ?>"><span>Главная</span></a>
-                <a href="<?= SiteRoot('catalog') ?>"><span>Каталог товаров</span></a>
-                <a href="<?= SiteRoot('contacts') ?>"><span>Контакты</span></a>
             </div>
         </div>
         <div class="row mb-2">

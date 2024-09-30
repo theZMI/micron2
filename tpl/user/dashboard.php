@@ -1,1 +1,1 @@
-<?php IncludeCom('_close_area'); ?>
+Здесь dashboard-страница для ЛК пользователя

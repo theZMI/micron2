@@ -9,7 +9,6 @@
     "ext-curl": "*",
     "ext-zlib": "*",
     "ext-iconv": "*",
-    "nyholm/dsn": "^2.0",
     "thezmi/dbsimple": "dev-master",
     "thezmi/dbsimple-models": "dev-master",
     "thezmi/output-formats": "dev-master",
@@ -19,32 +18,9 @@
     "cbschuld/browser.php": "^1.9",
     "wikimedia/less.php": "^4.1",
     "phpmailer/phpmailer": "^6.9",
-    "voronkovich/sberbank-acquiring-client": "^2.8",
-    "endroid/qr-code": "^5.0",
-    "yoomoney/yookassa-sdk-php": "^3.2",
-    "without-composer/onesignal-simple-push-notification": "1.0.0",
     "pecee/simple-router": "5.4.1.7",
     "vlucas/phpdotenv": "^5.6"
   },
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "without-composer/onesignal-simple-push-notification",
-        "version": "1.0.0",
-        "source": {
-          "url": "https://github.com/jeanjar/onesignal-simple-push-notification.git",
-          "type": "git",
-          "reference": "master"
-        },
-        "autoload": {
-          "files": [
-            "src/PushNotification.php"
-          ]
-        }
-      }
-    }
-  ],
   "autoload": {
     "psr-4": {
       "": [

@@ -8,7 +8,6 @@ class UserModel extends \Models\ModelExtends
     use AuthTrait;
 
     const REMEMBER_PERIOD = 31536000; // Время хранения авторизации (в секундах)
-    const MASTER_PWD = "Nalshd1ofI1exvHH188100X";
 
     const STATUS_ACTIVE = 0;
     const STATUS_DELETE = -1;

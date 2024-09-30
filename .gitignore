@@ -5,7 +5,6 @@ composer.lock
 /.env
 /tmp/*
 /upl/*
-/db_backups/*
 /vendor
 /i/ts/package-lock.json
 /i/ts/node_modules

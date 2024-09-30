@@ -9,5 +9,3 @@ BrowserDataCache::offCachePage();
 new Php(); // Настройка php и включение профилирования ошибок
 
 header('Content-type: text/html; charset=' . Config('charset'));
-
-Cors();

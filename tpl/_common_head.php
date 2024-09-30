@@ -17,9 +17,6 @@
 <link rel="icon" href="<?= Root('favicon.ico') ?>" type="image/x-icon"/>
 <link rel="shortcut icon" href="<?= Root('favicon.ico') ?>" type="image/x-icon"/>
 
-<!-- Application icon for IOS dashboard -->
-<link rel="apple-touch-icon" href="<?= Root('i/image/touch_icon/180x180.png') ?>"/>
-
 <!-- Place to inject js/css from webpack -->
 <?php foreach (Config(['webpack', 'cssFiles']) as $file): ?>
     <link rel="stylesheet" type="text/css" href="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>"/>

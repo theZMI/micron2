@@ -9,18 +9,18 @@ $logo = [
 
 $menu = [
     [
+        'link' => SiteRoot(),
+        'name' => 'Главная',
+    ],
+    [
         'link'  => 'javascript:void(0)',
-        'name'  => 'Кратко о нас',
+        'name'  => 'Пункт 1',
         'label' => '',
         'css'   => '',
         'list'  => [
             [
-                'link' => SiteRoot(),
+                'link' => SiteRoot('about_us'),
                 'name' => 'Кратко о нас',
-            ],
-            [
-                'link' => SiteRoot('requisites'),
-                'name' => 'Реквизиты',
             ],
             'divider',
             [
@@ -28,15 +28,7 @@ $menu = [
                 'name' => 'Контакты',
             ],
         ],
-    ],
-    [
-        'link' => SiteRoot('shop/catalog'),
-        'name' => 'Каталог товаров',
-    ],
-    [
-        'link' => SiteRoot('blog'),
-        'name' => 'Блог',
-    ],
+    ]
 ];
 
 $countMessages = 1;
@@ -44,20 +36,14 @@ $rightMenu     = [
     [
         'link'    => '#offcanvasUserMenu',
         'name'    => '<i class="bi bi-person-circle d-none d-lg-inline"></i><span class="d-inline d-lg-none">Личный кабинет</span>' .
-            ($countMessages ? '<span class="position-absolute top-50 translate-middle p-1 badge rounded-pill bg-danger">+' . $countMessages . '<span class="visually-hidden">Новых сообщений</span></span>' : ''),
+                     (
+                         $countMessages
+                         ? '<span class="position-absolute top-50 translate-middle p-1 badge rounded-pill bg-danger">+' . $countMessages . '<span class="visually-hidden">Новых сообщений</span></span>'
+                         : ''
+                     ),
         'html'    => 'data-bs-toggle="offcanvas" href="#offcanvasUserMenu" role="button" aria-controls="offcanvasUserMenu"',
         'linkCss' => 'position-relative',
-    ],
-    [
-        'link'    => SiteRoot('shop/likes'),
-        'name'    => '<i class="bi bi-suit-heart-fill d-none d-lg-inline"></i><span class="d-inline d-lg-none">Понравилось</span>',
-        'linkCss' => 'position-relative',
-    ],
-    [
-        'link'    => SiteRoot('shop/cart'),
-        'name'    => '<i class="bi bi-basket2-fill d-none d-lg-inline"></i><span class="d-inline d-lg-none">Корзина</span>',
-        'linkCss' => 'position-relative'
-    ],
+    ]
 ];
 
 $userMenu = [];
