@@ -2,6 +2,7 @@
 <html lang="<?= LANG ?>" dir="ltr"<?= $htmlAttrs ?>>
 <head>
     <?php IncludeCom('_common_head') ?>
+    <?php IncludeCom('_dev/syntaxhighlighter') ?>
 
     <!-- SEO -->
     <title><?= L('m_title') ?></title>
@@ -23,7 +24,13 @@
 <body>
 <div id="wrapper">
     <?php IncludeCom('_main_tpl/menu') ?>
-    <?= $content ?>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <?= $content ?>
+            </div>
+        </div>
+    </div>
 </div>
 <?php IncludeCom('_main_tpl/footer') ?>
 </body>

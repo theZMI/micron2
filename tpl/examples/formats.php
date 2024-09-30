@@ -1,4 +1,4 @@
-<?php IncludeCom('_dev/syntaxhighlighter'); ?>
+
 
 <h1>Форматы вывода данных</h1>
 

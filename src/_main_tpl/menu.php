@@ -10,11 +10,11 @@ $logo = [
 $menu = [
     [
         'link' => SiteRoot(),
-        'name' => 'Главная',
+        'name' => 'Что это?',
     ],
     [
         'link'  => 'javascript:void(0)',
-        'name'  => 'Пункт 1',
+        'name'  => 'Примеры',
         'label' => '',
         'css'   => '',
         'list'  => [
@@ -28,7 +28,11 @@ $menu = [
                 'name' => 'Контакты',
             ],
         ],
-    ]
+    ],
+    [
+        'link' => SiteRoot('contacts'),
+        'name' => 'Связь',
+    ],
 ];
 
 $countMessages = 1;
