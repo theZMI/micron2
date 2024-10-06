@@ -19,14 +19,103 @@ $menu = [
         'css'   => '',
         'list'  => [
             [
-                'link' => SiteRoot('about_us'),
-                'name' => 'Кратко о нас',
+                'link' => SiteRoot('examples/engine'),
+                'name' => 'Немножко о функциях движка',
             ],
             'divider',
             [
-                'link' => SiteRoot('contacts'),
-                'name' => 'Контакты',
+                'link' => SiteRoot('examples/ajax_form'),
+                'name' => 'Ajax-формы',
             ],
+            [
+                'link' => SiteRoot('examples/ajax_upload'),
+                'name' => 'Ajax загрука файлов',
+            ],
+            [
+                'link' => SiteRoot('examples/ekko_lightbox'),
+                'name' => 'Модальное окно',
+            ],
+            [
+                'link' => SiteRoot('examples/force_download'),
+                'name' => 'Вызов загрузки файла через скрипт',
+            ],
+            [
+                'link' => SiteRoot('examples/gen_db_error'),
+                'name' => 'Запрос к БД с ошибкой (тест логгирования)',
+            ],
+            [
+                'link' => SiteRoot('examples/gen_php_error'),
+                'name' => 'Тест ошибки в php-коде',
+            ],
+            [
+                'link' => SiteRoot('examples/datepicker'),
+                'name' => 'Выбор даты',
+            ],
+            [
+                'link' => SiteRoot('examples/timepicker'),
+                'name' => 'Выбор времени',
+            ],
+            [
+                'link' => SiteRoot('examples/masks'),
+                'name' => 'IMask - форматирование данных в input-ах',
+            ],
+            [
+                'link' => SiteRoot('examples/formats'),
+                'name' => 'Форматы вывода данных (даты, суммы, время)',
+            ],
+            [
+                'link' => SiteRoot('examples/yandex_address_input'),
+                'name' => 'Ввод гео-адреса через yandex',
+            ],
+            [
+                'link' => SiteRoot('examples/geo'),
+                'name' => 'Geo ф-ии (географические)',
+            ],
+            [
+                'link' => SiteRoot('examples/magicsuggest'),
+                'name' => 'Прокаченный select',
+            ],
+            [
+                'link' => SiteRoot('examples/messages'),
+                'name' => 'MsgOk, MsgErr... - сообщения в формах',
+            ],
+            [
+                'link' => SiteRoot('examples/micron_cache'),
+                'name' => 'Кеширование',
+            ],
+            [
+                'link' => SiteRoot('examples/mockup_models'),
+                'name' => 'Модели-заглушки (модели с тестовыми данными)',
+            ],
+            [
+                'link' => SiteRoot('examples/pagesbar'),
+                'name' => 'Постраничный бар',
+            ],
+            [
+                'link' => SiteRoot('examples/pwd_shower'),
+                'name' => 'Показать / скрыть пароль',
+            ],
+            [
+                'link' => SiteRoot('examples/router'),
+                'name' => 'Роутинг',
+            ],
+            [
+                'link' => SiteRoot('examples/session_manager'),
+                'name' => 'Работа с сессией',
+            ],
+            [
+                'link' => SiteRoot('examples/syntaxhighliner'),
+                'name' => 'Выделение кода',
+            ],
+            [
+                'link' => SiteRoot('examples/url_redirect'),
+                'name' => 'Для редиректов',
+            ],
+            [
+                'link' => SiteRoot('examples/vue_app'),
+                'name' => 'Vue3 приложение',
+            ],
+
         ],
     ],
     [

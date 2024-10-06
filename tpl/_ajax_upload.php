@@ -59,7 +59,7 @@
                         <?php if ($isImageUpload):?>
                         $('#i-ajax-form-<?= $uplName?>-button-image-edit').show();
                         const urlStart = $('#i-ajax-form-<?= $uplName?>-button-image-edit').find('a').data('start-url');
-                        const url = "/_crop_image&field=<?= $uplName?>&has_thumbs=<?= intval($hasThumbs)?>&thumbs=<?= $thumbs?>&def_w=<?= $defWidth?>&def_h=<?= $defHeight?>&uri=" + urlStart + json.fileName + '&ekkoLightboxFixer=1';
+                        const url = "/_crop_image?field=<?= $uplName?>&has_thumbs=<?= intval($hasThumbs)?>&thumbs=<?= $thumbs?>&def_w=<?= $defWidth?>&def_h=<?= $defHeight?>&uri=" + urlStart + json.fileName + '&ekkoLightboxFixer=1';
                         $('#i-ajax-form-<?= $uplName?>-button-image-edit').find('a').attr('href', url);
                         <?php endif;?>
                         $('#i-ajax-form-<?= $uplName?>-button-image-delete').show();

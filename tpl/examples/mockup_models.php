@@ -19,18 +19,17 @@
                         // Создаём файл model/UserProfessionModel.php в котором наследуем нашу модель от MockupModel
                         class UserProfessionModel extends MockupModel
                         {
-                        // Определяем все наши захардкоженные данные прямо тут
-                        protected function _getAllFromPseudoDB()
-                        {
-                        return [
-                        1 => ['id' => 1, 'name' => 'Программист'],
-                        2 => ['id' => 2, 'name' => 'Владелец продукта'],
-                        3 => ['id' => 3, 'name' => 'Менеджер проекта'],
-                        4 => ['id' => 4, 'name' => 'Scrum-мастер'],
-                        ];
+                            // Определяем все наши захардкоженные данные прямо тут
+                            protected function _getAllFromPseudoDB()
+                            {
+                                return [
+                                    1 => ['id' => 1, 'name' => 'Программист'],
+                                    2 => ['id' => 2, 'name' => 'Владелец продукта'],
+                                    3 => ['id' => 3, 'name' => 'Менеджер проекта'],
+                                    4 => ['id' => 4, 'name' => 'Scrum-мастер'],
+                                ];
+                            }
                         }
-                        }
-
 
                         // Теперь можем в компонентах использовать псевдо-модель будто она настоящая:
                         $model = new UserProfessionModel(4);

@@ -14,7 +14,7 @@
                 <input type="text" class="form-control money-mask" value="" placeholder="Начните вводить число">
             </div>
             <div class="mb-3">
-                <label class="form-label">Сумма/число</label>
+                <label class="form-label">Гос номер автомобиля</label>
                 <input type="text" class="form-control ru-car-gov-number" value="" placeholder="Начните вводить гос. номер автомобиля (ру-формат)">
             </div>
         </div>
