@@ -9,15 +9,15 @@
                 <div class="col">
                     [code=Php]
                     IncludeCom(
-                    "_dev/paginator",
-                    [
-                    "css" => "justify-content-center",
-                    "pageUrl" => GetCurUrl("page=" . M_PAGINATOR_PAGE),
-                    "firstPageUrl" => GetCurUrl("page=" . M_DELETE_PARAM),
-                    "total" => 25,
-                    "perPage" => 5,
-                    "curPage" => Get("page", 1)
-                    ]
+                        "_dev/paginator",
+                        [
+                            "css" => "justify-content-center",
+                            "pageUrl" => GetCurUrl("page=" . M_PAGINATOR_PAGE),
+                            "firstPageUrl" => GetCurUrl("page=" . M_DELETE_PARAM),
+                            "total" => 25,
+                            "perPage" => 5,
+                            "curPage" => Get("page", 1)
+                        ]
                     );
                     [/code]
                 </div>

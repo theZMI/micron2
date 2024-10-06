@@ -11,9 +11,9 @@
                     [code=Php]
                     $paramName = 'session_param_1';
                     if (SessionManager::has($paramName)) {
-                    echo "SESSION PARAM: " . SessionManager::get($paramName);
+                        echo "SESSION PARAM: " . SessionManager::get($paramName);
                     } else {
-                    SessionManager::set($paramName, uniqid());
+                        SessionManager::set($paramName, uniqid());
                     }
                     [/code]
                 </div>
