@@ -11,7 +11,7 @@ class Uploader extends CI_Upload
 
     public function getFinalConfig($config = [])
     {
-        $finalConfig = Config('uploader')['default_config'];
+        $finalConfig = Config(['uploader', 'default_config']);
         foreach ($config as $k => $v) {
             $finalConfig[$k] = $v;
         }

@@ -51,7 +51,7 @@
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-sql-<?= $log->id ?>').slideToggle()">SQL</button>
                                     <div id="i-sql-<?= $log->id ?>" style="display: none;">
                                         <div id="i-debug-panel">
-                                            <?= $log->sql ?>
+                                            <?= @($log->sql) ?>
                                         </div>
                                     </div>
                                 </td>

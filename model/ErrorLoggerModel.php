@@ -2,7 +2,7 @@
 
 class ErrorLoggerModel extends \Models\ModelExtends
 {
-    const PAGE_LIMIT = 25;
+    const PAGE_LIMIT = 10;
 
     public function createTable()
     {
