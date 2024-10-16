@@ -117,7 +117,6 @@
     </script>
 </head>
 
-
 <h1>Html response:</h1>
 <div class="alert alert-primary" role="alert" id="my-alert"></div>
 <form action="<?= GetCurUrl('get_response=1') ?>" method="post" id="myForm1">

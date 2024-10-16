@@ -1,6 +1,4 @@
-<?php IncludeCom('_dev/syntaxhighlighter'); ?>
-
-<h1>Выделение программного кода и Маркеров</h1>
+<h1 class="mt-4 mb-4">Выделение программного кода и Маркеров</h1>
 <div>
     [code=C++]
     int main()

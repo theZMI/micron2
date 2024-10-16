@@ -1,10 +1,5 @@
+<h1 class="mt-4 mb-4">Форматы вывода данных</h1>
 
-
-<h1>Форматы вывода данных</h1>
-
-<br>
-
-<p class="lead">С числами:</p>
 <div class="row mb-4">
     <div class="col-12">
         Вывод числа со склонением:
@@ -22,10 +17,6 @@
         ?>
     </div>
 </div>
-
-<br>
-
-<p class="lead">Дата и время:</p>
 <div class="row mb-4">
     <div class="col-12">
         Даты в формате
