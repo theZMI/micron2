@@ -18,8 +18,8 @@
     <link rel="stylesheet" type="text/css" href="<?= Root('i/css/_admin/main.less') ?>"/>
     <script type="text/javascript" src="<?= Root('i/js/_admin/main.js') ?>"></script>
 </head>
-<body>
-<div id="wrapper">
+<body class="d-flex flex-column">
+<div id="wrapper" class="d-flex flex-column flex-grow-1">
     <div id="admin-menu">
         <?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => Config('admin_menu'), 'rightMenu' => Config('admin_menu_right'), 'w100' => true]) ?>
     </div>
@@ -37,6 +37,6 @@
             </div>
         </div>
     </div>
-<?php endif; ?>
+<?php endif ?>
 </body>
 </html>

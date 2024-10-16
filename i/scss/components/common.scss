@@ -5,7 +5,8 @@ html {
   background: $site-backstage-bg;
 
   body {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     padding-top: $site-menu-height;
     min-width: $site-min-width;
     overflow-y: scroll;
@@ -15,19 +16,9 @@ html {
 
 #wrapper {
   position: relative;
-  display: flex;
-  flex-direction: column;
-
-  min-height: 100%;
   background: $site-wrapper-bg;
 
-  // Если нужно что бы футер был ниже страницы и для его просмотра требовалось чуть-чуть мотнуть страницу
-  height: auto;
-  margin: 0 auto;
-
-  // Если нужно что бы футер был не ниже контента, а просто всегда внизу страницы:
-  //margin: 0 auto -1 * $site-footer-height;
-  //padding-bottom: $site-footer-height + 1px;
+  min-height: 100vh; // Если нужно чтобы футер был за пределами экрана при загрузке
 }
 
 
@@ -65,12 +56,12 @@ body {
   .text-muted {
     color: rgba(0, 0, 0, 0.25) !important;
   }
-}
 
-// На больших экранах сделать отступ больше для меню и футера
-@include media-breakpoint-up(lg) {
-  .container-fluid {
-    padding-left: 30px;
-    padding-right: 30px;
+  // На больших экранах сделать отступ больше для меню и футера
+  @include media-breakpoint-up(lg) {
+    .container-fluid {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
   }
 }

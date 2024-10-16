@@ -21,12 +21,12 @@
 
     <?php IncludeCom('_seo') ?>
 </head>
-<body>
-<div id="wrapper">
+<body class="d-flex flex-column">
+<div id="wrapper" class="d-flex flex-column flex-grow-1">
     <?php IncludeCom('_main_tpl/menu') ?>
-    <div class="container">
-        <div class="row">
-            <div class="col">
+    <div class="container d-flex flex-column flex-grow-1">
+        <div class="row flex-grow-1">
+            <div class="col d-flex flex-column flex-grow-1">
                 <?= $content ?>
             </div>
         </div>
