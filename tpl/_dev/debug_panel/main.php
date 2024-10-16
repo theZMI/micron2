@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="<?= Root('i/css/_dev/debug_panel.css'); ?>" />
+<link rel="stylesheet" type="text/css" href="<?= Root('i/css/_dev/debug_panel.css') ?>" />
 <script type="text/javascript" src="<?= Root('i/js/_dev/debug_panel.js') ?>"></script>
 
 
@@ -13,11 +13,11 @@
         </li>
         <li>
             <span class="icon time"></span>
-            <?= number_format(floatval(microtime(true) - Config('startExecTime')), 3); ?> s
+            <?= number_format(floatval(microtime(true) - Config('startExecTime')), 3) ?> s
         </li>
         <li>
             <span class="icon mem"></span>
-            <?= $debug->memoryUsage(); ?>
+            <?= $debug->memoryUsage() ?>
         </li>
         <li>
             <span class="icon db"></span>
@@ -25,11 +25,11 @@
         </li>
         <li>
             <span class="icon vars"></span>
-            <a href="javascript:g_debug.toggle('i-vars-log')">Vars <span class="small">(G: <?= count($_GET); ?> / P: <?= count($_POST); ?> / C: <?= count($_COOKIE); ?> / F: <?= count($_FILES); ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-vars-log')">Vars <span class="small">(G: <?= count($_GET) ?> / P: <?= count($_POST) ?> / C: <?= count($_COOKIE) ?> / F: <?= count($_FILES) ?>)</span></a>
         </li>
         <li>
             <span class="icon files"></span>
-            <a href="javascript:g_debug.toggle('i-files')">Files <span class="small">(<?= count($debug->files()); ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-files')">Files <span class="small">(<?= count($debug->files()) ?>)</span></a>
         </li>
         <li>
             <span class="icon engine"></span>
@@ -43,30 +43,30 @@
 
     <div id="i-debug-panel-all-panels" style="display: none;">
         <div id="i-databasa-log" class="debug-panel" style="display: none;">
-            <?= $debug->db(); ?>
+            <?= $debug->db() ?>
         </div>
 
         <div id="i-vars-log" class="debug-panel" style="display: none;">
             <ul>
                 <li>
-                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_GET', 'link' => 'i-get-log', 'arr' => $_GET]); ?>
+                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_GET', 'link' => 'i-get-log', 'arr' => $_GET]) ?>
                 </li>
                 <li>
-                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_POST', 'link' => 'i-post-log', 'arr' => $_POST]); ?>
+                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_POST', 'link' => 'i-post-log', 'arr' => $_POST]) ?>
                 </li>
                 <li>
-                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_COOKIE', 'link' => 'i-cookie-log', 'arr' => $_COOKIE]); ?>
+                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_COOKIE', 'link' => 'i-cookie-log', 'arr' => $_COOKIE]) ?>
                 </li>
                 <?php if (session_id()): ?>
                     <li>
-                        <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SESSION', 'link' => 'i-session-log', 'arr' => $_SESSION]); ?>
+                        <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SESSION', 'link' => 'i-session-log', 'arr' => $_SESSION]) ?>
                     </li>
                 <?php endif ?>
                 <li>
-                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SERVER', 'link' => 'i-server-log', 'arr' => $_SERVER]); ?>
+                    <?php IncludeCom('_dev/debug_panel/var_panel', ['head' => '$_SERVER', 'link' => 'i-server-log', 'arr' => $_SERVER]) ?>
                 </li>
                 <li>
-                    <a href="javascript:g_debug.toggle('i-files-log')">$_FILES <span>(<?= count($_FILES); ?>)</span></a>
+                    <a href="javascript:g_debug.toggle('i-files-log')">$_FILES <span>(<?= count($_FILES) ?>)</span></a>
                     <div id="i-files-log" style="display: none;">
                         <table>
                             <tr>
@@ -114,16 +114,16 @@
                 foreach ($debug->files() as $f): ?>
                     <tr>
                         <td class="num"><?= ++$i ?></td>
-                        <td><?= str_replace(BASEPATH, '<span>' . BASEPATH . '</span>', $f['file']); ?></td>
+                        <td><?= str_replace(BASEPATH, '<span>' . BASEPATH . '</span>', $f['file']) ?></td>
                         <td><?= $f['size'] ?></td>
                         <td><?= $f['lines'] ?></td>
                     </tr>
                 <?php endforeach ?>
                 <tr class="total">
                     <td></td>
-                    <td class="center"><span>Total</span> <?= count($debug->files()); ?> <span>files</span></td>
-                    <td><?= $debug->totalFileSize(); ?></td>
-                    <td><?= $debug->totalFileLines(); ?></td>
+                    <td class="center"><span>Total</span> <?= count($debug->files()) ?> <span>files</span></td>
+                    <td><?= $debug->totalFileSize() ?></td>
+                    <td><?= $debug->totalFileLines() ?></td>
                 </tr>
             </table>
         </div>
@@ -136,16 +136,16 @@
                 </tr>
                 <tr>
                     <td>Current url</td>
-                    <td><?= GetCurUrl(); ?></td>
+                    <td><?= GetCurUrl() ?></td>
                 </tr>
                 <tr>
                     <td>Query</td>
-                    <td><?= GetQuery(); ?></td>
+                    <td><?= GetQuery() ?></td>
                 </tr>
                 <?php foreach (Config('phpIni') as $k => $v): ?>
                     <tr>
                         <td><?= $k ?></td>
-                        <td><?= VarDump($v); ?></td>
+                        <td><?= VarDump($v) ?></td>
                     </tr>
                 <?php endforeach ?>
             </table>
@@ -156,10 +156,10 @@
             <ul class="exts">
                 <?php foreach (get_loaded_extensions() as $v): ?>
                     <li>
-                        <a href="javascript:g_debug.showExtensionFuncs('i-ext-<?= md5($v); ?>')">
+                        <a href="javascript:g_debug.showExtensionFuncs('i-ext-<?= md5($v) ?>')">
                             <?= $v ?>
                         </a>
-                        <div style="display:none" id="i-ext-<?= md5($v); ?>">
+                        <div style="display:none" id="i-ext-<?= md5($v) ?>">
                             <h3>Function in extension: <?= $v ?></h3>
                             <?php
                             $funcs = get_extension_funcs($v);
@@ -175,7 +175,7 @@
                                         </tr>
                                     <?php endforeach ?>
                                 </table>
-                            <?php endif; ?>
+                            <?php endif ?>
                         </div>
                     </li>
                 <?php endforeach ?>
@@ -194,11 +194,11 @@
                 <?php foreach (ini_get_all() as $k => $v): ?>
                     <tr>
                         <td><?= $k ?></td>
-                        <td><?= VarDump($v['global_value']); ?></td>
-                        <td><?= VarDump($v['local_value']); ?></td>
-                        <td><?= DebugPanel::showPhpIniAccess($v['access']); ?></td>
+                        <td><?= VarDump($v['global_value']) ?></td>
+                        <td><?= VarDump($v['local_value']) ?></td>
+                        <td><?= DebugPanel::showPhpIniAccess($v['access']) ?></td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endforeach ?>
             </table>
         </div>
     </div>

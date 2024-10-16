@@ -8,7 +8,7 @@
                 </span>
             </h1>
             <div id="list-page">
-                <?= RecursiveUl($dirs, array('class' => 'list-unstyled'), 'CreateLinkFromElement', $exceptions); ?>
+                <?= RecursiveUl($dirs, array('class' => 'list-unstyled'), 'CreateLinkFromElement', $exceptions) ?>
             </div>
 
         </div>

@@ -1,4 +1,4 @@
-<a href="javascript:g_debug.toggle('<?= $link ?>')"><?= $head ?> <span>(<?= count($arr); ?>)</span></a>
+<a href="javascript:g_debug.toggle('<?= $link ?>')"><?= $head ?> <span>(<?= count($arr) ?>)</span></a>
 
 <div id="<?= $link ?>" style="display: none;">
     <table>
@@ -14,7 +14,7 @@
                 <tr>
                     <td class="num"><?= ++$i ?></td>
                     <td><?= $k ?></td>
-                    <td><?= VarDump($v); ?></td>
+                    <td><?= VarDump($v) ?></td>
                 </tr>
             <?php
             endforeach;

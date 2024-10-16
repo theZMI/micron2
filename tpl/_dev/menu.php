@@ -9,7 +9,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMainMenuContent">
-            <?php IncludeCom('_dev/menu/sub_menu', ['menu' => $menu, 'css' => 'me-auto menu-left-part']); ?>
+            <?php IncludeCom('_dev/menu/sub_menu', ['menu' => $menu, 'css' => 'me-auto menu-left-part']) ?>
             <?php if ($incSearch): ?>
                 <form class="d-none search-panel">
                     <div class="d-block d-lg-none mt-5"></div>
@@ -19,8 +19,8 @@
                     </div>
                     <div class="d-block d-lg-none mt-5"></div>
                 </form>
-            <?php endif; ?>
-            <?php IncludeCom('_dev/menu/sub_menu', ['menu' => $rightMenu, 'css' => 'navbar-nav-right mr-auto menu-right-part']); ?>
+            <?php endif ?>
+            <?php IncludeCom('_dev/menu/sub_menu', ['menu' => $rightMenu, 'css' => 'navbar-nav-right mr-auto menu-right-part']) ?>
         </div>
     </div>
 </nav>

@@ -28,12 +28,12 @@
                                     <li class="mb-1">
                                         <?= $file['addr'] ?> <span class="badge bg-dark"><?= FormatDate($file['time']) ?></span>
                                     </li>
-                                <?php endforeach; ?>
+                                <?php endforeach ?>
                             </ul>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                <?php endforeach ?>
             </div>
-        <?php endforeach; ?>
+        <?php endforeach ?>
     </div>
 </div>

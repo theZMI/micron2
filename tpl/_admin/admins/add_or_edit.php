@@ -5,7 +5,7 @@
             <h1 class="mt-4 mb-4">
                 <span class="pull-start"><h1><?= $admin_id ? "Редактирование администратора" : "Новый администратор" ?></h1></span>
             </h1>
-            <form action="<?= GetCurUrl(); ?>" method="post">
+            <form action="<?= GetCurUrl() ?>" method="post">
                 <input type="hidden" name="is_apply" value="1"/>
                 <?= $msg ?>
                 <div class="row">

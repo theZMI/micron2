@@ -46,7 +46,7 @@
                         }
                         ?>
                     </div>
-                <?php endforeach; ?>
+                <?php endforeach ?>
                 <div class="text-end">
                     <a href="<?= SiteRoot('_admin/list/list&lang=' . $lang) ?>" class="btn btn-link btn-lg">
                         <i class="bi bi-arrow-left me-2"></i>К списку

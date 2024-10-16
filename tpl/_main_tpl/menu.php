@@ -32,9 +32,9 @@
             <ul class="list-unstyled">
                 <?php foreach ($userMenu as $item): ?>
                     <li><a href="<?= $item['link'] ?>"><span><?= $item['name'] ?></span></a></li>
-                <?php endforeach; ?>
+                <?php endforeach ?>
             </ul>
         </div>
     </div>
 </div>
-<?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => $menu, 'rightMenu' => $rightMenu, 'incSearch' => true]); ?>
+<?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => $menu, 'rightMenu' => $rightMenu, 'incSearch' => true]) ?>

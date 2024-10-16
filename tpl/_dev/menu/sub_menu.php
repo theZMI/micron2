@@ -2,9 +2,9 @@
 if ($count): ?>
     <ul class="navbar-nav <?= $css ?>">
         <?php foreach ($menu as $v): ?>
-            <?php --$count; ?>
+            <?php --$count ?>
             <li class="nav-item <?= $v['css'] ?>">
-                <?php $linkCss = ($count === 0 ? ' last' : '') . " {$v['linkCss']}"; ?>
+                <?php $linkCss = ($count === 0 ? ' last' : '') . " {$v['linkCss']}" ?>
                 <a href="<?= $v['link'] ?>" title="<?= $v['label'] ?>" <?= $v['html'] ?> <?= count($v['list']) ? 'class="nav-link dropdown' . $linkCss . '" role="button" data-bs-toggle="dropdown" aria-expanded="false"' : 'class="nav-link' . $linkCss . '"' ?>>
                     <span>
                         <?= $v['name'] ?>
@@ -20,11 +20,11 @@ if ($count): ?>
                                 </li>
                             <?php else: ?>
                                 <li><a href="<?= $v2['link'] ?>" title="<?= $v2['label'] ?>" class="dropdown-item"><span><?= $v2['name'] ?></span></a></li>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                            <?php endif ?>
+                        <?php endforeach ?>
                     </ul>
-                <?php endif; ?>
+                <?php endif ?>
             </li>
-        <?php endforeach; ?>
+        <?php endforeach ?>
     </ul>
-<?php endif; ?>
+<?php endif ?>
