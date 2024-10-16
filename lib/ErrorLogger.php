@@ -60,7 +60,7 @@ class ErrorLogger
             $logger->_server         = json_encode($_SERVER);
             $logger->_files          = isset($_FILES) ? json_encode($_FILES) : '';
             $logger->backtrace       = $backtraceToString($trace);
-            $logger->sql             = MyDataBaseLog::render();
+            $logger->sql             = json_encode(MyDataBaseLog::$dbLog);
             $logger->ip              = GetClientIP();
             $logger->browser         = $browser->getBrowser();
             $logger->browser_version = $browser->getVersion();
