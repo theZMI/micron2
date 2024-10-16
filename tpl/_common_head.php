@@ -17,18 +17,21 @@
 <link rel="icon" href="<?= Root('favicon.ico') ?>" type="image/x-icon"/>
 <link rel="shortcut icon" href="<?= Root('favicon.ico') ?>" type="image/x-icon"/>
 
+<!-- Application icon for IOS dashboard -->
+<link rel="apple-touch-icon" href="<?= Root('i/image/touch_icon/180x180.png') ?>"/>
+
 <!-- Place to inject js/css from webpack -->
 <?php foreach (Config(['webpack', 'cssFiles']) as $file): ?>
     <link rel="stylesheet" type="text/css" href="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>"/>
-<?php endforeach; ?>
+<?php endforeach ?>
 <?php foreach (Config(['webpack', 'jsFiles']) as $file): ?>
     <script type="text/javascript" src="<?= Root("{$file}&mtime=" . filemtime(BASEPATH . $file)) ?>"></script>
-<?php endforeach; ?>
+<?php endforeach ?>
 
 <!-- Place to inject js/css from extraPacker -->
 <!-- extraPackerJs -->
 <!-- extraPackerCss -->
 
-<?php IncludeCom('_dev/ekko_lightbox'); ?>
-<?php IncludeCom('_dev/jcrop'); ?>
-<?php IncludeCom('_dev/jqueryui'); ?>
+<?php IncludeCom('_dev/ekko_lightbox') ?>
+<?php IncludeCom('_dev/jcrop') ?>
+<?php IncludeCom('_dev/jqueryui') ?>
