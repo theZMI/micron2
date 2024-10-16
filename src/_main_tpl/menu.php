@@ -115,7 +115,14 @@ $menu = [
                 'link' => SiteRoot('examples/vue_app'),
                 'name' => 'Vue3 приложение',
             ],
-
+            [
+                'link' => SiteRoot('examples/round_to'),
+                'name' => 'Округление чисел/времени',
+            ],
+            [
+                'link' => SiteRoot('examples/qr'),
+                'name' => 'QR-коды',
+            ],
         ],
     ],
     [
