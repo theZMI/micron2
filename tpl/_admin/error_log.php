@@ -48,12 +48,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-sql-<?= $log->id ?>').slideToggle()">SQL</button>
-                                    <div id="i-sql-<?= $log->id ?>" style="display: none;">
-                                        <div id="i-debug-panel">
-                                            <?= @($log->sql) ?>
-                                        </div>
-                                    </div>
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="const c = $('#i-sql-<?= $log->id ?>'); c.load('<?= Root("_admin/error_log_sql&id={$log->id}") ?>').slideToggle()">SQL</button>
+                                    <div id="i-sql-<?= $log->id ?>" style="display: none;"></div>
                                 </td>
                                 <td>
                                     <strong>
@@ -66,59 +62,59 @@
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-get-<?= $log->id ?>').slideToggle()">GET</button>
                                     <div id="i-get-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->_get)); ?>
+                                        <?php @Xmp(json_decode($log->_get)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-post-<?= $log->id ?>').slideToggle()">POST</button>
                                     <div id="i-post-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->_post)); ?>
+                                        <?php @Xmp(json_decode($log->_post)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-cookie-<?= $log->id ?>').slideToggle()">COOKIE</button>
                                     <div id="i-cookie-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->_cookie)); ?>
+                                        <?php @Xmp(json_decode($log->_cookie)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-session-<?= $log->id ?>').slideToggle()">SESSION</button>
                                     <div id="i-session-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->_session)); ?>
+                                        <?php @Xmp(json_decode($log->_session)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-server-<?= $log->id ?>').slideToggle()">SERVER</button>
                                     <div id="i-server-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->_server)); ?>
+                                        <?php @Xmp(json_decode($log->_server)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-files-<?= $log->id ?>').slideToggle()">FILES</button>
                                     <div id="i-files-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->_files)); ?>
+                                        <?php @Xmp(json_decode($log->_files)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-config-<?= $log->id ?>').slideToggle()">CONFIG</button>
                                     <div id="i-config-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->g_config)); ?>
+                                        <?php @Xmp(json_decode($log->g_config)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-user-<?= $log->id ?>').slideToggle()">USER</button>
                                     <div id="i-user-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->g_user)); ?>
+                                        <?php @Xmp(json_decode($log->g_user)) ?>
                                     </div>
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-lang-<?= $log->id ?>').slideToggle()">LANG</button>
                                     <div id="i-lang-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
-                                        <?php @Xmp(json_decode($log->g_lang)); ?>
+                                        <?php @Xmp(json_decode($log->g_lang)) ?>
                                     </div>
                                 </td>
                                 <td width="1%" class="text-center">
-                                    <a href="<?= GetCurUrl('a=delete&id=' . $log->id); ?>" onclick="return confirm('Удалить эту запись?')" class="btn btn-sm btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                                    <a href="<?= GetCurUrl('a=delete&id=' . $log->id) ?>" onclick="return confirm('Удалить эту запись?')" class="btn btn-sm btn-danger"><i class="bi bi-trash3-fill"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach ?>
@@ -137,7 +133,7 @@
                         "perPage"      => ErrorLoggerModel::PAGE_LIMIT,
                         "curPage"      => Get("page", 1)
                     ]
-                ); ?>
+                ) ?>
             </div>
             <div class="text-center">
                 <a href="<?= GetCurUrl('a=clear') ?>" class="btn btn-danger btn-lg rounded-pill" onclick="return confirm('Очистить весь лог ошибок?')">
