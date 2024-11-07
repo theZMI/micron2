@@ -85,19 +85,14 @@ class ExtraPacker_Config
 
     public static function lessImport($content, $path)
     {
-        $dir          = pathinfo($path, PATHINFO_DIRNAME) . '/';
-        $oldImportDir = strval(Config('extrapacker__tempImportDir'));
-
-        Config('extraPacker__tempImportDir', $dir);
+        $dir = dirname($path) . '/';
 
         if (stripos($content, '@import') !== false) {
             $content = preg_replace_callback(
                 "~@import (.*?);~is",
-                function ($m) {
-                    $importFile  = $m[1];
-                    $importFile  = trim($importFile, '"\'');
-                    $dir         = Config('extraPacker__tempImportDir');
-                    $file        = is_readable($dir . $importFile) ? $dir . $importFile : ($dir . $importFile . '.less');
+                function ($m) use ($dir) {
+                    $importFile  = trim($m[1], '"\'');
+                    $file        = is_readable($dir . $importFile) ? "{$dir}{$importFile}" : "{$dir}{$importFile}.less";
                     $lessContent = '';
                     if (is_readable($file)) {
                         $lessContent = file_get_contents($file);
@@ -109,8 +104,6 @@ class ExtraPacker_Config
                 $content
             );
         }
-
-        Config('extraPacker__tempImportDir', $oldImportDir);
 
         return $content;
     }
