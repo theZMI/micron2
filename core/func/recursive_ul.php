@@ -72,7 +72,7 @@ function _RecursiveUl($type, $list, $attributes = '', $depth = 0, $pPrepareElemF
         if (!is_array($val)) {
             $out .= $pPrepareElemFunc ? call_user_func($pPrepareElemFunc, $val) : "$val";
         } else {
-            $out .= "<strong> <span class='fa fa-folder'></span> &nbsp; " . $_last_list_item . "</strong>\n";
+            $out .= "<strong> <i class='bi bi-folder-fill'></i> &nbsp; " . $_last_list_item . "</strong>\n";
             $out .= _RecursiveUl($type, $val, $attributes, $depth + 4, $pPrepareElemFunc, $exceptions);
             $out .= str_repeat(" ", $depth + 2);
         }
