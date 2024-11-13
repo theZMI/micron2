@@ -5,14 +5,10 @@ namespace Middlewares;
 use \Pecee\Http\Middleware\IMiddleware;
 use \Pecee\Http\Request;
 
-class UserAuthMiddleware implements IMiddleware
+class CheckUserAuthMiddleware implements IMiddleware
 {
     public function handle(Request $request): void
     {
-        define('IS_USER_CABINET', true);
-
-        (new CommonMiddleware())->handle($request);
-
         if (IS_USER_AUTH) {
             return;
         }

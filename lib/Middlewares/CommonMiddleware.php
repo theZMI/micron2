@@ -12,6 +12,9 @@ class CommonMiddleware implements IMiddleware
         if (IS_ADMIN_AREA) {
             return;
         }
+        if (IS_API) {
+            return;
+        }
         if (file_exists(BASEPATH . 'tmp/site_stopper.txt')) {
             IncludeCom('reconstruction'); // Temporary close site
         }
@@ -40,10 +43,18 @@ class CommonMiddleware implements IMiddleware
         }
     }
 
+    private function forApi()
+    {
+        if (!defined('IS_API')) {
+            define('IS_API', false);
+        }
+    }
+
     public function handle(Request $request): void
     {
         $this->forAdmin();
         $this->forUser();
+        $this->forApi();
         $this->checkCloseSite();
     }
 }
