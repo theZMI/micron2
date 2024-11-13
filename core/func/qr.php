@@ -16,23 +16,21 @@ function CreateQrCode($text, $pathToSave = null, $imgSize = 240, $imgMargin = 30
     }
 
     $builder = Builder::create();
-    $builder
-        ->writer(new PngWriter())
-        ->writerOptions([])
-        ->data($text)
-        ->encoding(new Encoding('UTF-8'))
-        ->errorCorrectionLevel(ErrorCorrectionLevel::High)
-        ->size($imgSize)
-        ->margin($imgMargin)
-        ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-        ->validateResult(false);
+    $builder->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($text)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+            ->size($imgSize)
+            ->margin($imgMargin)
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->validateResult(false);
 
     if ($bottomLabel) {
-        $builder
-            ->labelText($bottomLabel)
-            ->labelFont(new OpenSans(16))
-            // ->labelTextColor(new Color(0, 0, 0))
-            ->labelAlignment(LabelAlignment::Center);
+        $builder->labelText($bottomLabel)
+                ->labelFont(new OpenSans(16))
+                // ->labelTextColor(new Color(0, 0, 0))
+                ->labelAlignment(LabelAlignment::Center);
     }
 
     $result = $builder->build();
