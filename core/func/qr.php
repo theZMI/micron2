@@ -10,13 +10,7 @@ use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Color\Color;
 
-function CreateQrCode(
-    $text,
-    $pathToSave = null,
-    $imgSize = 240,
-    $imgMargin = 30,
-    $bottomLabel = null,
-) {
+function CreateQrCode($text, $pathToSave = null, $imgSize = 240, $imgMargin = 30, $bottomLabel = null) {
     if ($pathToSave) {
         FileSys::makeDir(dirname($pathToSave));
     }
@@ -44,5 +38,4 @@ function CreateQrCode(
     $result = $builder->build();
 
     return $pathToSave ? $result->saveToFile($pathToSave) : $result->getString();
-
 }
