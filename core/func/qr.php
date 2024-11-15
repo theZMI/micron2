@@ -25,14 +25,12 @@ function CreateQrCode($text, $pathToSave = null, $imgSize = 240, $imgMargin = 30
             ->margin($imgMargin)
             ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
             ->validateResult(false);
-
     if ($bottomLabel) {
         $builder->labelText($bottomLabel)
                 ->labelFont(new OpenSans(16))
                 // ->labelTextColor(new Color(0, 0, 0))
                 ->labelAlignment(LabelAlignment::Center);
     }
-
     $result = $builder->build();
 
     return $pathToSave ? $result->saveToFile($pathToSave) : $result->getString();
