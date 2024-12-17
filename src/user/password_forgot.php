@@ -19,15 +19,15 @@ if (Post('is_pwd_recover_order')) {
     if (count($errs)) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
-        $user_id = (new UserModel())->getIdByEmail($email);
-        if (empty($user_id)) {
+        $userModel = (new UserModel())->findOne(['email' => $email]);
+        if (!$userModel->isExists()) {
             $msg = MsgErr(L("Не найден пользователь с данным e-mail"));
         } else {
-            $code_id    = (new UserPwdRecoverModel())->generate($user_id);
+            $code_id    = (new UserPwdRecoverModel())->generate($userModel->id);
             $pwdRecover = new UserPwdRecoverModel($code_id);
             $code       = $pwdRecover->code;
             $isCodeSend = (new EmailNotificator())->send(
-                new UserModel($user_id),
+                $userModel,
                 "<p>Для завершения регистрации, пожалуйста, введите данный код на сайте:</p>" .
                 "<p style='padding: 30px 0; text-align: center; font-size: 40px; letter-spacing: 5px;'>{$code}</p>",
                 "Завершение регистрации"
@@ -51,9 +51,7 @@ if (Post('is_check_pwd_recover_code')) {
     $isValidCode = (new UserPwdRecoverModel())->isValidCode($user_code, $email);
 
     if ($isValidCode) {
-        $userModel                    = new UserModel(
-            (new UserModel())->getIdByEmail($email)
-        );
+        $userModel = (new UserModel())->findOne(['email' => $email]);
         $userModel->is_email_verified = true;
         $userModel->login($userModel->email, $userModel->pwd_hash);
         UrlRedirect::go(SiteRoot('user/dashboard'));

@@ -7,7 +7,7 @@ if (IS_USER_AUTH) {
 $msg = '';
 if (Post('is_register')) {
     $first_name           = Post('first_name');
-    $last_name            = Post('last_name');
+    $surname              = Post('surname');
     $email                = Post('email');
     $phone                = PhoneFilter(Post('phone'));
     $phone                = IsValidPhone($phone) ? PhoneFilter($phone) : '';
@@ -15,7 +15,7 @@ if (Post('is_register')) {
     $model                = new UserModel();
 
     $errs = [];
-    if (empty($first_name) || empty($last_name)) {
+    if (empty($first_name) || empty($surname)) {
         $errs[] = "Пожалуйста впишите ваше имя";
     }
     if (empty($email)) {
@@ -32,7 +32,7 @@ if (Post('is_register')) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
         $model->first_name = $first_name;
-        $model->last_name  = $last_name;
+        $model->surname    = $surname;
         $model->email      = $email;
         $model->login      = $email;
         $model->phone      = $phone;
