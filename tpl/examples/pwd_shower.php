@@ -1,5 +1,3 @@
-<?php IncludeCom('_dev/pwd_shower') ?>
-
 <h1 class="mt-4 mb-4">Показ пароля по кнопке:</h1>
 <div class="input-group mb-3">
     <input
