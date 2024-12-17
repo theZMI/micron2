@@ -14,10 +14,14 @@ import "magicsuggest-alpine/magicsuggest.css";
 import "@scss/components/magicsuggest.scss";
 import "@webpack/src/MainMenuInit";
 import "@webpack/src/IMaskInit";
-import "@ts/_dev/pwd_shower";
-import {createApp} from "vue/dist/vue.esm-bundler";
+import "@ts/helpers/pwd_shower";
+import { createApp } from "vue/dist/vue.esm-bundler";
+import { UserModel } from "@ts/models/UserModel";
+import { TaskModel } from "@ts/models/TaskModel";
 
 window.bootstrap = bootstrap;
 window.Vue = {createApp};
+window.UserModel = UserModel;
+window.TaskModel = TaskModel;
 
 $.webpackCompitedAt = parseInt(Date.now() / 1000);
