@@ -48,6 +48,7 @@
   "autoload": {
     "psr-4": {
       "": [
+        "trait/",
         "lib/",
         "model/"
       ]
