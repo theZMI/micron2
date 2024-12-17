@@ -2,13 +2,13 @@
 
 Config(['admin_menu', 'PUSH'], [
     'link'  => 'javascript:void(0)',
-    'name'  => 'Сотрудники',
+    'name'  => 'Смены',
     'label' => '',
     'css'   => '',
     'list'  => [
         [
-            'link' => SiteRoot('_admin/users'),
-            'name' => 'Список',
+            'link'  => SiteRoot('_admin/dir_shifts'),
+            'name'  => 'Смены',
         ],
-    ],
+    ]
 ]);

@@ -2,12 +2,12 @@
 
 Config(['admin_menu', 'PUSH'], [
     'link'  => 'javascript:void(0)',
-    'name'  => 'Сотрудники',
+    'name'  => 'Отделы',
     'label' => '',
     'css'   => '',
     'list'  => [
         [
-            'link' => SiteRoot('_admin/users'),
+            'link' => SiteRoot('_admin/departments'),
             'name' => 'Список',
         ],
     ],
