@@ -1,20 +1,19 @@
-import {magicMethods} from "@js/_dev/magicMethods";
-import {ModelWindowDB} from "@ts/models/ModelWindowDB";
+import { addMagicMethods } from "@ts/helpers/addMagicMethods";
+import { ModelWindowDB } from "@ts/models/ModelWindowDB";
 
-export const UserModel = magicMethods(class UserModel extends ModelWindowDB {
+export class UserModel extends ModelWindowDB {
     constructor(id = null) {
         super('users', +id);
+        return addMagicMethods(this);
     }
 
-    __get(name: string) {
-        let ret;
-        switch (name) {
+    override __get(target, prop, receiver) {
+        switch (prop) {
             case 'full_name':
-                ret = [this.first_name, this.last_name].filter(v => !!v).join(' ');
-                break;
-            default:
-                ret = super.__get(name);
+                return [receiver.surname, receiver.first_name, receiver.patronymic].filter(v => !!v).join(' ');
+            case 'avatar_full_url':
+                return `/upl/users/${receiver.avatar}`;
         }
-        return ret;
+        return super.__get(target, prop, receiver);
     }
-});
+}

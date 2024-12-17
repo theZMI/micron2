@@ -1,9 +1,16 @@
-import {magicMethods} from "@js/_dev/magicMethods";
-import {Model} from "@ts/models/Model";
+import { Model } from "@ts/models/Model";
 
-export const ModelWindowDB = magicMethods(class ModelWindowDB extends Model {
+export class ModelWindowDB extends Model {
+    getTableData() {
+        return window.DB[this.table];
+    }
+
+    setTableData(data: []) {
+        window.DB[this.table] = data;
+    }
+
     getDataFromDB(id: number): Object {
-        const all = window.DB[this.table];
+        const all = this.getTableData();
         return all.find(v => +v.id === id);
     }
 
@@ -18,9 +25,4 @@ export const ModelWindowDB = magicMethods(class ModelWindowDB extends Model {
         }
         return 0;
     }
-
-    // Don't remove, because it's need to magicMethods
-    override __get(name: string) {
-        return super.__get(name);
-    }
-});
+}
