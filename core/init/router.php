@@ -59,6 +59,14 @@ foreach ($getLangs() as $lang => $langUri) {
         })->where(['end_uri' => '.*?']);
     });
 
+    // Кабинет менеджера
+    SimpleRouter::group(['middleware' => [\Middlewares\PrepareManagerMiddleware::class, \Middlewares\CommonMiddleware::class, \Middlewares\CheckManagerAuthMiddleware::class]], function () use ($langUri) {
+        SimpleRouter::all("/{$langUri}manager/{end_uri}", function ($end_uri) use ($langUri) {
+            $end_uri = FileSys::filenameSecurity($end_uri);
+            TryIncludeCom("/{$langUri}manager/{$end_uri}");
+        })->where(['end_uri' => '.*?']);
+    });
+
     // Стандартный тип подключения микрона (т.е. contacts/about_us -> IncludeCom('contacts/about_us'))
     SimpleRouter::group(['middleware' => \Middlewares\CommonMiddleware::class], function () use ($langUri, $apiUri) {
         SimpleRouter::all("/{$langUri}{end_uri}", function ($end_uri) use ($langUri) {

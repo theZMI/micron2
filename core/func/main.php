@@ -34,7 +34,7 @@ function _StrReplaceFirst($search, $replace, $subject, $offset = 0)
  */
 function IncludeCom($_micron_file, $_micron_params = [])
 {
-    global $g_lang, $g_user, $g_admin;
+    global $g_lang, $g_admin, $g_user, $g_manager;
 
     $_micron_file = GetQuery($_micron_file);
     foreach ($_micron_params as $micron_name => $micron_value) {
