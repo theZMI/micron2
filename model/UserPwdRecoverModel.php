@@ -33,7 +33,7 @@ class UserPwdRecoverModel extends \Models\ModelExtends
 
     public function isValidCode($userCode, $userEmail)
     {
-        $user    = new UserModel((new UserModel())->getIdByEmail($userEmail));
+        $user    = (new UserModel())->findOne(['email' => $userEmail]);
         $code_id = $this->db->selectCell("SELECT `id` FROM ?# WHERE `user_id` = ? ORDER BY `create_time` DESC LIMIT 1", $this->table, $user->id);
         $model   = new self($code_id);
         // TODO: Ввести проверку ttl
