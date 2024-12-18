@@ -1,7 +1,7 @@
 <?php
 
 Config(['admin_menu', 'PUSH'], [
-    'link'  => SiteRoot('_admin/shift_templates'),
+    'link'  => SiteRoot('_admin/dir_shift_templates'),
     'name'  => 'Шаблоны смен',
     'label' => '',
     'css'   => '',

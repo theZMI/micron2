@@ -8,6 +8,7 @@ class DirShiftsModel extends \Models\ModelExtends
             "CREATE TABLE IF NOT EXISTS ?# (
               `id` INT NOT NULL AUTO_INCREMENT,
               `name` VARCHAR(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+              `is_template` INT DEFAULT '0',
               `create_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",

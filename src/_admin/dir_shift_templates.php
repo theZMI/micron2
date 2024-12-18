@@ -2,7 +2,7 @@
 
 $model  = new DirShiftsModel();
 $page   = intval(Get('p', 1));
-$list   = array_filter($model->getList($page), fn($v) => !$v->is_template);
+$list   = array_filter($model->getList($page), fn($v) => $v->is_template);
 $action = Get('a');
 
 switch ($action) {
