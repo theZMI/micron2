@@ -32,17 +32,6 @@ class CommonMiddleware implements IMiddleware
         }
     }
 
-    private function forManager()
-    {
-        global $g_manager;
-        $g_manager = new \ManagerModel(\ManagerModel::curId());
-        define('IS_MANAGER_AUTH', $g_manager->isAuth());
-
-        if (!defined('IS_MANAGER_CABINET')) {
-            define('IS_MANAGER_CABINET', false);
-        }
-    }
-
     private function forAdmin()
     {
         global $g_admin;
@@ -65,7 +54,6 @@ class CommonMiddleware implements IMiddleware
     {
         $this->forAdmin();
         $this->forUser();
-        $this->forManager();
         $this->forApi();
         $this->checkCloseSite();
     }

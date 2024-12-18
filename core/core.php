@@ -7,7 +7,6 @@ $g_config  = [];
 $g_lang    = [];
 $g_admin   = new stdClass();
 $g_user    = new stdClass();
-$g_manager = new stdClass();
 
 RequireOnceAll(BASEPATH . 'core/func');
 
