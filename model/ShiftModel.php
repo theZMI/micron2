@@ -73,7 +73,7 @@ class ShiftModel extends \Models\ModelExtends
             $dir_id,
             $user_id
         );
-        return $shift_id ? new ShiftModel($shift_id) : null;
+        return $shift_id ? new self($shift_id) : null;
     }
 
     public function delete()

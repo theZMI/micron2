@@ -53,7 +53,7 @@ class DirShiftsModel extends \Models\ModelExtends
         return parent::__get($key);
     }
 
-    public function findOne($params)
+    public function findShift($params)
     {
         if (isset($params['user_id'])) {
             return (new ShiftModel())->findOne($this->id, $params['user_id']);
