@@ -36,6 +36,9 @@ class ShiftModel extends \Models\ModelExtends
         if ($key === 'tasks') {
             return (new TaskModel())->find(['shift_id' => $this->id]);
         }
+        if ($key === 'params') {
+            return (new ShiftParamModel())->find(['shift_id' => $this->id]);
+        }
         return parent::__get($key);
     }
 

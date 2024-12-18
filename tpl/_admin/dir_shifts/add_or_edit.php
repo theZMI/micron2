@@ -106,6 +106,17 @@
                             <div class="text-center">
                                 <button class="btn btn-primary rounded-pill" type="button" data-bs-toggle="modal" data-bs-target="#taskFormModal"><i class="bi bi-plus-lg me-2"></i>Добавить задачу</button>
                             </div>
+                            <hr style="color: #DDD;">
+                            <p class="lead">Параметры по завершению смены:</p>
+                            <div class="pt-3 pb-3">
+                                <div class="form-check form-switch form-switch-md mb-2" v-for="param in possibleParams" :key="param.id">
+                                    <input type="checkbox" role="switch" class="form-check-input" :id="`common_param_id__${param.id}`" v-model="params['common']" :value="param.id">
+                                    <label class="form-check-label ms-3 mt-1" :for="`common_param_id__${param.id}`">
+                                        {{ param.name }}
+                                        <span class="badge bg-secondary rounded-pill">{{ param.type_name }}</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div v-for="worker in select_workers" :key="worker.id" :id="`worker-tasks-tab-${worker.id}-pane`" class="tab-pane fade" role="tabpanel" :aria-labelledby="`worker-tasks-tab-${worker.id}-tab`" tabindex="0">
                             <p class="lead">Задачи на смену:</p>
@@ -123,6 +134,17 @@
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-primary rounded-pill" type="button" data-bs-toggle="modal" data-bs-target="#taskFormModal"><i class="bi bi-plus-lg me-2"></i>Добавить задачу</button>
+                            </div>
+                            <hr style="color: #DDD;">
+                            <p class="lead">Параметры по завершению смены:</p>
+                            <div class="pt-3 pb-3">
+                                <div class="form-check form-switch form-switch-md mb-2" v-for="param in possibleParams" :key="param.id">
+                                    <input type="checkbox" role="switch" class="form-check-input" :id="`user_param_id__${worker.id}__${param.id}`" v-model="params[worker.id]" :value="param.id">
+                                    <label class="form-check-label ms-3 mt-1" :for="`user_param_id__${worker.id}__${param.id}`">
+                                        {{ param.name }}
+                                        <span class="badge bg-secondary rounded-pill">{{ param.type_name }}</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -175,6 +197,38 @@
                         task: '',
                         description: '',
                         deadline: 0
+                    },
+                    possibleParams: [
+                        <?php foreach ($possibleParams as $param): ?>
+                        {
+                            id: <?= $param->id ?>,
+                            name: '<?= $param->name ?>',
+                            type: <?= $param->type ?>,
+                            type_name: '<?= $param->type_name ?>',
+                        },
+                        <?php endforeach; ?>
+                    ],
+                    params: {
+                        'common': [],
+                        <?php
+                        // Создаём объект с перечислением параметров для каждого юзера в виде: user_id: [param_id, param_id...]
+                        $wasUserIds = [];
+                        foreach ($model->shifts as $shift) {
+                            $wasUserIds[] = $shift->user_id;
+                            ?>
+                            <?= intval($shift->user_id) ?>: [
+                                <?php
+                                foreach ($shift->params as $shift_param) {
+                                    echo "{$shift_param->param->id}, ";
+                                }
+                                ?>
+                            ],
+                            <?php
+                        }
+                        foreach (array_diff($allWorkersIds, $wasUserIds) as $user_id) {
+                            echo intval($user_id) . ": [],";
+                        }
+                        ?>
                     },
                     isTaskEdit: false
                 }
@@ -260,6 +314,7 @@
                             'start_time': this.start_time,
                             'end_time': this.end_time,
                             'dir_name': this.dir_name_ready,
+                            'params': this.params,
                         },
                         'json'
                     );
