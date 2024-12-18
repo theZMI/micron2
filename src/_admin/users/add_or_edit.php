@@ -45,6 +45,24 @@ if (Post('is_set')) {
         $model->phone         = $phone;
         $model->role          = $role;
 
+        // Если роль, которая назначается сотруднику, это начальник или ИО, то он будет иметь ещё и доступ в админку
+        if (in_array($role, [UserModel::ROLE_CHIEF, UserModel::ROLE_ACTING_CHIEF])) {
+            $newAdmin = new AdminModel();
+            $newAdmin->login = $model->login;
+            $newAdmin->email = $model->email;
+            $newAdmin->surname = $model->surname;
+            $newAdmin->first_name = $model->first_name;
+            $newAdmin->patronymic = $model->patronymic;
+            $newAdmin->pwd_hash = $model->pwd_hash;
+            $newAdmin->desc = 'Автоматически созданная запись для сотрудника: ' . $model->full_name;
+        } else {
+            // Если же админ для данного сотрудника был, но теперь его снова сделали просто сотрудником, то удаляем его админские права
+            $oldAdmin = (new AdminModel)->getIdByLogin($model->login);
+            if ($oldAdmin) {
+                $oldAdmin->delete();
+            }
+        }
+
         $user_id = $model->flush();
         UrlRedirect::go(
             SiteRoot("_admin/users&sel_id={$user_id}")

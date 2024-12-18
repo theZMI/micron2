@@ -16,9 +16,9 @@ class CommonUserModel extends \Models\ModelExtends
     const GENDER_MALE = 1;
     const GENDER_FEMALE = 2;
 
-    const REGULAR_WORKER = 1; // Сотрудник
-    const CHIEF = 2; // Начальник смены
-    const ACTING_CHIEF = 3; // ИО начальника смены
+    const ROLE_REGULAR_WORKER = 1; // Сотрудник
+    const ROLE_CHIEF = 2; // Начальник смены
+    const ROLE_ACTING_CHIEF = 3; // ИО начальника смены
 
     public function createTable()
     {
@@ -151,9 +151,9 @@ class CommonUserModel extends \Models\ModelExtends
     public function roles($role = null)
     {
         $all = [
-            self::REGULAR_WORKER => 'Сотрудник',
-            self::ACTING_CHIEF => 'ИО начальника смены',
-            self::CHIEF => 'Начальник смены',
+            self::ROLE_REGULAR_WORKER => 'Сотрудник',
+            self::ROLE_ACTING_CHIEF => 'ИО начальника смены',
+            self::ROLE_CHIEF => 'Начальник смены',
         ];
         return empty($role) ? $all : $all[$role];
     }
