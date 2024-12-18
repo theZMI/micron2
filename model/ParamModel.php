@@ -34,7 +34,7 @@ class ParamModel extends \Models\ModelExtends
             self::TYPE_IMAGE    => 'Изображение',
             self::TYPE_NUMBER   => 'Число',
             self::TYPE_DATETIME => 'Дата',
-            self::TYPE_TIME => 'Время',
+            self::TYPE_TIME     => 'Время',
         ];
     }
 
