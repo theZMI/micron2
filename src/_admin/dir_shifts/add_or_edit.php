@@ -86,7 +86,6 @@ if (Post('is_set')) {
                 $shiftParamModel = new ShiftParamModel();
                 $shiftParamModel->shift_id = $shift_id;
                 $shiftParamModel->param_id = $param_id;
-                $shiftParamModel->user_id  = $worker_id;
                 $shiftParamModel->flush();
             }
         };
