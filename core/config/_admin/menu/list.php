@@ -1,5 +1,6 @@
 <?php
 
+/*
 $subMenu = [];
 foreach (array_keys(Config('langs')) as $lang) {
     $subMenu[] = [
@@ -21,3 +22,4 @@ Config(['admin_menu', 'PUSH'], [
     'list'  => $subMenu
 ]);
 unset($subMenu);
+*/
