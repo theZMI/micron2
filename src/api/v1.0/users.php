@@ -1,7 +1,5 @@
 <?php
 
-FillArrayFromPhpInput($_GET);
-
 $model = new UserModel();
 $page  = intval(Get('page', 1));
 $list  = $model->getList($page);

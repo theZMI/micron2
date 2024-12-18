@@ -11,6 +11,7 @@ class PrepareApiMiddleware implements IMiddleware
     {
         define('IS_API', true);
 
+        FillArrayFromPhpInput($_GET);
         FillArrayFromPhpInput($_POST);
     }
 }
