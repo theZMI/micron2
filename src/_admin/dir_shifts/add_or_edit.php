@@ -25,7 +25,7 @@ if (Post('is_set')) {
     if ($dirModel->isExists()) {
         // Удаляем задачи, которые были исключены из смены у каждого юзера
         array_walk($wasWorkers, function ($was_worker_id) use ($worker_ids, $dirModel, $tasks) {
-            $shiftModel = $dirModel->findOne(['user_id' => $was_worker_id]);
+            $shiftModel = $dirModel->findShift(['user_id' => $was_worker_id]) ?: new ShiftModel();
 
             $wasUserTasks = array_map(fn($v) => $v->id, $shiftModel->tasks);
             $userTasks    = array_map(fn($v) => $v['id'], $tasks[$was_worker_id] ?? []);
@@ -44,14 +44,14 @@ if (Post('is_set')) {
                 return;
             }
 
-            $shiftModel = $dirModel->findOne(['user_id' => $was_worker_id]);
+            $shiftModel = $dirModel->findShift(['user_id' => $was_worker_id]) ?: new ShiftModel();
             $shiftModel->delete();
         });
     }
 
     // Создаём смены для каждого пользователя
     foreach ($worker_ids as $worker_id) {
-        $shiftModel             = $dirModel->findOne(['user_id' => $worker_id]);
+        $shiftModel             = $dirModel->findShift(['user_id' => $worker_id]) ?: new ShiftModel();
         $shiftModel->user_id    = $worker_id;
         $shiftModel->start_time = $start_time;
         $shiftModel->end_time   = $end_time;

@@ -19,7 +19,7 @@ if (Post('is_pwd_recover_order')) {
     if (count($errs)) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
-        $userModel = (new UserModel())->findOne(['email' => $email]);
+        $userModel = (new UserModel())->findOne(['email' => $email]) ?: new UserModel();
         if (!$userModel->isExists()) {
             $msg = MsgErr(L("Не найден пользователь с данным e-mail"));
         } else {
@@ -51,7 +51,7 @@ if (Post('is_check_pwd_recover_code')) {
     $isValidCode = (new UserPwdRecoverModel())->isValidCode($user_code, $email);
 
     if ($isValidCode) {
-        $userModel = (new UserModel())->findOne(['email' => $email]);
+        $userModel = (new UserModel())->findOne(['email' => $email]) ?: new UserModel();
         $userModel->is_email_verified = true;
         $userModel->login($userModel->email, $userModel->pwd_hash);
         UrlRedirect::go(SiteRoot('user/dashboard'));

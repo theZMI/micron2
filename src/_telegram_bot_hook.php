@@ -5,7 +5,7 @@ $chat_id     = $output['message']['chat']['id'] ?? '';
 $first_name  = $output['message']['chat']['first_name'] ?? '';
 $username    = $output['message']['chat']['username'] ?? '';
 $message     = $output['message']['text'] ?? '';
-$userModel   = (new UserModel())->findOne(['telegram_login' => $username]);
+$userModel   = (new UserModel())->findOne(['telegram_login' => $username]) ?: new UserModel();
 $isUserFound = $userModel->isExists();
 $notificator = new TelegramNotificator();
 
