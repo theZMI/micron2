@@ -31,7 +31,6 @@ class TaskModel extends \Models\ModelExtends
               `deadline_time` INT DEFAULT NULL,
               `done_time` INT DEFAULT NULL,
               `shift_id` INT DEFAULT NULL,
-              `user_id` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
