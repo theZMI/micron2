@@ -79,7 +79,7 @@ Micron в данном случае:
 
 ### Middleware
 Путь 1:
-- Создайте файл в /lib/Middlewares/ с нужным middleware
+- Создайте файл в /middleware/ с нужным middleware
 - Подключите его в /core/init/router.php
 
 Путь 2:

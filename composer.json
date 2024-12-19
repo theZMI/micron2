@@ -50,7 +50,8 @@
       "": [
         "trait/",
         "lib/",
-        "model/"
+        "model/",
+        "middleware/"
       ]
     }
   }

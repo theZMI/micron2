@@ -1,9 +1,7 @@
 <?php
 
-namespace Middlewares;
-
-use \Pecee\Http\Middleware\IMiddleware;
-use \Pecee\Http\Request;
+use Pecee\Http\Middleware\IMiddleware;
+use Pecee\Http\Request;
 
 class CheckManagerAuthMiddleware implements IMiddleware
 {
