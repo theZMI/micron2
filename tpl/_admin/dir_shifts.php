@@ -9,7 +9,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= SiteRoot('_admin/dir_shifts/create_by_template') ?>">На основе шаблона</a></li>
-                        <li><a class="dropdown-item" href="<?= SiteRoot('_admin/dir_shifts/add_or_edit') ?>">Уникальный</a></li>
+                        <li><a class="dropdown-item" href="<?= SiteRoot('_admin/dir_shifts/add_or_edit') ?>">Уникальная</a></li>
                     </ul>
                 </div>
             </h1>
