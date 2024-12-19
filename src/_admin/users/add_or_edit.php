@@ -9,16 +9,17 @@ $modelParam  = function ($param, $default = '') use (&$model) {
 $msg = '';
 if (Post('is_set')) {
     $email         = Post('email');
-    $surname       = Post('surname');
-    $first_name    = Post('first_name');
-    $patronymic    = Post('patronymic');
+    $full_name     = explode(' ', Post('full_name', ''));
+    $surname       = $full_name[0] ?? '';
+    $first_name    = $full_name[1] ?? '';
+    $patronymic    = $full_name[2] ?? '';
     $password      = Post('password', UserModel::genPassword());
     $department_id = +Post('department_id');
     $phone         = PhoneFilter(Post('phone'));
     $role          = +Post('role');
     $errs          = [];
 
-    if (empty($first_name) || empty($patronymic) || empty($surname)) {
+    if (empty($full_name)) {
         $errs[] = "Пожалуйста впишите ФИО сотрудника";
     }
     if (empty($email)) {
