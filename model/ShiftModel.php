@@ -45,6 +45,8 @@ class ShiftModel extends \Models\ModelExtends
 
     public function find($params)
     {
+        $params['is_template'] = $params['is_template'] ?? false;
+
         if (isset($params['dir_id'])) {
             $dir_id = $params['dir_id'];
             $ids    = $this->db->selectCol("SELECT `id` FROM ?# WHERE `dir_id` = ?d", $this->table, $dir_id);
@@ -62,10 +64,9 @@ class ShiftModel extends \Models\ModelExtends
             $ret     = [];
             foreach ($ids as $id) {
                 $one = new self($id);
-                if (isset($params['is_template'])) {
-                    if (+$one->is_template !== +$params['is_template']) {
-                        continue;
-                    }
+                // Если указано is_template=true, то работает только по шаблонам, иначе по сменам
+                if (+$one->is_template !== +$params['is_template']) {
+                    continue;
                 }
                 $ret[$id] = $one;
             }
