@@ -46,11 +46,13 @@ class ShiftParamModel extends \Models\ModelExtends
 
     public function find($params)
     {
-        $ret = [];
-        if ($params['shift_id']) {
+        $ids = [];
+        if (isset($params['shift_id'])) {
             $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `shift_id` = ?d", $this->table, $params['shift_id']);
-            $ret = array_map(fn($id) => new self($id), $ids);
         }
-        return $ret;
+        if (isset($params['param_id'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `param_id` = ?d", $this->table, $params['param_id']);
+        }
+        return array_map(fn($id) => new self($id), $ids);
     }
 }

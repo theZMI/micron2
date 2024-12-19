@@ -18,7 +18,7 @@
                     <?php $isFirst = true; foreach ($model->users as $user): ?>
 
                         <div id="worker-tasks-tab-<?= $user->id ?>-pane" class="tab-pane fade<?= $isFirst ? ' show active' : '' ?>" role="tabpanel" aria-labelledby="worker-tasks-tab-<?= $user->id ?>-tab" tabindex="0">
-                            <?php $shift = (new ShiftModel())->findOne($dir_id, $user->id) ?>
+                            <?php $shift = (new ShiftModel())->findOne(['dir_id' => $dir_id, 'user_id' => $user->id]) ?>
                             <div class="mb-3">
                                 <h4>Задачи:</h4>
                                 <?php if (empty($shift) || !count($shift->tasks)): ?>

@@ -37,6 +37,9 @@ class ShiftModel extends \Models\ModelExtends
         if ($key === 'params') {
             return (new ShiftParamModel())->find(['shift_id' => $this->id]);
         }
+        if ($key === 'is_template') {
+            return (new DirShiftsModel($this->dir_id))->is_template;
+        }
         return parent::__get($key);
     }
 
@@ -58,7 +61,13 @@ class ShiftModel extends \Models\ModelExtends
             $ids     = empty($ids) ? [] : $ids;
             $ret     = [];
             foreach ($ids as $id) {
-                $ret[$id] = new self($id);
+                $one = new self($id);
+                if (isset($params['is_template'])) {
+                    if (+$one->is_template !== +$params['is_template']) {
+                        continue;
+                    }
+                }
+                $ret[$id] = $one;
             }
             return $ret;
         }
@@ -66,15 +75,23 @@ class ShiftModel extends \Models\ModelExtends
         return [];
     }
 
-    public function findOne($dir_id, $user_id)
+    public function findOne($params)
     {
-        $shift_id = $this->db->selectCell(
-            "SELECT `id` FROM ?# WHERE `dir_id` = ?d AND `user_id` = ?d",
-            $this->table,
-            $dir_id,
-            $user_id
-        );
-        return $shift_id ? new self($shift_id) : null;
+        if (isset($param['dir_id'])) {
+            $dir_id = $params['dir_id'];
+            if (isset($params['user_id'])) {
+                $user_id = $params['user_id'];
+
+                $shift_id = $this->db->selectCell(
+                    "SELECT `id` FROM ?# WHERE `dir_id` = ?d AND `user_id` = ?d",
+                    $this->table,
+                    $dir_id,
+                    $user_id
+                );
+                return $shift_id ? new self($shift_id) : null;
+            }
+        }
+        return null;
     }
 
     public function delete()
