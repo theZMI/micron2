@@ -31,16 +31,12 @@ class ShiftModel extends \Models\ModelExtends
 
     public function __get($key)
     {
-        if ($key === 'tasks') {
-            return (new TaskModel())->find(['shift_id' => $this->id]);
-        }
-        if ($key === 'params') {
-            return (new ShiftParamModel())->find(['shift_id' => $this->id]);
-        }
-        if ($key === 'is_template') {
-            return (new DirShiftsModel($this->dir_id))->is_template;
-        }
-        return parent::__get($key);
+        return match ($key) {
+            'tasks'       => (new TaskModel())->find(['shift_id' => $this->id]),
+            'params'      => (new ShiftParamModel())->find(['shift_id' => $this->id]),
+            'is_template' => (new DirShiftsModel($this->dir_id))->is_template,
+            default       => parent::__get($key)
+        };
     }
 
     public function find($params)
@@ -51,26 +47,14 @@ class ShiftModel extends \Models\ModelExtends
             $dir_id = $params['dir_id'];
             $ids    = $this->db->selectCol("SELECT `id` FROM ?# WHERE `dir_id` = ?d", $this->table, $dir_id);
             $ids    = empty($ids) ? [] : $ids;
-            $ret    = [];
-            foreach ($ids as $id) {
-                $ret[$id] = new self($id);
-            }
-            return $ret;
+            return array_map(fn($id) => new self($id), $ids);
         }
         if (isset($params['user_id'])) {
             $user_id = $params['user_id'];
             $ids     = $this->db->selectCol("SELECT `id` FROM ?# WHERE `user_id` = ?d", $this->table, $user_id);
             $ids     = empty($ids) ? [] : $ids;
-            $ret     = [];
-            foreach ($ids as $id) {
-                $one = new self($id);
-                // Если указано is_template=true, то работает только по шаблонам, иначе по сменам
-                if (+$one->is_template !== +$params['is_template']) {
-                    continue;
-                }
-                $ret[$id] = $one;
-            }
-            return $ret;
+            $ret     = array_map(fn($id) => new self($id), $ids);;
+            return array_filter($ret, fn($v) => +$v->is_template === $params['is_template']); // Если указано is_template=true, то работает только по шаблонам, иначе по сменам
         }
 
         return [];
