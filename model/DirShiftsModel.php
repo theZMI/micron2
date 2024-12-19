@@ -57,14 +57,19 @@ class DirShiftsModel extends \Models\ModelExtends
     public function findShift($params)
     {
         if (isset($params['user_id'])) {
-            return (new ShiftModel())->findOne($this->id, $params['user_id']);
+            return (new ShiftModel())->findOne([
+                'dir_id'  => $this->id,
+                'user_id' => $params['user_id']
+            ]);
         }
         return null;
     }
 
     public function delete()
     {
-        array_walk($this->shifts, fn($shift) => $shift->delete());
+        foreach ($this->shifts as $shift) {
+            $shift->delete();
+        }
         return parent::delete();
     }
 }
