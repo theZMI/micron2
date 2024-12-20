@@ -49,7 +49,7 @@ class DirShiftsModel extends \Models\ModelExtends
 
     public function find($params)
     {
-        $is_template = $params['is_template'] ?? false;
+        $is_template = boolval($params['is_template'] ?? false);
         unset($params['is_template']);
 
         if (count($params) === 0) { // Если единственный параметр поиска это is_template

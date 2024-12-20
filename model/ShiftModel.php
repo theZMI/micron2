@@ -91,8 +91,8 @@ class ShiftModel extends \Models\ModelExtends
         return array_merge(
             $this->getData(),
             [
-                'tasks'       => array_map(fn($task) => $task->getDataToApi(), $this->tasks),
-                'param'       => array_map(fn($param) => $param->getDataToApi(), $this->params),
+                'tasks'       => array_values( array_map(fn($task) => $task->getDataToApi(), $this->tasks) ),
+                'params'      => array_values( array_map(fn($param) => $param->getDataToApi(), $this->params) ),
                 'dir'         => $this->dir->getData(), // Здесь специально не getDataToApi так как оно будет возвращать shifts, что приведёт к зацикливанию
                 'is_template' => $this->dir->is_template,
             ]
