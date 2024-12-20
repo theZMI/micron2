@@ -61,7 +61,7 @@ class ParamModel extends \Models\ModelExtends
     public function getList($page = self::PAGE_ALL)
     {
         $list = parent::getList($page);
-        return array_filter($list, fn($v) => $v->status !== self::STATUS_HIDDEN);
+        return array_filter($list, fn($v) => +$v->status !== self::STATUS_HIDDEN);
     }
 
     public function delete()
