@@ -6,11 +6,6 @@ $all  = array_values( array_map(
     $dirs
 ) );
 $all  = array_map(fn($v) => $v->getDataToApi(), $all);
-Xmp($all);
-echo PHP_EOL;
-$m = new ShiftModel(15);
-//Xmp( array_map(fn($task) => $task->getDataToApi(), $m->tasks));
-Xmp($m->getDataToApi());
 (new ApiResponse())->normal(
     $all
 );
