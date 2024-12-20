@@ -42,9 +42,9 @@ foreach ($getLangs() as $lang => $langUri) {
             TryIncludeCom("{$langUri}{$apiUri}users{$end_uri}", [], "{$apiUri}404");
         })->where(['end_uri' => '.*?']);
 
-        // tasks
-        SimpleRouter::all("/{$langUri}{$apiUri}tasks", function () use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}tasks", [], "{$apiUri}404");
+        // shifts
+        SimpleRouter::all("/{$langUri}{$apiUri}shifts", function () use ($langUri, $apiUri) {
+            TryIncludeCom("{$langUri}{$apiUri}shifts", [], "{$apiUri}404");
         });
     });
 
