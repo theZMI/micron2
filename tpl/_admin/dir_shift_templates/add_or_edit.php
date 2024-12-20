@@ -130,7 +130,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <a href="<?= SiteRoot('_admin/dir_shifts') ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>
+                    <a href="<?= SiteRoot('_admin/dir_shift_templates') ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>
                     <button type="submit" class="btn btn-primary btn-lg rounded-pill"><i class="bi bi-check-lg pe-2"></i>Сохранить</button>
                 </div>
             </form>
