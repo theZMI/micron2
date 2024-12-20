@@ -28,25 +28,18 @@ class DirShiftsModel extends \Models\ModelExtends
         }
         elseif ($key === 'start_time') {
             $shifts = $this->shifts;
-            if (count($shifts)) {
-                return $shifts[array_key_first($shifts)]->start_time;
-            }
-            return 0;
+            return count($shifts)
+                ? $shifts[array_key_first($shifts)]->start_time
+                : 0;
         }
         elseif ($key === 'end_time') {
             $shifts = $this->shifts;
-            if (count($shifts)) {
-                return $shifts[array_key_first($shifts)]->end_time;
-            }
-            return 0;
+            return count($shifts)
+                ? $shifts[array_key_first($shifts)]->end_time
+                : 0;
         }
         elseif ($key === 'user_ids') {
-            $shifts   = $this->shifts;
-            $user_ids = [];
-            foreach ($shifts as $shift) {
-                $user_ids[] = $shift->user_id;
-            }
-            return $user_ids;
+            return array_map(fn($shift) => +$shift->user_id, $this->shifts);
         }
         elseif ($key === 'users') {
             return array_map(fn($id) => new UserModel($id), $this->user_ids);
@@ -54,22 +47,30 @@ class DirShiftsModel extends \Models\ModelExtends
         return parent::__get($key);
     }
 
-    public function findShift($params)
+    public function find($params)
     {
-        if (isset($params['user_id'])) {
-            return (new ShiftModel())->findOne([
-                'dir_id'  => $this->id,
-                'user_id' => $params['user_id']
-            ]);
+        $is_template = $params['is_template'] ?? false;
+        unset($params['is_template']);
+
+        if (count($params) === 0) { // Если единственный параметр поиска это is_template
+            return array_filter(
+                $this->getList(),
+                fn($v) => +$v->is_template === +$is_template
+            );
         }
-        return null;
+        if (isset($params['user_id'])) {
+            return array_filter(
+                $this->getList(),
+                fn($v) => in_array(+$params['user_id'], $v->user_ids) && +$v->is_template === +$is_template
+            );
+        }
+        return [];
     }
 
     public function delete()
     {
-        foreach ($this->shifts as $shift) {
-            $shift->delete();
-        }
+        $shifts = $this->shifts;
+        array_walk($shifts, fn($v) => $v->delete());
         return parent::delete();
     }
 }

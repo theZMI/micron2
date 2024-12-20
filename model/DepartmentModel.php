@@ -34,4 +34,11 @@ class DepartmentModel extends \Models\ModelExtends
     {
         return parent::__set($key, $value);
     }
+
+    public function delete()
+    {
+        $conns = (new UserDepartmentModel())->find(['department_id' => $this->id]);
+        array_walk($conns, fn($v) => $v->delete());
+        return parent::delete();
+    }
 }

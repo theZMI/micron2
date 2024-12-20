@@ -34,7 +34,8 @@ class ShiftModel extends \Models\ModelExtends
         return match ($key) {
             'tasks'       => (new TaskModel())->find(['shift_id' => $this->id]),
             'params'      => (new ShiftParamModel())->find(['shift_id' => $this->id]),
-            'is_template' => (new DirShiftsModel($this->dir_id))->is_template,
+            'dir'         => (new DirShiftsModel($this->dir_id)),
+            'is_template' => $this->dir->is_template,
             default       => parent::__get($key)
         };
     }
@@ -53,8 +54,8 @@ class ShiftModel extends \Models\ModelExtends
             $user_id = $params['user_id'];
             $ids     = $this->db->selectCol("SELECT `id` FROM ?# WHERE `user_id` = ?d", $this->table, $user_id);
             $ids     = empty($ids) ? [] : $ids;
-            $ret     = array_map(fn($id) => new self($id), $ids);;
-            return array_filter($ret, fn($v) => +$v->is_template === $params['is_template']); // Если указано is_template=true, то работает только по шаблонам, иначе по сменам
+            $ret     = array_map(fn($id) => new self($id), $ids);
+            return array_filter($ret, fn($v) => +$v->is_template === +$params['is_template']); // Если указано is_template=true, то работает только по шаблонам, иначе по сменам
         }
 
         return [];
@@ -62,28 +63,39 @@ class ShiftModel extends \Models\ModelExtends
 
     public function findOne($params)
     {
-        if (isset($param['dir_id'])) {
-            $dir_id = $params['dir_id'];
-            if (isset($params['user_id'])) {
-                $user_id = $params['user_id'];
-
-                $shift_id = $this->db->selectCell(
-                    "SELECT `id` FROM ?# WHERE `dir_id` = ?d AND `user_id` = ?d",
-                    $this->table,
-                    $dir_id,
-                    $user_id
-                );
-                return $shift_id ? new self($shift_id) : null;
-            }
+        if (isset($params['dir_id']) && isset($params['user_id'])) {
+            $dir_id   = +$params['dir_id'];
+            $user_id  = +$params['user_id'];
+            $shift_id = $this->db->selectCell(
+                "SELECT `id` FROM ?# WHERE `dir_id` = ?d AND `user_id` = ?d",
+                $this->table,
+                $dir_id,
+                $user_id
+            );
+            return $shift_id ? new self($shift_id) : null;
         }
         return null;
     }
 
     public function delete()
     {
-        foreach ($this->tasks as $task) {
-            $task->delete();
-        }
+        $tasks = $this->tasks;
+        array_walk($tasks, fn($v) => $v->delete());
+        $params = $this->params;
+        array_walk($params, fn($v) => $v->delete());
         return parent::delete();
+    }
+
+    public function getDataToApi()
+    {
+        return array_merge(
+            $this->getData(),
+            [
+                'tasks'       => array_map(fn($task) => $task->getDataToApi(), $this->tasks),
+                'param'       => array_map(fn($param) => $param->getDataToApi(), $this->params),
+                'dir'         => $this->dir->getData(), // Здесь специально не getDataToApi так как оно будет возвращать shifts, что приведёт к зацикливанию
+                'is_template' => $this->dir->is_template,
+            ]
+        );
     }
 }

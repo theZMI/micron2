@@ -101,4 +101,16 @@ class TaskModel extends \Models\ModelExtends
         }
         return $ret;
     }
+
+    public function getDataToApi()
+    {
+        return array_merge(
+            $this->getData(),
+            [
+                'is_done'      => $this->is_done,
+                'shift'        => $this->shift->getData(), // Здесь специально не getDataToApi
+                'status_label' => $this->status_label,
+            ]
+        );
+    }
 }

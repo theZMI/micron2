@@ -73,4 +73,14 @@ class ParamModel extends \Models\ModelExtends
         }
         return parent::delete();
     }
+
+    public function getDataToApi()
+    {
+        return array_merge(
+            $this->getData(),
+            [
+                'type_name' => $this->type_name
+            ]
+        );
+    }
 }

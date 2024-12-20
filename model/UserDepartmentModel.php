@@ -32,12 +32,4 @@ class UserDepartmentModel extends \Models\ModelExtends
         $ids = empty($ids) ? [] : $ids;
         return array_map(fn($id) => new self($id), $ids);
     }
-
-    public function remove($user_id, $department_id = 'all')
-    {
-        if ($department_id === 'all') {
-            return $this->db->query("DELETE FROM ?# WHERE `user_id` = ?d", $this->table, $user_id);
-        }
-        return $this->db->query("DELETE FROM ?# WHERE `user_id` = ?d AND `department_id` = ?d", $this->table, $department_id);
-    }
 }

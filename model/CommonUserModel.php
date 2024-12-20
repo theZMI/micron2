@@ -89,8 +89,11 @@ class CommonUserModel extends \Models\ModelExtends
     public function __set($key, $value)
     {
         if ($key === 'department_id') {
+            // Удаляем старые коннекты так как сейчас у нас 1 человек может быть в одном отделе
+            $conns = (new UserDepartmentModel())->find(['user_id' => $this->id]);
+            array_walk($conns, fn($conn) => $conn->delete());
+
             $m = new UserDepartmentModel();
-            $m->remove($this->id);
             $m->user_id = $this->id;
             $m->department_id = $value;
             return $m;

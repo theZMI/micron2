@@ -28,7 +28,7 @@ class ShiftParamModel extends \Models\ModelExtends
         if ($key === 'param') {
             return new ParamModel($this->param_id);
         }
-        if ($key === 'value') {
+        elseif ($key === 'value') {
             $valueField = $this->param->getValueFieldName();
             return $this->$valueField;
         }
@@ -54,5 +54,16 @@ class ShiftParamModel extends \Models\ModelExtends
             $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `param_id` = ?d", $this->table, $params['param_id']);
         }
         return array_map(fn($id) => new self($id), $ids);
+    }
+
+    public function getDataToApi()
+    {
+        return array_merge(
+            $this->getData(),
+            [
+                'value' => $this->value,
+                'param' => $this->param->getDataToApi()
+            ]
+        );
     }
 }
