@@ -81,7 +81,7 @@ class Request
             if ($v == M_DELETE_PARAM) {
                 continue;
             }
-            $pars .= ("{$k}=" . urlencode($v) . "&");
+            $pars .= ("{$k}=" . urlencode(strval($v)) . "&");
         }
         $pars = substr($pars, 0, -1) ? ('&' . substr($pars, 0, -1)) : '';
 

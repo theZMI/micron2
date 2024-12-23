@@ -27,6 +27,7 @@ class TaskModel extends \Models\ModelExtends
               `is_photo_5_required` INT DEFAULT NULL,
               `status` INT DEFAULT NULL,
               `last_status_change_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
               `deadline_time` INT DEFAULT NULL,
               `done_time` INT DEFAULT NULL,
@@ -71,8 +72,6 @@ class TaskModel extends \Models\ModelExtends
                 if (+$value === self::STATUS_DONE) {
                     $this->done_time = time();
                 }
-                parent::__set($key, $value);
-                break;
             default:
                 parent::__set($key, $value);
         }
@@ -107,10 +106,17 @@ class TaskModel extends \Models\ModelExtends
         return array_merge(
             $this->getData(),
             [
-                'is_done'      => $this->is_done,
                 'shift'        => $this->shift->getData(), // Здесь специально не getDataToApi
                 'status_label' => $this->status_label,
             ]
         );
+    }
+
+    public function flush()
+    {
+        if ($this->hasChanges()) {
+            $this->last_update_time = time();
+        }
+        return parent::flush();
     }
 }
