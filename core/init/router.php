@@ -46,6 +46,11 @@ foreach ($getLangs() as $lang => $langUri) {
         SimpleRouter::all("/{$langUri}{$apiUri}shifts", function () use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}shifts", [], "{$apiUri}404");
         });
+
+        // tasks/{id}
+        SimpleRouter::all("/{$langUri}{$apiUri}tasks/{id}", function ($id) use ($langUri, $apiUri) {
+            TryIncludeCom("{$langUri}{$apiUri}tasks/task", ['id' => $id], "{$apiUri}404");
+        })->where(['id' => '[0-9]+']);
     });
 
     // Вызовы API без авторизации
