@@ -25,6 +25,10 @@
                     </select>
                 </div>
                 <div class="mb-4">
+                    <label class="form-label">Должность:</label>
+                    <input type="text" name="job_title" class="form-control" value="<?= $modelParam('job_title') ?>">
+                </div>
+                <div class="mb-4">
                     <label class="form-label">Роль сотрудника:</label>
                     <select name="role" class="form-control">
                         <?php foreach ($model->roles() as $role => $roleName): ?>

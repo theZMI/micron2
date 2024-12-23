@@ -7,6 +7,8 @@ class CommonUserModel extends \Models\ModelExtends
 {
     use AuthTrait;
 
+    const PAGE_LIMIT = 9999;
+
     const REMEMBER_PERIOD = 31536000; // Время хранения авторизации (в секундах)
 
     const STATUS_ACTIVE = 0;
@@ -36,6 +38,7 @@ class CommonUserModel extends \Models\ModelExtends
               `first_name` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `surname` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `patronymic` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+              `job_title` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `status` INT DEFAULT NULL,
               `gender` INT DEFAULT NULL,
               `birthday_date` DATE DEFAULT NULL,
@@ -132,6 +135,19 @@ class CommonUserModel extends \Models\ModelExtends
         return $id ? new static($id) : null;
     }
 
+    public function find($params)
+    {
+        $ids = [];
+        if (isset($params['surname']) && isset($params['first_name']) && isset($params['patronymic'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `surname` = ? AND `first_name` = ? AND `patronymic` = ?", $this->table, $params['surname'], $params['first_name'], $params['patronymic']);
+        } elseif (isset($params['surname']) && isset($params['first_name'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `surname` = ? AND `first_name` = ?", $this->table, $params['surname'], $params['first_name']);
+        } elseif (isset($params['surname'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `surname` = ?", $this->table, $params['surname']);
+        }
+        return array_map(fn($id) => new static($id), $ids);
+    }
+
     public function isEmailBusy($email)
     {
         return $this->db->selectCell("SELECT COUNT(`id`) FROM ?# WHERE `email` = ?", $this->table, $email);
@@ -155,8 +171,8 @@ class CommonUserModel extends \Models\ModelExtends
     {
         $all = [
             self::ROLE_REGULAR_WORKER => 'Сотрудник',
-            self::ROLE_ACTING_CHIEF => 'ИО начальника смены',
-            self::ROLE_CHIEF => 'Начальник смены',
+            self::ROLE_ACTING_CHIEF => 'И.о. руководителя отдела',
+            self::ROLE_CHIEF => 'Руководитель отдела',
         ];
         return empty($role) ? $all : $all[$role];
     }

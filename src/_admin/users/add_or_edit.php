@@ -17,6 +17,7 @@ if (Post('is_set')) {
     $department_id = +Post('department_id');
     $phone         = PhoneFilter(Post('phone'));
     $role          = +Post('role');
+    $job_title     = Post('job_title');
     $errs          = [];
 
     if (empty($full_name)) {
@@ -45,6 +46,7 @@ if (Post('is_set')) {
         $model->department_id = $department_id;
         $model->phone         = $phone;
         $model->role          = $role;
+        $model->job_title     = $job_title;
 
         // Если роль, которая назначается сотруднику, это начальник или ИО, то он будет иметь ещё и доступ в админку
         if (in_array($role, [UserModel::ROLE_CHIEF, UserModel::ROLE_ACTING_CHIEF])) {

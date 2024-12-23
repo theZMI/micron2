@@ -15,6 +15,7 @@
                             <th>Имя</th>
                             <th>Отдел</th>
                             <th>Роль</th>
+                            <th>Должность</th>
                             <th>Логин</th>
                             <th>Телефон</th>
                             <th colspan="2">Действия</th>
@@ -27,6 +28,7 @@
                                 </td>
                                 <td><?= $v->department?->department ?></td>
                                 <td><?= $v->roles($v->role) ?: '' ?></td>
+                                <td><?= $v->job_title ?></td>
                                 <td><?= $v->login ?></td>
                                 <td><?= OutputFormats::mobilePhone((string)$v->phone) ?></td>
                                 <td width="1%" class="text-center">
