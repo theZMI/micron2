@@ -27,7 +27,7 @@
                                     <?= $v->full_name ?>
                                 </td>
                                 <td><?= $v->department?->department ?></td>
-                                <td><?= $v->roles($v->role) ?: '' ?></td>
+                                <td><?= $v->role ? $v->roles($v->role) : '---' ?></td>
                                 <td><?= $v->job_title ?></td>
                                 <td><?= $v->login ?></td>
                                 <td><?= OutputFormats::mobilePhone((string)$v->phone) ?></td>

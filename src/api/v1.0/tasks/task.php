@@ -1,5 +1,5 @@
 <?php
-die('temp close');
+
 $model = new TaskModel(+$id);
 $canEditFields = [
     'user_comment',
