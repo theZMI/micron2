@@ -176,4 +176,12 @@ class CommonUserModel extends \Models\ModelExtends
         ];
         return empty($role) ? $all : $all[$role];
     }
+
+    public function flush()
+    {
+        if ($this->hasChanges()) {
+            $this->last_update_time = time();
+        }
+        return parent::flush();
+    }
 }
