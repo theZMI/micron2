@@ -22,7 +22,6 @@ class TimerModel extends SiteModel
               `value` INT DEFAULT NULL,
               `last_update_time` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
-              UNIQUE (`login`),
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

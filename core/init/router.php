@@ -38,10 +38,6 @@ foreach ($getLangs() as $lang => $langUri) {
         SimpleRouter::all("/{$langUri}{$apiUri}work_intervals", function () use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}work_intervals", [], "{$apiUri}404");
         });
-        // work_intervals/create
-        SimpleRouter::all("/{$langUri}{$apiUri}work_intervals/create", function () use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}work_intervals/create", [], "{$apiUri}404");
-        });
         // work_intervals/{id}
         SimpleRouter::all("/{$langUri}{$apiUri}work_intervals/{id}", function ($id) use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}work_intervals/interval", ['id' => $id], "{$apiUri}404");

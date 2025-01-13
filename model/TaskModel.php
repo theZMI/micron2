@@ -10,7 +10,7 @@ class TaskModel extends SiteModel
     {
         return [
             'id'                       => 'int',
-            'task'                     => 'int',
+            'task'                     => 'string',
             'description'              => 'int',
             'user_comment'             => 'string',
             'is_user_comment_required' => 'bool',
