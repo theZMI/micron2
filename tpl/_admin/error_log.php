@@ -58,7 +58,7 @@
                                     <br>
                                     IP: <?= $log->ip ?>
                                 </td>
-                                <td><?= date("d-m-Y H:i:s", $log->time) ?></td>
+                                <td><?= date("d-m-Y H:i:s", $log->create_time) ?></td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-get-<?= $log->id ?>').slideToggle()">GET</button>
                                     <div id="i-get-<?= $log->id ?>" style="display: none; font-size: 11px; min-width: 600px; padding: 15px; border: 1px solid #DDD; border-radius: 7px;">
