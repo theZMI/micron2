@@ -25,10 +25,27 @@ SimpleRouter::group(['middleware' => AdminAuthMiddleware::class], function () {
 foreach ($getLangs() as $lang => $langUri) {
     // Вызовы API с авторизацией
     SimpleRouter::group(['middleware' => [PrepareApiMiddleware::class, CommonMiddleware::class, CheckApiUserAuthMiddleware::class]], function () use ($langUri, $apiUri) {
-        // current_timer_value
-        SimpleRouter::all("/{$langUri}{$apiUri}current_timer_value", function () use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}current_timer_value", [], "{$apiUri}404");
-        })->where(['end_uri' => '.*?']);
+        // Получение текущего значения таймера
+//        SimpleRouter::get("/{$langUri}{$apiUri}timer", function () use ($langUri, $apiUri) {
+//            TryIncludeCom("{$langUri}{$apiUri}timer", [], "{$apiUri}404");
+//        })->where(['end_uri' => '.*?']);
+//        // Установка нового значения таймера
+//        SimpleRouter::post("/{$langUri}{$apiUri}timer", function () use ($langUri, $apiUri) {
+//            TryIncludeCom("{$langUri}{$apiUri}timer", [], "{$apiUri}404");
+//        })->where(['end_uri' => '.*?']);
+
+        // work_intervals
+        SimpleRouter::all("/{$langUri}{$apiUri}work_intervals", function () use ($langUri, $apiUri) {
+            TryIncludeCom("{$langUri}{$apiUri}work_intervals", [], "{$apiUri}404");
+        });
+        // work_intervals/create
+        SimpleRouter::all("/{$langUri}{$apiUri}work_intervals/create", function () use ($langUri, $apiUri) {
+            TryIncludeCom("{$langUri}{$apiUri}work_intervals/create", [], "{$apiUri}404");
+        });
+        // work_intervals/{id}
+        SimpleRouter::all("/{$langUri}{$apiUri}work_intervals/{id}", function ($id) use ($langUri, $apiUri) {
+            TryIncludeCom("{$langUri}{$apiUri}work_intervals/interval", ['id' => $id], "{$apiUri}404");
+        });
 
         // users
         SimpleRouter::all("/{$langUri}{$apiUri}users", function () use ($langUri, $apiUri) {
@@ -37,10 +54,6 @@ foreach ($getLangs() as $lang => $langUri) {
         // users/{id}
         SimpleRouter::all("/{$langUri}{$apiUri}users/{id}", function ($id) use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}users/user", ['id' => $id], "{$apiUri}404");
-        })->where(['id' => '[0-9]+']);
-        // users/{id}/timer
-        SimpleRouter::all("/{$langUri}{$apiUri}users/{id}/timer", function ($id) use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}users/user/timer", ['id' => $id], "{$apiUri}404");
         })->where(['id' => '[0-9]+']);
         // users/*
         SimpleRouter::all("/{$langUri}{$apiUri}users{end_uri}", function ($end_uri) use ($langUri, $apiUri) {
