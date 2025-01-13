@@ -1,10 +1,18 @@
 <?php
 
-class ShiftParamModel extends \Models\ModelExtends
+class ShiftParamModel extends SiteModel
 {
-    public function __construct($id = null)
+    public function scheme()
     {
-        parent::__construct('shift_params', $id);
+        return [
+            'id'               => 'int',
+            'shift_id'         => 'int',
+            'param_id'         => 'int',
+            'value_as_string'  => 'string',
+            'value_as_number'  => 'float',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
     }
 
     public function createTable()
@@ -17,10 +25,16 @@ class ShiftParamModel extends \Models\ModelExtends
               `value_as_string` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `value_as_number` FLOAT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
         );
+    }
+
+    public function __construct($id = null)
+    {
+        parent::__construct('shift_params', $id);
     }
 
     public function __get($key)

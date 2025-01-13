@@ -3,11 +3,26 @@
 /**
  * Модель для работы администратора
  */
-class AdminModel extends \Models\ModelExtends
+class AdminModel extends SiteModel
 {
     use AuthTrait;
 
     const REMEMBER_PERIOD = 604800;
+
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'login'            => 'string',
+            'pwd_hash'         => 'string',
+            'name'             => 'string',
+            'desc'             => 'string',
+            'email'            => 'string',
+            'phone'            => 'string',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
 
     public function createTable()
     {
@@ -21,6 +36,7 @@ class AdminModel extends \Models\ModelExtends
                 `email` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `phone` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `create_time` INT DEFAULT NULL,
+                `last_update_time` INT DEFAULT NULL,
                 UNIQUE (`login`),
                 PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",

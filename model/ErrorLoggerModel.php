@@ -1,8 +1,36 @@
 <?php
 
-class ErrorLoggerModel extends \Models\ModelExtends
+class ErrorLoggerModel extends SiteModel
 {
     const PAGE_LIMIT = 10;
+
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            '_get'             => 'string',
+            '_post'            => 'string',
+            '_cookie'          => 'string',
+            '_session'         => 'string',
+            '_server'          => 'string',
+            '_files'           => 'string',
+            'backtrace'        => 'string',
+            'sql'              => 'string',
+            'ip'               => 'string',
+            'browser'          => 'string',
+            'browser_version'  => 'string',
+            'platform'         => 'string',
+            'g_config'         => 'string',
+            'g_lang'           => 'string',
+            'g_user'           => 'string',
+            'errno'            => 'int',
+            'errstr'           => 'string',
+            'errfile'          => 'string',
+            'errline'          => 'int',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
 
     public function createTable()
     {
@@ -24,11 +52,12 @@ class ErrorLoggerModel extends \Models\ModelExtends
                 `g_config` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `g_lang` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `g_user` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-                `errno` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `errno` INT DEFAULT NULL,
                 `errstr` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `errfile` VARCHAR(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `errline` INT DEFAULT NULL,
                 `create_time` INT DEFAULT NULL,
+                `last_update_time` INT DEFAULT NULL,
                 PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

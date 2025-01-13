@@ -1,7 +1,18 @@
 <?php
 
-class UserDepartmentModel extends \Models\ModelExtends
+class UserDepartmentModel extends SiteModel
 {
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'user_id'          => 'int',
+            'department_id'    => 'int',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
+
     public function createTable()
     {
         return $this->db->query(
@@ -10,6 +21,7 @@ class UserDepartmentModel extends \Models\ModelExtends
               `user_id` INT DEFAULT NULL,
               `department_id` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

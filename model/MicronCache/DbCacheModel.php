@@ -2,8 +2,19 @@
 
 namespace MicronCache;
 
-class DbCacheModel extends \Models\ModelExtends implements ICache
+class DbCacheModel extends \SiteModel implements ICache
 {
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'key'             => 'string',
+            'data'            => 'string',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
+
     protected function createTable()
     {
         return $this->db->query(
@@ -12,6 +23,7 @@ class DbCacheModel extends \Models\ModelExtends implements ICache
                 `key` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
                 `data` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
                 `create_time` INT NULL DEFAULT NULL, 
+                `last_update_time` INT NULL DEFAULT NULL, 
                 PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

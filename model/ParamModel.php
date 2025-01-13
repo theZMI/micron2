@@ -1,6 +1,6 @@
 <?php
 
-class ParamModel extends \Models\ModelExtends
+class ParamModel extends SiteModel
 {
     const TYPE_STRING   = 10;
     const TYPE_IMAGE    = 20;
@@ -11,6 +11,17 @@ class ParamModel extends \Models\ModelExtends
     const STATUS_VISIBLE = 0;
     const STATUS_HIDDEN = 1;
 
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'name'             => 'string',
+            'type'             => 'int',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
+
     public function createTable()
     {
         return $this->db->query(
@@ -20,6 +31,7 @@ class ParamModel extends \Models\ModelExtends
               `type` INT DEFAULT NULL,
               `status` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

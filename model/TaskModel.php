@@ -1,10 +1,39 @@
 <?php
 
-class TaskModel extends \Models\ModelExtends
+class TaskModel extends SiteModel
 {
     const STATUS_CREATED = 0;
     const STATUS_DONE    = 2;
     const STATUS_FAILED  = -1;
+
+    public function scheme()
+    {
+        return [
+            'id'                       => 'int',
+            'task'                     => 'int',
+            'description'              => 'int',
+            'user_comment'             => 'string',
+            'is_user_comment_required' => 'bool',
+            'photo_1'                  => 'string',
+            'is_photo_1_required'      => 'bool',
+            'photo_2'                  => 'string',
+            'is_photo_2_required'      => 'bool',
+            'photo_3'                  => 'string',
+            'is_photo_3_required'      => 'bool',
+            'photo_4'                  => 'string',
+            'is_photo_4_required'      => 'bool',
+            'photo_5'                  => 'string',
+            'is_photo_5_required'      => 'bool',
+            'status'                   => 'int',
+            'last_status_change_time'  => 'int',
+            'deadline_time'            => 'int',
+            'done_time'                => 'int',
+            'shift_id'                 => 'int',
+            'user_id'                  => 'int',
+            'create_time'              => 'int',
+            'last_update_time'         => 'int',
+        ];
+    }
 
     public function createTable()
     {

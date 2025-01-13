@@ -1,9 +1,23 @@
 <?php
 
-class ShiftModel extends \Models\ModelExtends
+class ShiftModel extends SiteModel
 {
     const STATUS_CREATED = 0;
     const STATUS_DONE    = 2;
+
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'user_id'          => 'int',
+            'start_time'       => 'int',
+            'end_time'         => 'int',
+            'status'           => 'int',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+            'dir_id'           => 'int',
+        ];
+    }
 
     public function createTable()
     {
@@ -15,9 +29,8 @@ class ShiftModel extends \Models\ModelExtends
               `end_time` INT DEFAULT NULL,
               `status` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               `dir_id` INT DEFAULT NULL,
-              `work_time` INT DEFAULT NULL,
-              `_work_intervals` VARCHAR(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

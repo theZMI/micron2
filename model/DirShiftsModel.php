@@ -1,7 +1,18 @@
 <?php
 
-class DirShiftsModel extends \Models\ModelExtends
+class DirShiftsModel extends SiteModel
 {
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'name'             => 'string',
+            'is_template'      => 'int',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
+
     public function createTable()
     {
         return $this->db->query(
@@ -10,6 +21,7 @@ class DirShiftsModel extends \Models\ModelExtends
               `name` VARCHAR(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `is_template` INT DEFAULT '0',
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table

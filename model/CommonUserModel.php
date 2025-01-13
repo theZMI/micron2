@@ -3,7 +3,7 @@
 /**
  * Пользовательская модель
  */
-class CommonUserModel extends \Models\ModelExtends
+class CommonUserModel extends SiteModel
 {
     use AuthTrait;
 
@@ -21,6 +21,38 @@ class CommonUserModel extends \Models\ModelExtends
     const ROLE_REGULAR_WORKER = 1; // Сотрудник
     const ROLE_CHIEF = 2; // Начальник смены
     const ROLE_ACTING_CHIEF = 3; // ИО начальника смены
+
+    public function scheme()
+    {
+        return [
+            'id'                       => 'int',
+            'login'                    => 'string',
+            'email'                    => 'string',
+            'phone'                    => 'string',
+            'avatar'                   => 'string',
+            'device_id'                => 'string',
+            'telegram_login'           => 'string',
+            'telegram_chat_id'         => 'string',
+            'pwd_hash'                 => 'string',
+            'first_name'               => 'string',
+            'surname'                  => 'string',
+            'patronymic'               => 'string',
+            'job_title'                => 'string',
+            'status'                   => 'int',
+            'gender'                   => 'int',
+            'birthday_date'            => 'string',
+            'is_phone_verified'        => 'int',
+            'notification_by_phone'    => 'int',
+            'is_email_verified'        => 'int',
+            'notification_by_email'    => 'int',
+            'is_telegram_verified'     => 'int',
+            'notification_by_telegram' => 'int',
+            'last_location'            => 'string',
+            'role'                     => 'int',
+            'create_time'              => 'int',
+            'last_update_time'         => 'int',
+        ];
+    }
 
     public function createTable()
     {
@@ -51,6 +83,7 @@ class CommonUserModel extends \Models\ModelExtends
               `last_location` VARCHAR(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `role` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               UNIQUE (`login`),
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
@@ -175,13 +208,5 @@ class CommonUserModel extends \Models\ModelExtends
             self::ROLE_CHIEF => 'Руководитель отдела',
         ];
         return empty($role) ? $all : $all[$role];
-    }
-
-    public function flush()
-    {
-        if ($this->hasChanges()) {
-            $this->last_update_time = time();
-        }
-        return parent::flush();
     }
 }

@@ -1,7 +1,17 @@
 <?php
 
-class DepartmentModel extends \Models\ModelExtends
+class DepartmentModel extends SiteModel
 {
+    public function scheme()
+    {
+        return [
+            'id'               => 'int',
+            'department'       => 'string',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
+        ];
+    }
+
     public function createTable()
     {
         return $this->db->query(
@@ -9,6 +19,7 @@ class DepartmentModel extends \Models\ModelExtends
               `id` INT NOT NULL AUTO_INCREMENT,
               `department` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
