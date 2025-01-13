@@ -1,19 +1,38 @@
 <?php
 
-$newUserData = Post('userData', []);
-$newPassword = Post('newPassword');
+$model = $g_user;
+$newPassword = Post('new_password');
+$canEditFields = [
+    'email',
+    'phone',
+    'avatar',
+    'device_id',
+    'telegram_login',
+    'telegram_chat_id',
+    'first_name',
+    'surname',
+    'patronymic',
+    'gender',
+    'birthday_date',
+    'notification_by_phone',
+    'notification_by_email',
+    'notification_by_telegram',
+    'job_title',
+];
 
-FileSys::writeFile(BASEPATH.'tmp_save_users', json_encode($newUserData), true);
-FileSys::writeFile(BASEPATH.'tmp_save_passwords', json_encode(['user_id' => $newUserData['id'], 'newPassword' => $newPassword]), true);
-
-if ($newPassword) {
-    $g_user->pwd_hash = UserModel::makeHash($newPassword);
-}
-foreach ($newUserData as $k => $v) {
-    if ($g_user->$k !== $v) {
-        $g_user->$k = $v;
+if (Post('is_set')) {
+    foreach ($_POST as $k => $v) {
+        if (!in_array($k, $canEditFields)) {
+            continue;
+        }
+        $model->$k = $v;
     }
 }
-$g_user->flush();
 
-(new ApiResponse())->normal($g_user->getData());
+$model->flush();
+$userData = $model->getData();
+unset($userData['pwd_hash']);
+
+(new ApiResponse())->normal(
+    array_merge($userData, ['token' => $g_user->pwd_hash])
+);

@@ -35,8 +35,10 @@ $response      = $isCorrectAuth ? $password_hash : '';
 $apiResponse   = new ApiResponse();
 
 if ($isCorrectAuth) {
+    $userData = $userModel->getData();
+    unset($userData['pwd_hash']);
     $apiResponse->normal(
-        array_merge($userModel->getData(), ['token' => $password_hash])
+        array_merge($userData, ['token' => $password_hash])
     );
     return;
 }

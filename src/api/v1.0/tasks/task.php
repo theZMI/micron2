@@ -25,13 +25,8 @@ $savePhoto = function($base64, $fileName) {
         throw new \Exception('did not match data URI with image data');
     }
 
-    FileSys::writeFile(
-        BASEPATH . "upl/task_photos/{$fileName}.{$type}",
-        $data
-    );
     return "/upl/task_photos/{$fileName}.{$type}";
 };
-ToLog("task: {$id}" . print_r($_POST, true));
 
 if (Post('is_set')) {
     foreach ($_POST as $k => $v) {
