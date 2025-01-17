@@ -1,5 +1,6 @@
 <?php
 
+$apiResponse           = new ApiResponse();
 $tryGetLoginByManyWays = function() {
     // В поле loginOrName может содержаться фамилия, фамилия имя, фамилия имя отчество или сразу логин
     $loginOrName   = explode(' ', trim(strval(Post('login_or_name')))) ;
@@ -14,7 +15,7 @@ $tryGetLoginByManyWays = function() {
     $searchBy1     = $m->find(['surname' => $surname]);
 
     // Если где у нас по поискам однозначно определился пользователь, то мы нашли нужного юзера, иначе считаем что юзер в поле login_or_name ввёл логин
-    $login = $loginOrName[0];
+    $login = '';
     if (count($searchBy3) === 1) {
         $login = $searchBy3[0]->login;
     } elseif (count($searchBy2) === 1) {
@@ -23,16 +24,43 @@ $tryGetLoginByManyWays = function() {
         $login = $searchBy1[0]->login;
     }
 
+    if (!$login) {
+        switch (count($loginOrName)) {
+            case 3:
+                if (count($searchBy3) > 1) {
+                    throw new RuntimeException("Больше одного подходящего пользователя под ваше ФИО. Обратитесь к администратору");
+                }
+                break;
+            case 2:
+                if (count($searchBy2) > 1) {
+                    throw new RuntimeException("Больше одного подходящего пользователя под фамилию и имя. Попробуйте добавить отчество");
+                }
+                break;
+            case 1:
+                if (count($searchBy1) > 1) {
+                    throw new RuntimeException("Больше одного подходящего пользователя под фамилию. Попробуйте добавить имя");
+                }
+                break;
+            default:
+                $login = Post('login_or_name');
+        }
+    }
+
     return $login;
 };
 
-// Обычная авторизация по логину и паролю
-$user_id       = (new UserModel())->getIdByLogin( $tryGetLoginByManyWays() );
+// Пытаемся получить user_id для авторизации человека
+try {
+    $user_id = (new UserModel())->getIdByLogin( $tryGetLoginByManyWays() );
+} catch (\Throwable $exception) {
+    $apiResponse->error($exception->getMessage());
+}
+
 $userModel     = new UserModel($user_id);
 $password_hash = UserModel::makeHash(Post('password'));
 $isCorrectAuth = $user_id && $userModel->pwd_hash === $password_hash;
 $response      = $isCorrectAuth ? $password_hash : '';
-$apiResponse   = new ApiResponse();
+
 
 if ($isCorrectAuth) {
     $userData = $userModel->getData();
