@@ -34,4 +34,19 @@ class WorkIntervalModel extends SiteModel
     {
         parent::__construct('work_intervals', $id);
     }
+
+    public function find($params)
+    {
+        $ids = [];
+        if ($params['user_id']) {
+            $ids = $this->db->selectCol(
+                "SELECT `id` FROM ?# WHERE `user_id` = ?d { AND `start` >= ?d }",
+                $this->table,
+                $params['user_id'],
+                isset($params['from']) ? +$params['from'] : DBSIMPLE_SKIP
+            );
+        }
+        $ids = empty($ids) ? [] : $ids;
+        return array_map(fn($id) => new self($id), $ids);
+    }
 }
