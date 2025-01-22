@@ -14,9 +14,9 @@ if (Post('is_set')) {
     $first_name    = $full_name[1] ?? '';
     $patronymic    = $full_name[2] ?? '';
     $password      = Post('password', UserModel::genPassword());
-    $department_id = +Post('department_id');
+    $department_id = intval(Post('department_id'));
     $phone         = PhoneFilter(Post('phone'));
-    $role          = +Post('role');
+    $role          = intval(Post('role'));
     $job_title     = Post('job_title');
     $errs          = [];
 

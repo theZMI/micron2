@@ -1,7 +1,7 @@
 <?php
 
-$model = $g_user;
-$newPassword = Post('new_password');
+$model         = $g_user;
+$newPassword   = Post('new_password');
 $canEditFields = [
     'email',
     'phone',
@@ -25,7 +25,16 @@ if (Post('is_set')) {
         if (!in_array($k, $canEditFields)) {
             continue;
         }
+        if ($k === 'avatar') {
+            try {
+                $model->$k = SaveImageFromBase64(strval($v), "/upl/task_photos/" . +$model->id);
+            } catch (\Throwable) {
+            }
+        }
         $model->$k = $v;
+    }
+    if ($newPassword) {
+        $model->pwd_hash = UserModel::makeHash($newPassword);
     }
 }
 
