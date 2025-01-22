@@ -44,9 +44,25 @@ class WorkIntervalModel extends SiteModel
             if ($from === 'active_day') {
                 $midnight = strtotime(date('d-m-Y 00:00:00'));
                 $ids      = $this->db->selectCol(
-                    "SELECT `id` FROM ?# WHERE `user_id` = ?d AND ( `start` >= ?d OR (start < ?d AND v.stop > ?d) )",
+                    "SELECT
+                        `id`
+                    FROM ?#
+                    WHERE
+                        `user_id` = ?d
+                        AND ( 
+                            `start` >= ?d # Которые начали тикать после полночи
+                            OR ( # Те которые включили до полночи, а выключили после полночи
+                                `start` < ?d AND `stop` > ?d
+                            )
+                            OR ( # Те которые включили до полночи и они всё ещё тикают
+                                `start` < ?d AND `stop` = 0
+                            ) 
+                        )
+                    ",
                     $this->table,
                     $user_id,
+                    $midnight,
+                    $midnight,
                     $midnight,
                     $midnight
                 );
