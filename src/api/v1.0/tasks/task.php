@@ -1,32 +1,11 @@
 <?php
 
-$model = new TaskModel(+$id);
+$model         = new TaskModel(+$id);
 $canEditFields = [
     'user_comment',
     'photo_1',
     'status'
 ];
-
-$savePhoto = function($base64, $fileName) {
-    if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
-        $data = substr($base64, strpos($base64, ',') + 1);
-        $type = strtolower($type[1]); // jpg, png, gif
-
-        if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png' ])) {
-            throw new \Exception('invalid image type');
-        }
-        $data = str_replace( ' ', '+', $data);
-        $data = base64_decode($data);
-
-        if ($data === false) {
-            throw new \Exception('base64_decode failed');
-        }
-    } else {
-        throw new \Exception('did not match data URI with image data');
-    }
-
-    return "/upl/task_photos/{$fileName}.{$type}";
-};
 
 if (Post('is_set')) {
     foreach ($_POST as $k => $v) {
@@ -37,7 +16,10 @@ if (Post('is_set')) {
             if (!$v) {
                 continue;
             }
-            $model->$k = $savePhoto(strval($v), +$id);
+            try {
+                $model->$k = SaveImageFromBase64(strval($v), "/upl/task_photos/" . +$id);
+            } catch (\Throwable $e) {
+            }
             continue;
         }
         $model->$k = $v;
