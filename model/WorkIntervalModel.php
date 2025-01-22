@@ -38,13 +38,26 @@ class WorkIntervalModel extends SiteModel
     public function find($params)
     {
         $ids = [];
-        if ($params['user_id']) {
-            $ids = $this->db->selectCol(
-                "SELECT `id` FROM ?# WHERE `user_id` = ?d { AND `start` >= ?d }",
-                $this->table,
-                $params['user_id'],
-                isset($params['from']) ? +$params['from'] : DBSIMPLE_SKIP
-            );
+        $user_id = $params['user_id'] ?? 0;
+        $from = $params['from'] ?? 0;
+        if ($user_id) {
+            if ($from === 'active_day') {
+                $midnight = strtotime(date('d-m-Y 00:00:00'));
+                $ids      = $this->db->selectCol(
+                    "SELECT `id` FROM ?# WHERE `user_id` = ?d AND ( `start` >= ?d OR (start < ?d AND v.stop > ?d) )",
+                    $this->table,
+                    $user_id,
+                    $midnight,
+                    $midnight
+                );
+            } else {
+                $ids = $this->db->selectCol(
+                    "SELECT `id` FROM ?# WHERE `user_id` = ?d { AND `start` >= ?d }",
+                    $this->table,
+                    $params['user_id'],
+                    $params['from'] ? +$params['from'] : DBSIMPLE_SKIP
+                );
+            }
         }
         $ids = empty($ids) ? [] : $ids;
         return array_map(fn($id) => new self($id), $ids);
