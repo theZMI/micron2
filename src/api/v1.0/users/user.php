@@ -32,6 +32,7 @@ if (Post('is_set')) {
                 $model->$k = SaveImageFromBase64(strval($v), "/upl/users/" . +$model->id);
             } catch (\Throwable) {
             }
+            continue;
         }
         $model->$k = $v;
     }
