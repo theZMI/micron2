@@ -1,6 +1,6 @@
 <?php
 
-function SaveImageFromBase64($base64, $pathWithoutExt) {
+function SaveImageFromBase64($base64, $urlWithoutExt) {
     if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
         $data = substr($base64, strpos($base64, ',') + 1);
         $type = strtolower($type[1]); // jpg, png, gif
@@ -18,5 +18,10 @@ function SaveImageFromBase64($base64, $pathWithoutExt) {
         throw new \Exception('did not match data URI with image data');
     }
 
-    return "{$pathWithoutExt}.{$type}";
+    FileSys::writeFile(
+        BASEPATH . ltrim("{$urlWithoutExt}.{$type}", '/'),
+        $data
+    );
+
+    return "{$urlWithoutExt}.{$type}";
 };
