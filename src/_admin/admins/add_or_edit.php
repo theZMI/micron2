@@ -9,13 +9,17 @@ if ($admin_id && !$admin->isExists()) {
     trigger_error("Invalid admin id.", E_USER_ERROR);
 }
 
-$login = trim((string)Post('login', $admin_id ? $admin->login : ''));
-$pwd   = Post('pwd');
-$pwd2  = Post('pwd2');
-$name  = trim((string)Post('name', $admin_id ? $admin->name : ''));
-$desc  = trim((string)Post('desc', $admin_id ? $admin->desc : ''));
-$email = trim((string)Post('email', $admin_id ? $admin->email : ''));
-$phone = PhoneFilter(trim((string)Post('phone', $admin_id ? $admin->phone : '')));
+$login           = trim((string)Post('login', $admin_id ? $admin->login : ''));
+$pwd             = Post('pwd');
+$pwd2            = Post('pwd2');
+$full_name       = trim((string)Post('full_name', $admin_id ? $admin->full_name : ''));
+$full_name_parts = explode(' ', $full_name);
+$surname         = $full_name_parts[0] ?? '';
+$first_name      = $full_name_parts[1] ?? '';
+$patronymic      = $full_name_parts[2] ?? '';
+$desc            = trim((string)Post('desc', $admin_id ? $admin->desc : ''));
+$email           = trim((string)Post('email', $admin_id ? $admin->email : ''));
+$phone           = PhoneFilter(trim((string)Post('phone', $admin_id ? $admin->phone : '')));
 
 $msg = '';
 if (Post('is_apply')) {
@@ -41,10 +45,12 @@ if (Post('is_apply')) {
         if (!empty($pwd)) {
             $admin->pwd_hash = $admin->makeHash($pwd);
         }
-        $admin->name  = $name;
-        $admin->desc  = $desc;
-        $admin->email = $email;
-        $admin->phone = $phone;
+        $admin->surname    = $surname;
+        $admin->first_name = $first_name;
+        $admin->patronymic = $patronymic;
+        $admin->desc       = $desc;
+        $admin->email      = $email;
+        $admin->phone      = $phone;
 
         $id = $admin->flush();
         if ($id) {

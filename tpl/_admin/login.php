@@ -7,8 +7,8 @@
             </span>
             <?= $msg ?>
             <div class="form-floating mb-4">
-                <input type="text" class="form-control" name="login" value="<?= Post('login') ?>" id="floatingLogin" placeholder="Логин">
-                <label for="floatingLogin">Логин</label>
+                <input type="text" class="form-control" name="login_or_name" value="<?= Post('login_or_name') ?>" id="floatingLogin" placeholder="Логин или ФИО">
+                <label for="floatingLogin">Логин или ФИО</label>
             </div>
             <div class="form-floating mb-4 position-relative">
                 <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Пароль">

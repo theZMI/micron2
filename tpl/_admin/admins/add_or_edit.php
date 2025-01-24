@@ -17,8 +17,8 @@
                     </div>
                     <div class="col-6">
                         <div class="mb-3">
-                            <label class="form-label" for="inputName">Имя администратора</label>
-                            <input type="text" class="form-control" id="inputName" autocomplete="on" name="name" value="<?= $name ?>" autocomplete="off">
+                            <label class="form-label" for="inputName">ФИО</label>
+                            <input type="text" class="form-control" id="inputName" autocomplete="on" name="full_name" value="<?= $full_name ?>" autocomplete="off">
                         </div>
                     </div>
                 </div>

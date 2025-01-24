@@ -26,7 +26,7 @@
                         <tr>
                             <td><?= $id ?></td>
                             <td><?= $admin->login ?></td>
-                            <td><?= $admin->name ?></td>
+                            <td><?= $admin->full_name ?></td>
                             <td><?= $admin->email ?></td>
                             <td><?= $admin->phone ?></td>
                             <td><?= $admin->desc ?></td>
