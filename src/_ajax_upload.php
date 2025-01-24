@@ -26,7 +26,7 @@ if ($isSet) {
             $uploadedFile = $uploader->GetInf('full_path');
             $isImage      = @is_array(getimagesize($uploadedFile));
             if ($isImage) {
-                // fix_orientation($uploadedFile);
+                fix_orientation($uploadedFile);
             }
             $response['success']  = true;
             $response['fileName'] = $uploader->GetInf('file_name');

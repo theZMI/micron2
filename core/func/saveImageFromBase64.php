@@ -18,8 +18,9 @@ function SaveImageFromBase64($base64, $urlWithoutExt) {
         throw new \Exception('did not match data URI with image data');
     }
 
+    $filePath = BASEPATH . ltrim("{$urlWithoutExt}.{$type}", '/');
     FileSys::writeFile(
-        BASEPATH . ltrim("{$urlWithoutExt}.{$type}", '/'),
+        $filePath,
         $data
     );
 
