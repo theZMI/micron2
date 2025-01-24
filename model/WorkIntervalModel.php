@@ -79,4 +79,24 @@ class WorkIntervalModel extends SiteModel
         $ids = empty($ids) ? [] : $ids;
         return array_map(fn($id) => new self($id), $ids);
     }
+
+    public function findOne($params)
+    {
+        $user_id = $params['user_id'] ?? 0;
+        $temp_id = $params['temp_id'] ?? 0;
+        $id      = null;
+
+        if ($user_id) {
+            if ($temp_id) {
+                $id = $this->db->selectCell(
+                    "SELECT `id` FROM ?# WHERE `user_id` = ?d AND `start` = ?d",
+                    $this->table,
+                    $user_id,
+                    abs($temp_id)
+                );
+            }
+        }
+
+        return $id ? new self($id) : null;
+    }
 }
