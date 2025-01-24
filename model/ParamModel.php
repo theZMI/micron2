@@ -17,6 +17,7 @@ class ParamModel extends SiteModel
             'id'               => 'int',
             'name'             => 'string',
             'type'             => 'int',
+            'status'           => 'int',
             'create_time'      => 'int',
             'last_update_time' => 'int',
         ];

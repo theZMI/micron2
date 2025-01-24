@@ -16,7 +16,7 @@ if (Post('is_set')) {
     $start_time = strtotime(Post('start_time') . ' 00:00:00');
     $end_time   = strtotime(Post('end_time') . ' 23:59:59');
     $dir_name   = Post('dir_name');
-    $dirModel   = new DirShiftTemplatesModel(+Get('id'));
+    $dirModel   = new DirShiftTemplatesModel(intval(Get('id')));
     $wasWorkers = $dirModel->isExists() ? $dirModel->user_ids : [];
     $params     = Post('params');
 
