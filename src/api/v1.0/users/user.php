@@ -1,5 +1,7 @@
 <?php
 
+ini_set('memory_limit', '512M');
+
 $model         = $g_user;
 $newPassword   = Post('new_password');
 $canEditFields = [
@@ -27,7 +29,7 @@ if (Post('is_set')) {
         }
         if ($k === 'avatar') {
             try {
-                $model->$k = SaveImageFromBase64(strval($v), "/upl/task_photos/" . +$model->id);
+                $model->$k = SaveImageFromBase64(strval($v), "/upl/users/" . +$model->id);
             } catch (\Throwable) {
             }
         }
