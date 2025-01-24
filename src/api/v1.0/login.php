@@ -22,6 +22,9 @@ $tryGetLoginByManyWays = function() {
         $login = $searchBy2[0]->login;
     } elseif (count($searchBy1) === 1) {
         $login = $searchBy1[0]->login;
+    } else {
+        $justLogin = $loginOrName[0];
+        $login = $m->isLoginBusy($justLogin) ? $justLogin : '';
     }
 
     if (!$login) {
