@@ -1,5 +1,6 @@
 <?php
 
+$model                = new TestSchemeModel();
 $model->int_data_1    = mt_rand(1, 1000);
 $model->string_data_1 = md5(mt_rand(1, 1000));
 $model->string_data_2 = "String value = " . md5(mt_rand(1, 1000));
