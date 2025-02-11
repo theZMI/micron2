@@ -209,4 +209,20 @@ class CommonUserModel extends SiteModel
         ];
         return empty($role) ? $all : $all[$role];
     }
+
+    public function getList($page = self::PAGE_ALL)
+    {
+        global $g_admin;
+
+        $login         = $g_admin->login;
+        $user_id       = (new UserModel())->getIdByLogin($login);
+        $user          = new UserModel($user_id);
+        $department_id = intval($user->isExists() ? $user->department_id : 0);
+
+        $list = parent::getList($page);
+        if ($department_id) {
+            $list = array_filter($list, fn($v) => intval($v->department_id) === $department_id);
+        }
+        return $list;
+    }
 }
