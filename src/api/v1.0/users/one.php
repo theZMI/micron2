@@ -1,5 +1,6 @@
 <?php
 
+//die('me call');
 ini_set('memory_limit', '512M');
 
 $model         = $g_user;
@@ -42,7 +43,7 @@ if (Post('is_set')) {
 }
 
 $model->flush();
-$userData = $model->getData();
+$userData = $model->getApiData();
 unset($userData['pwd_hash']);
 
 (new ApiResponse())->normal(

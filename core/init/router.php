@@ -15,7 +15,9 @@ $getLangs = function () {
 $apiUri   = 'api/v1.0/';
 
 // Админка
-SimpleRouter::group(['middleware' => AdminAuthMiddleware::class], function () {
+SimpleRouter::group(['middleware' => [
+    AdminAuthMiddleware::class
+]], function () {
     SimpleRouter::all('/_admin/{end_uri}', function ($end_uri) {
         $end_uri = FileSys::filenameSecurity($end_uri);
         TryIncludeCom("_admin/{$end_uri}");
@@ -24,24 +26,19 @@ SimpleRouter::group(['middleware' => AdminAuthMiddleware::class], function () {
 
 foreach ($getLangs() as $lang => $langUri) {
     // Вызовы API с авторизацией
-    SimpleRouter::group(['middleware' => [PrepareApiMiddleware::class, CommonMiddleware::class, CheckApiUserAuthMiddleware::class]], function () use ($langUri, $apiUri) {
-        // Получение текущего значения таймера
-//        SimpleRouter::get("/{$langUri}{$apiUri}timer", function () use ($langUri, $apiUri) {
-//            TryIncludeCom("{$langUri}{$apiUri}timer", [], "{$apiUri}404");
-//        })->where(['end_uri' => '.*?']);
-//        // Установка нового значения таймера
-//        SimpleRouter::post("/{$langUri}{$apiUri}timer", function () use ($langUri, $apiUri) {
-//            TryIncludeCom("{$langUri}{$apiUri}timer", [], "{$apiUri}404");
-//        })->where(['end_uri' => '.*?']);
-
+    SimpleRouter::group(['middleware' => [
+        PrepareApiMiddleware::class,
+        CommonMiddleware::class,
+        CheckApiUserAuthMiddleware::class]
+    ], function () use ($langUri, $apiUri) {
         // work_intervals
         SimpleRouter::all("/{$langUri}{$apiUri}work_intervals", function () use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}work_intervals", [], "{$apiUri}404");
         });
         // work_intervals/{id}
         SimpleRouter::all("/{$langUri}{$apiUri}work_intervals/{id}", function ($id) use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}work_intervals/interval", ['id' => $id], "{$apiUri}404");
-        });
+            TryIncludeCom("{$langUri}{$apiUri}work_intervals/one", ['id' => $id], "{$apiUri}404");
+        })->where(['id' => '-?[0-9]+?']);
 
         // users
         SimpleRouter::all("/{$langUri}{$apiUri}users", function () use ($langUri, $apiUri) {
@@ -49,8 +46,8 @@ foreach ($getLangs() as $lang => $langUri) {
         });
         // users/{id}
         SimpleRouter::all("/{$langUri}{$apiUri}users/{id}", function ($id) use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}users/user", ['id' => $id], "{$apiUri}404");
-        })->where(['id' => '[0-9]+']);
+            TryIncludeCom("{$langUri}{$apiUri}users/one", ['id' => $id], "{$apiUri}404");
+        })->where(['id' => '-?[0-9]+?']);
         // users/*
         SimpleRouter::all("/{$langUri}{$apiUri}users{end_uri}", function ($end_uri) use ($langUri, $apiUri) {
             $end_uri = FileSys::filenameSecurity($end_uri);
@@ -58,19 +55,22 @@ foreach ($getLangs() as $lang => $langUri) {
             TryIncludeCom("{$langUri}{$apiUri}users{$end_uri}", [], "{$apiUri}404");
         })->where(['end_uri' => '.*?']);
 
-        // shifts (юзер определиться по x-auth и будет занесён в g_user)
+        // shifts (юзер определиться по API-User-Auth-Login и будет занесён в g_user)
         SimpleRouter::all("/{$langUri}{$apiUri}shifts", function () use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}shifts", [], "{$apiUri}404");
         });
 
         // tasks/{id}
         SimpleRouter::all("/{$langUri}{$apiUri}tasks/{id}", function ($id) use ($langUri, $apiUri) {
-            TryIncludeCom("{$langUri}{$apiUri}tasks/task", ['id' => $id], "{$apiUri}404");
-        })->where(['id' => '[0-9]+']);
+            TryIncludeCom("{$langUri}{$apiUri}tasks/one", ['id' => $id], "{$apiUri}404");
+        })->where(['id' => '-?[0-9]+?']);
     });
-
     // Вызовы API без авторизации
-    SimpleRouter::group(['middleware' => [PrepareApiMiddleware::class, CommonMiddleware::class]], function () use ($langUri, $apiUri) {
+    SimpleRouter::group([
+        'middleware' => [
+            PrepareApiMiddleware::class,
+            CommonMiddleware::class
+        ]], function () use ($langUri, $apiUri) {
         SimpleRouter::all("/{$langUri}{$apiUri}{end_uri}", function ($end_uri) use ($langUri, $apiUri) {
             $end_uri = FileSys::filenameSecurity($end_uri);
             TryIncludeCom("{$langUri}{$apiUri}{$end_uri}", [], "{$apiUri}404");
@@ -78,7 +78,11 @@ foreach ($getLangs() as $lang => $langUri) {
     });
 
     // Кабинет пользователя
-    SimpleRouter::group(['middleware' => [PrepareUserMiddleware::class, CommonMiddleware::class, CheckUserAuthMiddleware::class]], function () use ($langUri) {
+    SimpleRouter::group(['middleware' => [
+        PrepareUserMiddleware::class,
+        CommonMiddleware::class,
+        CheckUserAuthMiddleware::class
+    ]], function () use ($langUri) {
         SimpleRouter::all("/{$langUri}user/{end_uri}", function ($end_uri) use ($langUri) {
             $end_uri = FileSys::filenameSecurity($end_uri);
             TryIncludeCom("/{$langUri}user/{$end_uri}");
@@ -86,7 +90,11 @@ foreach ($getLangs() as $lang => $langUri) {
     });
 
     // Кабинет менеджера
-    SimpleRouter::group(['middleware' => [PrepareManagerMiddleware::class, CommonMiddleware::class, CheckManagerAuthMiddleware::class]], function () use ($langUri) {
+    SimpleRouter::group(['middleware' => [
+        PrepareManagerMiddleware::class,
+        CommonMiddleware::class,
+        CheckManagerAuthMiddleware::class
+    ]], function () use ($langUri) {
         SimpleRouter::all("/{$langUri}manager/{end_uri}", function ($end_uri) use ($langUri) {
             $end_uri = FileSys::filenameSecurity($end_uri);
             TryIncludeCom("/{$langUri}manager/{$end_uri}");
@@ -94,7 +102,9 @@ foreach ($getLangs() as $lang => $langUri) {
     });
 
     // Стандартный тип подключения микрона (т.е. contacts/about_us -> IncludeCom('contacts/about_us'))
-    SimpleRouter::group(['middleware' => CommonMiddleware::class], function () use ($langUri, $apiUri) {
+    SimpleRouter::group(['middleware' => [
+        CommonMiddleware::class
+    ]], function () use ($langUri, $apiUri) {
         SimpleRouter::all("/{$langUri}{end_uri}", function ($end_uri) use ($langUri) {
             $end_uri = FileSys::filenameSecurity($end_uri);
             if (in_array($end_uri, ['index.php', 'index.html', 'index.htm'])) {
