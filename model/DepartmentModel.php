@@ -7,6 +7,7 @@ class DepartmentModel extends SiteModel
         return [
             'id'               => 'int',
             'department'       => 'string',
+            'use_timer'        => 'bool',
             'create_time'      => 'int',
             'last_update_time' => 'int',
         ];
@@ -18,6 +19,7 @@ class DepartmentModel extends SiteModel
             "CREATE TABLE IF NOT EXISTS ?# (
               `id` INT NOT NULL AUTO_INCREMENT,
               `department` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+              `use_timer` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
               `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
