@@ -116,6 +116,8 @@ class CommonUserModel extends SiteModel
                 return empty($list) ? [] : $list[0]->department_id;
             case 'department':
                 return new DepartmentModel($this->department_id);
+            case 'use_timer':
+                return $this->department->use_timer;
             default:
                 $ret = parent::__get($key);
         }
@@ -133,6 +135,10 @@ class CommonUserModel extends SiteModel
             $m->user_id = $this->id;
             $m->department_id = $value;
             return $m;
+        }
+        if ($key === 'phone') {
+            $value = PhoneFilter($value);
+            return parent::__set($key, $value);
         }
         return parent::__set($key, $value);
     }
@@ -224,5 +230,12 @@ class CommonUserModel extends SiteModel
             $list = array_filter($list, fn($v) => intval($v->department_id) === $department_id);
         }
         return $list;
+    }
+
+    public function getApiData()
+    {
+        $data = $this->getData();
+        $data['use_timer'] = $this->use_timer;
+        return $data;
     }
 }
