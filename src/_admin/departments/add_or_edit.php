@@ -8,6 +8,7 @@ $modelParam = function ($param, $default = '') use (&$model) {
 $msg = '';
 if (Post('is_set')) {
     $department = Post('department');
+    $use_timer  = Post('use_timer') === 'on';
     $errs       = [];
 
     if (empty($department)) {
@@ -18,6 +19,7 @@ if (Post('is_set')) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
         $model->department = $department;
+        $model->use_timer  = $use_timer;
 
         $id = $model->flush();
 
