@@ -2,6 +2,9 @@
 
 class ShiftParamModel extends SiteModel
 {
+    const STATUS_CREATED = 0;
+    const STATUS_DONE    = 2;
+
     public function scheme()
     {
         return [
@@ -10,6 +13,7 @@ class ShiftParamModel extends SiteModel
             'param_id'         => 'int',
             'value_as_string'  => 'string',
             'value_as_number'  => 'float',
+            'status'           => 'int',
             'create_time'      => 'int',
             'last_update_time' => 'int',
         ];
@@ -24,6 +28,7 @@ class ShiftParamModel extends SiteModel
               `param_id` INT DEFAULT NULL,
               `value_as_string` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `value_as_number` FLOAT DEFAULT NULL,
+              `status` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
               `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
@@ -45,6 +50,8 @@ class ShiftParamModel extends SiteModel
         elseif ($key === 'value') {
             $valueField = $this->param->getValueFieldName();
             return $this->$valueField;
+        } elseif ($key === 'is_done') {
+            return +$this->status === self::STATUS_DONE;
         }
         return parent::__get($key);
     }
