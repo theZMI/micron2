@@ -20,7 +20,7 @@ if (Post('is_set')) {
             }
             try {
                 $model->$k = SaveImageFromBase64(strval($v), "/upl/task_photos/" . +$id);
-            } catch (\Throwable $e) {
+            } catch (\Throwable $exception) {
             }
             continue;
         }

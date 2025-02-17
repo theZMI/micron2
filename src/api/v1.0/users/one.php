@@ -31,7 +31,7 @@ if (Post('is_set')) {
         if ($k === 'avatar') {
             try {
                 $model->$k = SaveImageFromBase64(strval($v), "/upl/users/" . +$model->id);
-            } catch (\Throwable) {
+            } catch (\Throwable $exception) {
             }
             continue;
         }

@@ -63,12 +63,9 @@ if (Post('is_login')) {
 
     try {
         $login = $tryGetLoginByManyWays();
-        Xmp($login);
     } catch (\Throwable $exception) {
         $loginError = $exception->getMessage();
     }
-
-
 
     if (empty($login)) {
         $errs[] = $loginError ?: "Впишите логин";
