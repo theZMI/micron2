@@ -61,6 +61,7 @@ class ShiftParamModel extends SiteModel
         if ($key === 'value') {
             $this->value_as_string = (string)$value;
             $this->value_as_number = (float)$value;
+            return;
         }
         return parent::__set($key, $value);
     }
