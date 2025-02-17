@@ -12,7 +12,7 @@
                     <input type="text" name="department" class="form-control" value="<?= $modelParam('department') ?>" required>
                 </div>
                 <div class="form-check form-switch form-switch-lg mb-5">
-                    <input class="form-check-input" type="checkbox" name="use_timer" id="flexCheckUseTimer" role="switch">
+                    <input class="form-check-input" type="checkbox" name="use_timer" id="flexCheckUseTimer" role="switch" <?= $modelParam('use_timer') ? 'checked' : '' ?>>
                     <label class="form-check-label ms-3 mt-2" for="flexCheckUseTimer">
                         Отдел использует таймер
                     </label>
