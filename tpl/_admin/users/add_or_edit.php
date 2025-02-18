@@ -32,7 +32,7 @@
                     <label class="form-label">Роль сотрудника:</label>
                     <select name="role" class="form-control">
                         <?php foreach ($model->roles() as $role => $roleName): ?>
-                            <option value="<?= $role ?>"<?= intval($modelParam('role')) === $role ? ' selected' : '' ?>><?= $roleName ?></option>
+                            <option value="<?= $role ?>"<?= intval($modelParam('role')) === $role ? ' selected' : '' ?>><?= strip_tags($roleName) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

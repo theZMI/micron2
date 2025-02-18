@@ -210,10 +210,10 @@ class CommonUserModel extends SiteModel
     {
         $all = [
             self::ROLE_REGULAR_WORKER => 'Сотрудник',
-            self::ROLE_ACTING_CHIEF => 'И.о. руководителя отдела',
-            self::ROLE_CHIEF => 'Руководитель отдела',
+            self::ROLE_ACTING_CHIEF   => '<span class="badge text-bg-secondary">И.О. руководителя отдела</span>',
+            self::ROLE_CHIEF          => '<span class="badge text-bg-secondary">Руководитель отдела</span>',
         ];
-        return empty($role) ? $all : $all[$role];
+        return is_null($role) ? $all : $all[$role];
     }
 
     public function getList($page = self::PAGE_ALL)
