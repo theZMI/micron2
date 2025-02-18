@@ -66,7 +66,7 @@ $response      = $isCorrectAuth ? $password_hash : '';
 
 
 if ($isCorrectAuth) {
-    $userData = $userModel->getData();
+    $userData = $userModel->getApiData();
     unset($userData['pwd_hash']);
     $apiResponse->normal(
         array_merge($userData, ['token' => $password_hash])
