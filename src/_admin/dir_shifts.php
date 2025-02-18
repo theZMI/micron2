@@ -1,7 +1,7 @@
 <?php
 
 $page   = intval(Get('p', 1));
-$list   = (new DirShiftsModel())->find(['is_template' => false]);
+$list   = (new DirShiftsModel())->getList();
 $action = Get('a');
 
 switch ($action) {

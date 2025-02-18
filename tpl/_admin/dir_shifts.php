@@ -19,17 +19,14 @@
                         <tr>
                             <th>ID</th>
                             <th>Название</th>
-                            <th colspan="3">Действия</th>
+                            <th colspan="2">Действия</th>
                         </tr>
                         <?php foreach ($list as $id => $v): ?>
                             <tr>
-                                <td><?= $v->id ?></td>
-                                <td><?= $v->name ?></td>
-                                <td width="1%" class="text-center">
-                                    <a href="<?= SiteRoot("_admin/dir_shifts/report&id={$id}") ?>" class="btn btn-sm btn-secondary rounded-pill" title="Отчёт"><i class="bi bi-ui-checks"></i></a>
-                                </td>
-                                <td width="1%" class="text-center">
-                                    <a href="<?= SiteRoot("_admin/dir_shifts/add_or_edit&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
+                                <td onclick="trClick(this)"><?= $v->id ?></td>
+                                <td onclick="trClick(this)"><?= $v->name ?></td>
+                                <td width="1%" class="text-center" style="display: none;">
+                                    <a href="<?= SiteRoot("_admin/dir_shifts/add_or_edit&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill default-click" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
                                 </td>
                                 <td width="1%" class="text-center">
                                     <a href="<?= GetCurUrl('a=delete&id=' . $v->id) ?>" class="btn btn-sm btn-danger rounded-pill" onclick="return confirm('Удалить?')" title="Удалить"><i class="bi bi-trash3-fill"></i></a>
