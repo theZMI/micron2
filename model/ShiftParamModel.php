@@ -59,8 +59,27 @@ class ShiftParamModel extends SiteModel
     public function __set($key, $value)
     {
         if ($key === 'value') {
-            $this->value_as_string = (string)$value;
-            $this->value_as_number = (float)$value;
+            switch (+$this->param->type) {
+                case ParamModel::TYPE_DATETIME:
+                    $this->value_as_string = (string)$value;
+                    $this->value_as_number = strtotime($value);
+                    break;
+                case ParamModel::TYPE_TIME:
+                    $parts = explode(':', $value);
+                    $h     = $parts[0] ?? 0;
+                    $m     = $parts[1] ?? 0;
+                    $s     = 3600*$h + 60*$m;
+                    $this->value_as_string = (string)$value;
+                    $this->value_as_number = $s;
+                    break;
+                case ParamModel::TYPE_IMAGE:
+                case ParamModel::TYPE_STRING:
+                case ParamModel::TYPE_NUMBER:
+                default:
+                    $this->value_as_string = (string)$value;
+                    $this->value_as_number = (float)$value;
+                    break;
+            }
             return;
         }
         return parent::__set($key, $value);
