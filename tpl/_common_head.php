@@ -35,3 +35,4 @@
 <?php IncludeCom('_dev/ekko_lightbox') ?>
 <?php IncludeCom('_dev/jcrop') ?>
 <?php IncludeCom('_dev/jqueryui') ?>
+<?php IncludeCom('_dev/live_filter') ?>

@@ -1,0 +1,75 @@
+.table-sorted {
+  margin-bottom: 0;
+  background: #FFF;
+
+  .input-for-live-search {
+    font-size: 12px;
+    padding: 0;
+    height: auto;
+    border: none 0;
+    box-shadow: none;
+    border-radius: 0;
+
+    &::placeholder {
+      color: #333;
+    }
+  }
+
+  > thead {
+    border-bottom: 4px solid #f5f5f5;
+  }
+
+  > thead > tr,
+  > tbody > tr,
+  > tr,
+  tr {
+    > th,
+    th {
+      background: #f5f5f5;
+    }
+
+    > td,
+    > th,
+    td,
+    th {
+      vertical-align: top;
+      font-size: 12px;
+      padding: 2px 3px;
+
+      .form-control,
+      .input-group,
+      .input-group-addon {
+        border-radius: 0;
+      }
+
+      .btn-default,
+      .btn-secondary {
+        border: none 0;
+      }
+
+      .form-control,
+      .btn,
+      .input-group {
+        margin-bottom: 0;
+      }
+
+      .label {
+        font-weight: normal;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  &-by-middle {
+    > thead > tr > td,
+    > thead > tr > th,
+    > tbody > tr > td,
+    > tbody > tr > th,
+    > tr > td,
+    > tr > th {
+      vertical-align: middle;
+    }
+  }
+}
