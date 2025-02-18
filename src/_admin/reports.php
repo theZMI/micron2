@@ -1,4 +1,4 @@
 <?php
 
-$page   = intval(Get('p', 1));
-$list   = (new DirShiftsModel())->getList();
+$page = intval(Get('p', 1));
+$list = (new DirShiftsModel())->getList();
