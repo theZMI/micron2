@@ -43,7 +43,7 @@ if (Post('is_set')) {
 }
 
 $model->flush();
-$userData = $model->getApiData();
+$userData = $model->getDataToApi();
 unset($userData['pwd_hash']);
 
 (new ApiResponse())->normal(

@@ -232,7 +232,7 @@ class CommonUserModel extends SiteModel
         return $list;
     }
 
-    public function getApiData()
+    public function getDataToApi()
     {
         $data = $this->getData();
         $data['use_timer'] = $this->use_timer;
