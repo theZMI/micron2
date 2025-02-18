@@ -18,6 +18,7 @@
 @import "@scss/components/form_by_center";
 @import "@scss/components/switcher_sizes";
 @import "@scss/components/table_extra_condensed";
+@import "@scss/components/table_sorted";
 @import "@scss/status_page";
 @import "@scss/login_form";
 @import "@scss/registration_form";
@@ -25,3 +26,7 @@
 @import "@scss/user_cabinet";
 @import "@scss/manager_cabinet";
 @import "@scss/home_page";
+
+.site-table {
+  @extend #{'.table', '.table-extra-condensed', '.table-bordered', '.table-sorted', '.table-sorted-by-middle'};
+}
