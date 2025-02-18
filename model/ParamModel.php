@@ -57,7 +57,7 @@ class ParamModel extends SiteModel
 
     public function getValueFieldName()
     {
-        if (in_array($this->type, [self::TYPE_NUMBER, self::TYPE_DATETIME, self::TYPE_TIME])) {
+        if (in_array($this->type, [self::TYPE_NUMBER])) {
             return 'value_as_number';
         }
         return 'value_as_string';
