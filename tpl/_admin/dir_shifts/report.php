@@ -85,7 +85,7 @@
             </div>
             <br>
             <div class="text-center">
-                <a href="<?= SiteRoot('_admin/dir_shifts') ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>
+                <a href="<?= SiteRoot('_admin/reports') ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>
             </div>
         </div>
     </div>
