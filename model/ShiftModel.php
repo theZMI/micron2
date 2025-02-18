@@ -42,6 +42,15 @@ class ShiftModel extends SiteModel
         parent::__construct('shifts', $id);
     }
 
+    public function statuses($status = null)
+    {
+        $all = [
+            self::STATUS_CREATED => ['name' => '<span class="badge text-bg-secondary">В работе</span>'],
+            self::STATUS_DONE    => ['name' => '<span class="badge text-bg-success">Закрыта</span>'],
+        ];
+        return is_null($status) ? $all : $all[$status];
+    }
+
     public function __get($key)
     {
         $calcProgress = function () {
@@ -50,19 +59,17 @@ class ShiftModel extends SiteModel
                 return $cache[$this->id];
             }
 
-            $tasks = $this->tasks;
-            $total = count($tasks);
-            $done  = 0;
-            foreach ($tasks as $task) {
-                if (!$task->is_done) {
-                    continue;
-                }
-                $done++;
-            }
+            $tasks  = $this->tasks;
+            $total  = count($tasks);
+            $done   = array_reduce($tasks, fn($done, $v) => $done+=intval($v->is_done), 0);
+            $failed = array_reduce($tasks, fn($failed, $v) => $failed+=intval($v->is_failed), 0);
+
             return $cache[$this->id] = [
-                'total'   => $total,
-                'done'    => intval($done),
-                'percent' => $total ? 100 * ($done / $total) : 0,
+                'total'          => $total,
+                'done'           => intval($done),
+                'failed'         => intval($failed),
+                'percent_done'   => $total ? 100 * ($done / $total) : 0,
+                'percent_failed' => $total ? 100 * ($failed / $total) : 0,
             ];
         };
 
@@ -73,8 +80,24 @@ class ShiftModel extends SiteModel
             'is_template' => $this->dir->is_template,
             'progress'    => $calcProgress(),
             'user'        => new UserModel($this->user_id),
+            'status_name' => $this->statuses(+$this->status)['name'],
             default       => parent::__get($key)
         };
+    }
+
+    public function __set($key, $value)
+    {
+        // Если мы закрываем сменю, то проходимся по всем задачам и те которые ещё не выполнены отмечаем как проваленные
+        if ($key === 'status' && +$value === self::STATUS_DONE) {
+            $tasks = $this->tasks;
+            array_walk($tasks, function ($task) {
+                if ($task->status === TaskModel::STATUS_DONE) {
+                    return;
+                }
+                $task->status = TaskModel::STATUS_FAILED;
+            });
+        }
+        return parent::__set($key, $value);
     }
 
     public function find($params)

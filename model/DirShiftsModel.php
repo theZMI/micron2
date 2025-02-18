@@ -61,15 +61,25 @@ class DirShiftsModel extends SiteModel
                 return $cache[$this->id];
             }
 
-            $shifts = $this->shifts;
+            $shifts           = $this->shifts;
             $progressByShifts = array_map(fn($shift) => $shift->progress, $shifts);
-            $total = array_reduce($progressByShifts, fn($total, $v) => $total+=$v['total'], 0);
-            $done  = array_reduce($progressByShifts, fn($done, $v) => $done+=$v['done'], 0);
+            $total            = array_reduce($progressByShifts, fn($total, $v) => $total += $v['total'], 0);
+            $done             = array_reduce($progressByShifts, fn($done, $v) => $done += $v['done'], 0);
+            $failed           = array_reduce($progressByShifts, fn($failed, $v) => $failed += $v['failed'], 0);
             return $cache[$this->id] = [
-                'total'   => $total,
-                'done'    => $done,
-                'percent' => $total ? 100*($done/$total) : 0,
+                'total'          => $total,
+                'done'           => $done,
+                'failed'         => $failed,
+                'percent_done'   => $total ? 100 * ($done / $total) : 0,
+                'percent_failed' => $total ? 100 * ($failed / $total) : 0,
             ];
+        } elseif ($key === 'status_name') {
+            $statuses = [];
+            foreach ($this->shifts as $shift) {
+                $statuses[] = $shift->status_name;
+            }
+            $statuses = array_unique($statuses);
+            return count($statuses) === 1 ? $statuses[0] : '';
         }
         return parent::__get($key);
     }

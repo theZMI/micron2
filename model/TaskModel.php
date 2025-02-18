@@ -73,22 +73,24 @@ class TaskModel extends SiteModel
         parent::__construct('tasks', $id);
     }
 
-    public function statuses()
+    public function statuses($status = null)
     {
-        return [
+        $all = [
             self::STATUS_CREATED => ['name' => 'В работе...', 'label' => '<span class="task-status-label badge rounded-pill ps-2 pe-2 text-bg-secondary">В работе...</span>'],
             self::STATUS_DONE    => ['name' => 'Завершена',   'label' => '<span class="task-status-label badge rounded-pill ps-2 pe-2 text-bg-success">Завершена</span>'],
             self::STATUS_FAILED  => ['name' => 'Провалена',   'label' => '<span class="task-status-label badge rounded-pill ps-2 pe-2 text-bg-danger">Провалена</span>'],
         ];
+        return is_null($status) ? $all : $all[$status];
     }
 
     public function __get($key)
     {
         return match ($key) {
             'is_done'       => +$this->status === self::STATUS_DONE,
+            'is_failed'     => +$this->status === self::STATUS_FAILED,
             'shift'         => new ShiftModel($this->shift_id),
             'user'          => new UserModel($this->shift->user_id),
-            'status_label'  => $this->statuses()[+$this->status]['label'],
+            'status_label'  => $this->statuses(+$this->status)['label'],
             default         => parent::__get($key),
         };
     }
