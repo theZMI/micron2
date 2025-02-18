@@ -45,6 +45,11 @@ class ShiftModel extends SiteModel
     public function __get($key)
     {
         $calcProgress = function () {
+            static $cache = [];
+            if (isset($cache[$this->id])) {
+                return $cache[$this->id];
+            }
+
             $tasks = $this->tasks;
             $total = count($tasks);
             $done  = 0;
@@ -54,7 +59,7 @@ class ShiftModel extends SiteModel
                 }
                 $done++;
             }
-            return [
+            return $cache[$this->id] = [
                 'total'   => $total,
                 'done'    => intval($done),
                 'percent' => $total ? 100 * ($done / $total) : 0,
@@ -67,6 +72,7 @@ class ShiftModel extends SiteModel
             'dir'         => (new DirShiftsModel($this->dir_id)),
             'is_template' => $this->dir->is_template,
             'progress'    => $calcProgress(),
+            'user'        => new UserModel($this->user_id),
             default       => parent::__get($key)
         };
     }
