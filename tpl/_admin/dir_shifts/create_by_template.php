@@ -5,7 +5,7 @@
                 <span class="pull-start me-3">Выберите шаблон</span>
             </h1>
             <div class="table-responsive mb-4 table-extra-condensed-wrapper">
-                <table class="table table-condensed table-hover table-extra-condensed">
+                <table class="table table-condensed table-extra-condensed">
                     <?php if (count($list)): ?>
                         <tr>
                             <th>ID</th>

@@ -6,7 +6,7 @@
             <h1 class="mt-4 mb-4">Лог ошибок</h1>
 
             <div class="table-responsive mb-4 table-extra-condensed-wrapper">
-                <table class="table table-condensed table-hover table-extra-condensed">
+                <table class="table table-condensed table-extra-condensed">
                     <?php if (empty($all)): ?>
                         <tr>
                             <td class="text-center">Нет записей об ошибках</td>

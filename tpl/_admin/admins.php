@@ -9,7 +9,7 @@
                 </a>
             </h1>
             <div class="table-responsive table-extra-condensed-wrapper mb-4">
-                <table class="table table-condensed table-hover table-extra-condensed">
+                <table class="table table-condensed table-extra-condensed">
                     <thead>
                     <tr>
                         <th>#</th>
