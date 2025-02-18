@@ -8,6 +8,8 @@ $modelParam        = function ($param, $default = '') use (&$model) {
     return ModelParam($model, $param, Post($param, $default));
 };
 $possibleParams    = (new ParamModel())->getList();
+$componentURI      = 'dir_shifts';
+$noDates           = false;
 
 if (Post('is_set')) {
     $errs       = [];
