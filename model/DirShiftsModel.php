@@ -66,17 +66,22 @@ class DirShiftsModel extends SiteModel
 
         if (count($params) === 0) { // Если единственный параметр поиска это is_template
             return array_filter(
-                $this->getList(),
+                parent::getList(),
                 fn($v) => +$v->is_template === +$is_template
             );
         }
         if (isset($params['user_id'])) {
             return array_filter(
-                $this->getList(),
+                parent::getList(),
                 fn($v) => in_array(+$params['user_id'], $v->user_ids) && +$v->is_template === +$is_template
             );
         }
         return [];
+    }
+
+    public function getList($page = self::PAGE_ALL)
+    {
+        return $this->find(['is_template' => false]);
     }
 
     public function delete()

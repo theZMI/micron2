@@ -20,4 +20,9 @@ class DirShiftTemplatesModel extends DirShiftsModel
         }
         return parent::flush();
     }
+
+    public function getList($page = self::PAGE_ALL)
+    {
+        return $this->find(['is_template' => true]);
+    }
 }
