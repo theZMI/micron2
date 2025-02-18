@@ -44,6 +44,7 @@
             <form action="<?= GetCurUrl() ?>" method="post" @submit.prevent="saveShift">
                 <input type="hidden" name="is_set" value="1">
                 <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+                <?php if (!$noDates): ?>
                 <div class="row">
                     <div class="col">
                         <div class="mb-4">
@@ -64,6 +65,7 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
                 <div class="mb-4">
                     <label class="form-label">Название:</label>
                     <input type="text" name="name" class="form-control" :value="dir_name_ready" @input="event => dir_name = event.target.value">
@@ -95,7 +97,7 @@
                                 <a v-for="task in appendTasks.common" class="tasks-block-task" @click="openTask(task)">
                                     <div class="tasks-block-task-task">
                                         {{ task.task }}
-                                        <div class="tasks-block-task-deadline" v-if="task.deadline">До {{ formatInterval(+task.deadline) }}</div>
+                                        <div class="tasks-block-task-deadline" v-if="task.deadline">До {{ formatTimer(+task.deadline) }}</div>
                                     </div>
                                     <div class="tasks-block-task-desc">{{ task.description }}</div>
                                 </a>
@@ -124,7 +126,7 @@
                                 <a v-for="task in appendTasks[worker.id]" class="tasks-block-task" @click="openTask(task)">
                                     <div class="tasks-block-task-task">
                                         {{ task.task }}
-                                        <div class="tasks-block-task-deadline" v-if="task.deadline">До {{ formatInterval(+task.deadline) }}</div>
+                                        <div class="tasks-block-task-deadline" v-if="task.deadline">До {{ formatTimer(+task.deadline) }}</div>
                                     </div>
                                     <div class="tasks-block-task-desc">{{ task.description }}</div>
                                 </a>
@@ -150,7 +152,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <a href="<?= SiteRoot('_admin/dir_shifts') ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>
+                    <a href="<?= SiteRoot("_admin/{$componentURI}") ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>
                     <button type="submit" class="btn btn-primary btn-lg rounded-pill"><i class="bi bi-check-lg pe-2"></i>Сохранить</button>
                 </div>
             </form>
@@ -159,6 +161,8 @@
 </div>
 
 <script type="module">
+    import { formatTimer } from "/i/js/_dev/format_date.js";
+
     $(() => {
         Vue.createApp({
             data() {
@@ -247,11 +251,8 @@
                 });
             },
             methods: {
-                formatInterval(seconds) {
-                    const dt = new Date(seconds * 1000);
-                    const h = dt.getUTCHours().toString().padStart(2, '');
-                    const m = dt.getUTCMinutes().toString().padStart(2, '0');
-                    return (+h > 0 ? `${h}:` : '') + [m].join(':');
+                formatTimer(seconds) {
+                    return formatTimer(seconds, false);
                 },
                 currentTaskSubmit() {
                     if (!this.currentTask.id) {
@@ -319,7 +320,7 @@
                         'json'
                     );
                     if (response['data'] === 'OK') {
-                        window.location.replace('<?= SiteRoot('_admin/dir_shifts') ?>');
+                        window.location.replace('<?= SiteRoot("_admin/{$componentURI}") ?>');
                         return;
                     }
                     this.errorMessage = response;
