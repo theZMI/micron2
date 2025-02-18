@@ -10,14 +10,23 @@
                         <tr>
                             <th>ID</th>
                             <th>Название</th>
-                            <th colspan="1" style="display: none;">Действия</th>
+                            <th width="220">Прогресс по задачам</th>
+                            <th colspan="2" style="display: none;">Действия</th>
                         </tr>
                         <?php foreach ($list as $id => $v): ?>
                             <tr>
                                 <td onclick="trClick(this)"><?= $v->id ?></td>
                                 <td onclick="trClick(this)"><?= $v->name ?></td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <?= intval($v->progress) ?>%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </td>
                                 <td width="1%" class="text-center" style="display: none;">
                                     <a href="<?= SiteRoot("_admin/dir_shifts/report&id={$id}") ?>" class="btn btn-sm btn-secondary rounded-pill" title="Отчёт"><i class="bi bi-ui-checks"></i></a>
+                                </td>
+                                <td width="1%" class="text-center">
+                                    <a href="<?= SiteRoot("_admin/dir_shifts/close&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill text-nowrap" title="Закрыть смену" onclick="return confirm('Вы уверены что хотите закрыть смену?')">Закрыть смену</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -44,11 +44,29 @@ class ShiftModel extends SiteModel
 
     public function __get($key)
     {
+        $calcProgress = function () {
+            $tasks = $this->tasks;
+            $total = count($tasks);
+            $done  = 0;
+            foreach ($tasks as $task) {
+                if (!$task->is_done) {
+                    continue;
+                }
+                $done++;
+            }
+            return [
+                'total'   => $total,
+                'done'    => intval($done),
+                'percent' => $total ? 100 * ($done / $total) : 0,
+            ];
+        };
+
         return match ($key) {
             'tasks'       => (new TaskModel())->find(['shift_id' => $this->id]),
             'params'      => (new ShiftParamModel())->find(['shift_id' => $this->id]),
             'dir'         => (new DirShiftsModel($this->dir_id)),
             'is_template' => $this->dir->is_template,
+            'progress'    => $calcProgress(),
             default       => parent::__get($key)
         };
     }

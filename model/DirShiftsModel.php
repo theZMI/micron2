@@ -55,6 +55,12 @@ class DirShiftsModel extends SiteModel
         }
         elseif ($key === 'users') {
             return array_map(fn($id) => new UserModel($id), $this->user_ids);
+        } elseif ($key === 'progress') {
+            $shifts = $this->shifts;
+            $progressByShifts = array_map(fn($shift) => $shift->progress, $shifts);
+            $total = array_reduce($progressByShifts, fn($total, $v) => $total+=$v['total'], 0);
+            $done  = array_reduce($progressByShifts, fn($done, $v) => $done+=$v['done'], 0);
+            return $total ? 100*($done/$total) : 0;
         }
         return parent::__get($key);
     }
