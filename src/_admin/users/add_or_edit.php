@@ -13,7 +13,7 @@ if (Post('is_set')) {
     $surname       = $full_name[0] ?? '';
     $first_name    = $full_name[1] ?? '';
     $patronymic    = $full_name[2] ?? '';
-    $password      = Post('password', UserModel::genPassword());
+    $password      = Post('password');
     $department_id = intval(Post('department_id'));
     $phone         = PhoneFilter(Post('phone'));
     $role          = intval(Post('role'));
@@ -40,13 +40,18 @@ if (Post('is_set')) {
         $model->patronymic    = $patronymic;
         $model->email         = $email;
         $model->login         = $email;
-        $model->pwd_hash      = UserModel::makeHash($password);
         $model->status        = UserModel::STATUS_ACTIVE;
         $model->gender        = UserModel::GENDER_UNKNOWN;
         $model->department_id = $department_id;
         $model->phone         = $phone;
         $model->role          = $role;
         $model->job_title     = $job_title;
+
+        if ($password) { // Если пароль задан, то устанавливаем его
+            $model->pwd_hash = UserModel::makeHash($password);
+        } elseif (!$model->isExists()) { // Если пароль не задан, но это мы только-только создаём юзера, то генерим пароль
+            $model->pwd_hash = UserModel::makeHash(UserModel::genPassword());
+        }
 
         // Если роль, которая назначается сотруднику, это начальник или ИО, то он будет иметь ещё и доступ в админку
         if (in_array($role, [UserModel::ROLE_CHIEF, UserModel::ROLE_ACTING_CHIEF])) {
