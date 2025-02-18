@@ -8,7 +8,7 @@
                 </a>
             </h1>
             <div class="table-responsive mb-4 table-extra-condensed-wrapper">
-                <table class="table table-condensed table-extra-condensed">
+                <table class="site-table">
                     <?php if (count($list)): ?>
                         <tr>
                             <th>ID</th>

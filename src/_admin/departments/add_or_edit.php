@@ -19,7 +19,7 @@ if (Post('is_set')) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
         $model->department = $department;
-        $model->use_timer  = $use_timer;
+        $model->use_timer  = intval($use_timer);
 
         $id = $model->flush();
 

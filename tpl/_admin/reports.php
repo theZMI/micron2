@@ -5,11 +5,13 @@
                 <span class="pull-start me-3">Отчёты</span>
             </h1>
             <div class="table-responsive mb-4 table-extra-condensed-wrapper">
-                <table class="table table-condensed table-extra-condensed">
+                <table class="site-table">
                     <?php if (count($list)): ?>
                         <tr>
                             <th>ID</th>
                             <th>Название</th>
+                            <th>Начать в</th>
+                            <th>Завершить в</th>
                             <th>Статус</th>
                             <th width="1%">Прогресс по задачам</th>
                             <th colspan="2" style="display: none;">Действия</th>
@@ -18,6 +20,13 @@
                             <tr>
                                 <td onclick="trClick(this)"><?= $v->id ?></td>
                                 <td onclick="trClick(this)"><?= $v->name ?></td>
+                                <td onclick="trClick(this)">
+                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->start_time, false) ?>
+                                </td>
+                                <td onclick="trClick(this)">
+                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->end_time, false) ?>
+                                    <span class="badge text-bg-secondary"><?= intval($v->shifts[0]->end_time - $v->shifts[0]->start_time + 1) / 86400 ?> д.</span>
+                                </td>
                                 <td onclick="trClick(this)"><?= $v->status_name !== (new ShiftModel())->statuses(ShiftModel::STATUS_CREATED)['name'] ? $v->status_name : '' ?></td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center">

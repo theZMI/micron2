@@ -14,17 +14,28 @@
                 </div>
             </h1>
             <div class="table-responsive mb-4 table-extra-condensed-wrapper">
-                <table class="table table-condensed table-extra-condensed">
+                <table class="site-table">
                     <?php if (count($list)): ?>
                         <tr>
                             <th>ID</th>
                             <th>Название</th>
+                            <th>Начать в</th>
+                            <th>Завершить в</th>
+                            <th>Статус</th>
                             <th colspan="2">Действия</th>
                         </tr>
                         <?php foreach ($list as $id => $v): ?>
                             <tr>
                                 <td onclick="trClick(this)"><?= $v->id ?></td>
                                 <td onclick="trClick(this)"><?= $v->name ?></td>
+                                <td onclick="trClick(this)">
+                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->start_time, false) ?>
+                                </td>
+                                <td onclick="trClick(this)">
+                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->end_time, false) ?>
+                                    <span class="badge text-bg-secondary"><?= intval($v->shifts[0]->end_time - $v->shifts[0]->start_time + 1) / 86400 ?> д.</span>
+                                </td>
+                                <td onclick="trClick(this)"><?= $v->status_name !== (new ShiftModel())->statuses(ShiftModel::STATUS_CREATED)['name'] ? $v->status_name : '' ?></td>
                                 <td width="1%" class="text-center" style="display: none;">
                                     <a href="<?= SiteRoot("_admin/dir_shifts/add_or_edit&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill default-click" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
                                 </td>
