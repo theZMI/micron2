@@ -46,27 +46,22 @@
             <?php $i = 1; foreach ($tableHeader as $v): ?>
                 <td>
                     <?php
-                    $allCells = [];
-                    foreach ($tableData as $row) {
-                        $i2 = 1;
-                        foreach ($row as $cell) {
-                            if ($i2 == $i) {
-                                $allCells[] = strip_tags($cell);
-                            }
-                            $i2++;
-                        }
-                    }
-                    $allCells = array_unique($allCells);
-                    natsort($allCells);
+                        // Получаем все возможные значения в этом столбце
+                        $cells = [];
+                        array_map(function($row) use (&$cells, $i) {
+                            $cells[] = strip_tags( array_values($row)[$i-1] );
+                        }, array_values($tableData));
+                        $cells = array_unique($cells);
+                        natsort($cells);
 
-                    $isEmpty = !count(array_filter($allCells));
-                    $isSelect = count($allCells) < 10;
+                        $isEmpty = !count(array_filter($cells));
+                        $isSelect = count($cells) <= 7;
                     ?>
                     <?php if ($isEmpty): ?>
                     <?php elseif ($isSelect): ?>
                         <select class="form-control input-for-live-search live-filter-input-<?= $i ?>">
                             <option value="">Неважно</option>
-                            <?php foreach ($allCells as $cell): ?>
+                            <?php foreach ($cells as $cell): ?>
                                 <option value="begin_<?= $cell ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
                             <?php endforeach; ?>
                         </select>
@@ -87,7 +82,7 @@
                         <div class="hidden d-none live-filter-data-block-filterinfo-<?= $i ?>">begin_<?= strip_tags($cell) ?>_end</div>
                         <?= $cell ?>
                     </td>
-                    <?php $i++; endforeach; ?>
+                <?php $i++; endforeach; ?>
             </tr>
         <?php endforeach; ?>
         </tbody>
