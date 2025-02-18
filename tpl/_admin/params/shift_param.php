@@ -25,12 +25,12 @@
 <?php if (+$model->param->type === ParamModel::TYPE_DATETIME): ?>
     <div class="mb-3">
         <label class="form-label"><?= $model->param->name ?></label>
-        <input type="text" class="form-control" name="shift_params[<?= $model->id ?>]" value="<?= OutputFormats::dateTime(+$model->value) ?>">
+        <input type="text" class="form-control" name="shift_params[<?= $model->id ?>]" value="<?= $model->value ?>">
     </div>
 <?php endif ?>
 <?php if (+$model->param->type === ParamModel::TYPE_TIME): ?>
     <div class="mb-3">
         <label class="form-label"><?= $model->param->name ?></label>
-        <input type="text" class="form-control" name="shift_params[<?= $model->id ?>]" value="<?= FormatTimeInterval(+$model->value) ?>">
+        <input type="text" class="form-control" name="shift_params[<?= $model->id ?>]" value="<?= $model->value ?>">
     </div>
 <?php endif ?>
