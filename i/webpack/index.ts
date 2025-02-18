@@ -15,6 +15,7 @@ import "@scss/components/magicsuggest.scss";
 import "@webpack/src/MainMenuInit";
 import "@webpack/src/IMaskInit";
 import "@ts/helpers/pwd_shower";
+import { trClick } from "@ts/helpers/trClick";
 import { createApp } from "vue/dist/vue.esm-bundler";
 import { UserModel } from "@ts/models/UserModel";
 import { TaskModel } from "@ts/models/TaskModel";
@@ -23,5 +24,6 @@ window.bootstrap = bootstrap;
 window.Vue = {createApp};
 window.UserModel = UserModel;
 window.TaskModel = TaskModel;
+window.trClick = trClick;
 
 $.webpackCompitedAt = parseInt(Date.now() / 1000);
