@@ -30,7 +30,7 @@ class PaySystem_YooKassa extends \PaySystem\PaySystem_Base
                     "tax_system_code" => "2", // Налогообложение
                     "vat_code"        => "1",
                     "payment_mode"    => "full_prepayment", // Полный платеж
-                    "payment_subject" => "commodity"
+                    "payment_subject" => "payment", // "commodity"
                 ];
             }
 
