@@ -24,7 +24,7 @@
                     <div class="progress-stacked" style="width: 125px;">
                         <div class="progress" role="progressbar" style="width: <?= intval($shift->progress['percent_done']) ?>%" aria-valuenow="<?= intval($shift->progress['percent_done']) ?>" aria-valuemin="0" aria-valuemax="100">
                             <div class="progress-bar progress-bar-striped">
-                                <?= intval($shift->progress['done']) ?> / <?= intval($model->progress['total']) ?>
+                                <?= intval($shift->progress['done']) ?> / <?= intval($shift->progress['total']) ?>
                             </div>
                         </div>
                         <div class="progress" role="progressbar" style="width: <?= intval($shift->progress['percent_failed']) ?>%" aria-valuenow="<?= intval($shift->progress['percent_failed']) ?>" aria-valuemin="0" aria-valuemax="100">
