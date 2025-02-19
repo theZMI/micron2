@@ -47,15 +47,19 @@
                 <td>
                     <?php
                         // Получаем все возможные значения в этом столбце
-                        $cells = [];
-                        array_map(function($row) use (&$cells, $i) {
-                            $cells[] = strip_tags( array_values($row)[$i-1] );
-                        }, array_values($tableData));
+                        $cells = array_map(
+                            fn($row) => strip_tags(array_values($row)[$i-1]),
+                            array_values($tableData)
+                        );
                         $cells = array_unique($cells);
+                        $uniq  = count($cells);
+                        $total = count(array_column($tableData, $i-1));
                         natsort($cells);
 
                         $isEmpty = !count(array_filter($cells));
-                        $isSelect = count($cells) <= 7;
+                        $isSelect = $uniq <= 10 && $uniq < $total // Показывать select если вариантов не больше 10-ти
+                                    ||
+                                    ($uniq <= 20 && $uniq <= 0.33*$total && $uniq < $total); // Если select сокращает кол-во пунктов до 1/3 от общего числа вариантов, но не больше 20
                     ?>
                     <?php if ($isEmpty): ?>
                     <?php elseif ($isSelect): ?>

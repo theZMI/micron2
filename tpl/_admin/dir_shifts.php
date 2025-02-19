@@ -1,3 +1,37 @@
+<head>
+    <script type="text/javascript">
+        let g_searchers;
+
+        $(() => {
+            <?php $countSearchers = count($tableHeader); ?>
+            <?php for ($i = 1; $i <= $countSearchers; $i++): ?>
+            $('#table-with-filters').liveFilter(
+                '.live-filter-input-<?= $i ?>',
+                '.live-filter-data-block',
+                {
+                    filterChildSelector: '.live-filter-data-block-filterinfo-<?= $i ?>',
+                    before: function (elem, contains, containsNot) {
+                        let searchers = {};
+                        let selector = '';
+                        <?php for ($j = 1; $j <= $countSearchers; $j++): ?>
+                        selector = '#table-with-filters .live-filter-input-<?= $j ?>';
+                        if ($(selector).val()) {
+                            searchers[<?= $j ?>] = $(selector).val();
+                        }
+                        <?php endfor ?>
+                        g_searchers = searchers;
+                    },
+                    after: function (elem, contains, containsNot) {
+                    }
+                }
+            );
+            <?php endfor; ?>
+
+            $('#table-with-filters').find('input:first, select:first').trigger('change');
+        });
+    </script>
+</head>
+
 <div class="container-fluid mb-4">
     <div class="row">
         <div class="col">
@@ -13,41 +47,75 @@
                     </ul>
                 </div>
             </h1>
-            <div class="table-responsive mb-4 table-extra-condensed-wrapper">
+            <div id="table-with-filters" class="table-responsive mb-4 table-extra-condensed-wrapper">
                 <table class="site-table">
                     <?php if (count($list)): ?>
+                    <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Название</th>
-                            <th>Начать в</th>
-                            <th>Завершить в</th>
-                            <th>Статус</th>
+                            <?php foreach ($tableHeader as $v): ?>
+                                <th><?= $v ?></th>
+                            <?php endforeach; ?>
                             <th colspan="2">Действия</th>
                         </tr>
-                        <?php foreach ($list as $id => $v): ?>
-                            <tr>
-                                <td onclick="trClick(this)"><?= $v->id ?></td>
-                                <td onclick="trClick(this)"><?= $v->name ?></td>
-                                <td onclick="trClick(this)">
-                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->start_time, false) ?>
+                        <tr>
+                            <?php $i = 1; foreach ($tableHeader as $v): ?>
+                                <td>
+                                    <?php
+                                    // Получаем все возможные значения в этом столбце
+                                    $cells = array_map(
+                                        fn($row) => strip_tags(array_values($row)[$i-1]),
+                                        array_values($tableData)
+                                    );
+                                    $cells = array_unique($cells);
+                                    $uniq  = count($cells);
+                                    $total = count(array_column($tableData, $i-1));
+                                    natsort($cells);
+
+                                    $isEmpty = !count(array_filter($cells));
+                                    $isSelect = $uniq <= 10 && $uniq < $total // Показывать select если вариантов не больше 10-ти
+                                                ||
+                                                ($uniq <= 20 && $uniq <= 0.33*$total && $uniq < $total); // Если select сокращает кол-во пунктов до 1/3 от общего числа вариантов, но не больше 20
+                                    ?>
+                                    <?php if ($isEmpty): ?>
+                                    <?php elseif ($isSelect): ?>
+                                        <select class="form-control input-for-live-search live-filter-input-<?= $i ?>">
+                                            <option value="">Неважно</option>
+                                            <?php foreach ($cells as $cell): ?>
+                                                <option value="begin_<?= $cell ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php else: ?>
+                                        <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>" />
+                                    <?php endif; ?>
                                 </td>
-                                <td onclick="trClick(this)">
-                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->end_time, false) ?>
-                                    <span class="badge text-bg-secondary"><?= intval($v->shifts[0]->end_time - $v->shifts[0]->start_time + 1) / 86400 ?> д.</span>
-                                </td>
-                                <td onclick="trClick(this)"><?= $v->status_name !== (new ShiftModel())->statuses(ShiftModel::STATUS_CREATED)['name'] ? $v->status_name : '' ?></td>
+                            <?php $i++; endforeach; ?>
+                            <td colspan="2"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($tableData as $id => $row): ?>
+                            <tr class="live-filter-data-block">
+                                <?php $i = 1; foreach ($row as $cell): ?>
+                                    <td onclick="trClick(this)">
+                                        <?= $cell ?>
+                                        <div class="hidden d-none live-filter-data-block-filterinfo-<?= $i ?>">begin_<?= strip_tags($cell) ?>_end</div>
+                                    </td>
+                                <?php $i++; endforeach; ?>
                                 <td width="1%" class="text-center" style="display: none;">
                                     <a href="<?= SiteRoot("_admin/dir_shifts/add_or_edit&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill default-click" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
                                 </td>
                                 <td width="1%" class="text-center">
-                                    <a href="<?= GetCurUrl('a=delete&id=' . $v->id) ?>" class="btn btn-sm btn-danger rounded-pill" onclick="return confirm('Удалить?')" title="Удалить"><i class="bi bi-trash3-fill"></i></a>
+                                    <a href="<?= GetCurUrl('a=delete&id=' . $id) ?>" class="btn btn-sm btn-danger rounded-pill" onclick="return confirm('Удалить?')" title="Удалить"><i class="bi bi-trash3-fill"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
+                    </tbody>
                     <?php else: ?>
+                    <tbody>
                         <tr>
                             <td class="text-center">Нет данных</td>
                         </tr>
+                    </tbody>
                     <?php endif ?>
                 </table>
             </div>
