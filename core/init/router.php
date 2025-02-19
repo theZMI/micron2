@@ -29,7 +29,7 @@ foreach ($getLangs() as $lang => $langUri) {
     SimpleRouter::group(['middleware' => [
         PrepareApiMiddleware::class,
         CommonMiddleware::class,
-        CheckApiUserAuthMiddleware::class]
+        CheckApiUserAuthMiddleware::class] // Юзер определиться по API-User-Auth-Login и будет занесён в g_user
     ], function () use ($langUri, $apiUri) {
         // work_intervals
         SimpleRouter::all("/{$langUri}{$apiUri}work_intervals", function () use ($langUri, $apiUri) {
@@ -55,7 +55,7 @@ foreach ($getLangs() as $lang => $langUri) {
             TryIncludeCom("{$langUri}{$apiUri}users{$end_uri}", [], "{$apiUri}404");
         })->where(['end_uri' => '.*?']);
 
-        // shifts (юзер определиться по API-User-Auth-Login и будет занесён в g_user)
+        // shifts
         SimpleRouter::all("/{$langUri}{$apiUri}shifts", function () use ($langUri, $apiUri) {
             TryIncludeCom("{$langUri}{$apiUri}shifts", [], "{$apiUri}404");
         });
