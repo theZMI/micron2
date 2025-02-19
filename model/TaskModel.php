@@ -76,9 +76,9 @@ class TaskModel extends SiteModel
     public function statuses($status = null)
     {
         $all = [
-            self::STATUS_CREATED => ['name' => 'В работе...', 'label' => '<span class="task-status-label badge rounded-pill ps-2 pe-2 text-bg-secondary">В работе...</span>'],
-            self::STATUS_DONE    => ['name' => 'Завершена',   'label' => '<span class="task-status-label badge rounded-pill ps-2 pe-2 text-bg-success">Завершена</span>'],
-            self::STATUS_FAILED  => ['name' => 'Провалена',   'label' => '<span class="task-status-label badge rounded-pill ps-2 pe-2 text-bg-danger">Провалена</span>'],
+            self::STATUS_CREATED => ['name' => 'В работе...', 'label' => '<span class="text-white badge rounded-pill ps-2 pe-2 text-bg-secondary">В работе...</span>'],
+            self::STATUS_DONE    => ['name' => 'Завершена',   'label' => '<span class="text-white badge rounded-pill ps-2 pe-2 text-bg-success">Завершена</span>'],
+            self::STATUS_FAILED  => ['name' => 'Провалена',   'label' => '<span class="text-white badge rounded-pill ps-2 pe-2 text-bg-danger">Провалена</span>'],
         ];
         return is_null($status) ? $all : $all[$status];
     }
