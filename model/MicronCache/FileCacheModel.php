@@ -32,9 +32,10 @@ class FileCacheModel implements ICache
     public function set(string $key, mixed $data): int
     {
         $cache = [
-            'key'         => $key,
-            'data'        => $data,
-            'create_time' => time()
+            'key'              => $key,
+            'data'             => $data,
+            'create_time'      => time(),
+            'last_update_time' => time(),
         ];
         $file  = $this->getFileNameByKey($key);
         return (int)FileSys::writeFile($file, json_encode($cache));

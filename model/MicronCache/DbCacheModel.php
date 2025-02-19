@@ -8,8 +8,8 @@ class DbCacheModel extends \SiteModel implements ICache
     {
         return [
             'id'               => 'int',
-            'key'             => 'string',
-            'data'            => 'string',
+            'key'              => 'string',
+            'data'             => 'string',
             'create_time'      => 'int',
             'last_update_time' => 'int',
         ];

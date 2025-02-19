@@ -5,13 +5,14 @@ class TestSchemeModel extends ModelWithScheme
     public function scheme()
     {
         return [
-            'id'            => 'int',
-            'int_data_1'    => 'int',
-            'string_data_1' => 'string',
-            'string_data_2' => 'string',
-            'bool_data_1'   => 'bool',
-            'float_data_1'  => 'float',
-            'create_time'   => 'int',
+            'id'               => 'int',
+            'int_data_1'       => 'int',
+            'string_data_1'    => 'string',
+            'string_data_2'    => 'string',
+            'bool_data_1'      => 'bool',
+            'float_data_1'     => 'float',
+            'create_time'      => 'int',
+            'last_update_time' => 'int',
         ];
     }
 
@@ -31,6 +32,7 @@ class TestSchemeModel extends ModelWithScheme
               `bool_data_1` BOOLEAN DEFAULT FALSE,
               `float_data_1` FLOAT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `last_update_time` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
