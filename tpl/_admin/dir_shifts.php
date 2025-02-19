@@ -52,9 +52,10 @@
                     <?php if (count($list)): ?>
                     <thead>
                         <tr>
-                            <?php foreach ($tableHeader as $v): ?>
-                                <th><?= $v ?></th>
-                            <?php endforeach; ?>
+                            <?php $i = 1; foreach ($tableHeader as $v): ?>
+                                <th width="<?= $i === 2 ? '' : '1%'?>"><?= $v ?></th>
+                            <?php $i++; endforeach; ?>
+                            <th width="1%">Прогресс по задачам</th>
                             <th colspan="2">Действия</th>
                         </tr>
                         <tr>
@@ -95,6 +96,7 @@
                                     <?php endif; ?>
                                 </td>
                             <?php $i++; endforeach; ?>
+                            <td></td>
                             <td colspan="2"></td>
                         </tr>
                     </thead>
@@ -102,15 +104,18 @@
                         <?php foreach ($tableData as $id => $row): ?>
                             <tr class="live-filter-data-block">
                                 <?php $i = 1; foreach ($row as $cell): ?>
-                                    <td onclick="trClick(this)">
+                                    <td onclick="trClick(this)" class="<?= $i === 2 ? '' : 'text-nowrap' ?> ps-2 pe-2">
                                         <?= $cell ?>
                                         <div class="hidden d-none live-filter-data-block-filterinfo-<?= $i ?>">begin_<?= strip_tags($cell) ?>_end</div>
                                     </td>
                                 <?php $i++; endforeach; ?>
+                                <td class="text-nowrap ps-2 pe-2">
+                                    <?php IncludeCom('_admin/_dir_shift_progresses', ['model' => $list[$id]]) ?>
+                                </td>
                                 <td width="1%" class="text-center" style="display: none;">
                                     <a href="<?= SiteRoot("_admin/dir_shifts/add_or_edit&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill default-click" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
                                 </td>
-                                <td width="1%" class="text-center">
+                                <td width="1%" class="text-center text-nowrap">
                                     <a href="<?= GetCurUrl('a=delete&id=' . $id) ?>" class="btn btn-sm btn-danger rounded-pill" onclick="return confirm('Удалить?')" title="Удалить"><i class="bi bi-trash3-fill"></i></a>
                                 </td>
                             </tr>

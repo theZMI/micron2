@@ -123,6 +123,11 @@ $menu = [
                 'link' => SiteRoot('examples/qr'),
                 'name' => 'QR-коды',
             ],
+            [
+                'link' => SiteRoot('examples/live_filter'),
+                'name' => 'Мультифильтры (как в XL)',
+            ],
+
         ],
     ],
     [

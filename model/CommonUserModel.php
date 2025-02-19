@@ -210,8 +210,8 @@ class CommonUserModel extends SiteModel
     {
         $all = [
             self::ROLE_REGULAR_WORKER => 'Сотрудник',
-            self::ROLE_ACTING_CHIEF   => '<span class="badge text-bg-secondary">И.О. руководителя отдела</span>',
-            self::ROLE_CHIEF          => '<span class="badge text-bg-secondary">Руководитель отдела</span>',
+            self::ROLE_ACTING_CHIEF   => '<span class="badge text-white text-bg-secondary">И.О. руководителя отдела</span>',
+            self::ROLE_CHIEF          => '<span class="badge text-white text-bg-secondary">Руководитель отдела</span>',
         ];
         return is_null($role) ? $all : $all[$role];
     }

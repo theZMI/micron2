@@ -16,7 +16,7 @@ foreach ($list as $k => $v) {
         $v->id,
         $v->name,
         OutputFormats::dateTime($v->shifts[0]->start_time, false),
-        OutputFormats::dateTime($v->shifts[0]->end_time, false) . ' &nbsp; <span class="badge text-bg-secondary">' . intval($v->shifts[0]->end_time - $v->shifts[0]->start_time + 1) / 86400 . ' д.</span>',
+        OutputFormats::dateTime($v->shifts[0]->end_time, false) . ' &nbsp; <span class="badge text-white text-bg-secondary">' . intval($v->shifts[0]->end_time - $v->shifts[0]->start_time + 1) / 86400 . ' д.</span>',
         $v->status_name,
     ];
 }

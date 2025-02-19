@@ -45,8 +45,8 @@ class ShiftModel extends SiteModel
     public function statuses($status = null)
     {
         $all = [
-            self::STATUS_CREATED => ['name' => '<span class="badge text-bg-secondary">В работе</span>'],
-            self::STATUS_DONE    => ['name' => '<span class="badge text-bg-success">Закрыта</span>'],
+            self::STATUS_CREATED => ['name' => '<span class="badge text-white text-bg-secondary">В работе</span>'],
+            self::STATUS_DONE    => ['name' => '<span class="badge text-white text-bg-success">Закрыта</span>'],
         ];
         return is_null($status) ? $all : $all[$status];
     }
