@@ -14,7 +14,7 @@
                             <th>Завершить в</th>
                             <th>Статус</th>
                             <th width="1%">Прогресс по задачам</th>
-                            <th colspan="2" style="display: none;">Действия</th>
+                            <th colspan="2">Действия</th>
                         </tr>
                         <?php foreach ($list as $id => $v): ?>
                             <tr>
