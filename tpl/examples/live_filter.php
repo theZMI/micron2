@@ -70,7 +70,7 @@
                             <?php endforeach; ?>
                         </select>
                     <?php else: ?>
-                        <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>" />
+                        <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= $defaultTableValues[$v] ?? '' ?>" />
                     <?php endif; ?>
                 </td>
                 <?php $i++; endforeach; ?>
