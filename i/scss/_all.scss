@@ -27,6 +27,31 @@
 @import "@scss/manager_cabinet";
 @import "@scss/home_page";
 
+// Общий стиль для таблиц на сайте (применяется для таблиц с фильтрацией примерно как в XL)
 .site-table {
   @extend #{'.table', '.table-extra-condensed', '.table-bordered', '.table-sorted', '.table-sorted-by-middle'};
+}
+
+// ol-li со индикаторами стилизованными по badge
+ol.site-ol-list {
+  list-style: none;
+  counter-reset: item;
+
+  li {
+    counter-increment: item;
+
+    &:before {
+      content: counter(item);
+      background: rgb(108, 117, 125);
+      border-radius: 100%;
+      color: #FFF;
+      display: inline-block;
+      margin-right: 5px;
+      text-align: center;
+      width: 15px;
+      font-size: 11px;
+      padding: 2px;
+      line-height: 1;
+    }
+  }
 }
