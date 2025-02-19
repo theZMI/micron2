@@ -1,8 +1,7 @@
 <?php
 
 $model  = new DepartmentModel();
-$page   = intval(Get('p', 1));
-$list   = $model->getList($page);
+$list   = $model->getList();
 $action = Get('a');
 
 switch ($action) {

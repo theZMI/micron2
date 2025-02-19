@@ -22,7 +22,7 @@
                                 <td><?= $v->department ?></td>
                                 <td>
                                     <?php if (count($v->users)): ?>
-                                        <ol class="mb-0 ps-3">
+                                        <ol class="mb-0 ps-0 site-ol-list">
                                         <?php foreach ($v->users as $user): ?>
                                             <li><?= $user->full_name ?></li>
                                         <?php endforeach; ?>
@@ -32,7 +32,7 @@
                                     <?php endif ?>
                                 </td>
                                 <td width="1%" class="text-center">
-                                    <a href="<?= SiteRoot("_admin/departments/add_or_edit&id={$id}") ?>" class="btn btn-sm btn-primary rounded-pill" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
+                                    <a href="<?= SiteRoot("_admin/departments/add_or_edit&id={$v->id}") ?>" class="btn btn-sm btn-primary rounded-pill" title="Изменить данные"><i class="bi bi-pencil-fill"></i></a>
                                 </td>
                                 <td width="1%" class="text-center">
                                     <a href="<?= GetCurUrl('a=delete&id=' . $v->id) ?>" class="btn btn-sm btn-danger rounded-pill" onclick="return confirm('Удалить?')" title="Удалить"><i class="bi bi-trash3-fill"></i></a>
