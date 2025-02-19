@@ -21,10 +21,10 @@
                                 <td onclick="trClick(this)"><?= $v->id ?></td>
                                 <td onclick="trClick(this)"><?= $v->name ?></td>
                                 <td onclick="trClick(this)">
-                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->start_time, false) ?>
+                                    <?= OutputFormats::dateTime($v->shifts[0]->start_time, false) ?>
                                 </td>
                                 <td onclick="trClick(this)">
-                                    <?= OutputFormats::dateTimeRu($v->shifts[0]->end_time, false) ?>
+                                    <?= OutputFormats::dateTime($v->shifts[0]->end_time, false) ?>
                                     <span class="badge text-bg-secondary"><?= intval($v->shifts[0]->end_time - $v->shifts[0]->start_time + 1) / 86400 ?> д.</span>
                                 </td>
                                 <td onclick="trClick(this)"><?= $v->status_name !== (new ShiftModel())->statuses(ShiftModel::STATUS_CREATED)['name'] ? $v->status_name : '' ?></td>

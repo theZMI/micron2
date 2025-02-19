@@ -72,9 +72,15 @@
                                     natsort($cells);
 
                                     $isEmpty = !count(array_filter($cells));
-                                    $isSelect = $uniq <= 10 && $uniq < $total // Показывать select если вариантов не больше 10-ти
-                                                ||
-                                                ($uniq <= 20 && $uniq <= 0.33*$total && $uniq < $total); // Если select сокращает кол-во пунктов до 1/3 от общего числа вариантов, но не больше 20
+                                    $filter  = $tableFilters[$v] ?? 'auto';
+                                    if ($filter === 'auto')
+                                    {
+                                        $isSelect = $uniq <= 10 && $uniq < $total // Показывать select если вариантов не больше 10-ти
+                                            ||
+                                            ($uniq <= 20 && $uniq <= 0.33*$total && $uniq < $total); // Если select сокращает кол-во пунктов до 1/3 от общего числа вариантов, но не больше 20
+                                    } else {
+                                        $isSelect = $filter === 'select';
+                                    }
                                     ?>
                                     <?php if ($isEmpty): ?>
                                     <?php elseif ($isSelect): ?>
@@ -85,7 +91,7 @@
                                             <?php endforeach; ?>
                                         </select>
                                     <?php else: ?>
-                                        <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>" />
+                                        <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= $defaultTableValues[$v] ?? '' ?>" />
                                     <?php endif; ?>
                                 </td>
                             <?php $i++; endforeach; ?>
