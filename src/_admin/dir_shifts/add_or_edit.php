@@ -70,12 +70,12 @@ if (Post('is_set')) {
                 $v['id'] = max($v['id'], 0);
             }
             foreach ($userTasks as $userTask) {
-                $taskModel                = new TaskModel($userTask['id'] ?: null);
-                $taskModel->task          = $userTask['task'];
-                $taskModel->description   = $userTask['description'];
-                $taskModel->deadline_time = $userTask['deadline'];
-                $taskModel->user_id       = $worker_id;
-                $taskModel->shift_id      = $shift_id;
+                $taskModel                      = new TaskModel($userTask['id'] ?: null);
+                $taskModel->task                = $userTask['task'];
+                $taskModel->description         = $userTask['description'];
+                $taskModel->deadline_time_only  = $userTask['deadline'];
+                $taskModel->user_id             = $worker_id;
+                $taskModel->shift_id            = $shift_id;
                 $taskModel->flush();
             }
         };

@@ -184,7 +184,7 @@
                                         id: <?= intval($task->id) ?>,
                                         task: '<?= $task->task ?>',
                                         description: <?= json_encode($task->description) ?>,
-                                        deadline: <?= intval($task->deadline_time) ?>
+                                        deadline: <?= intval($task->deadline_time_only) ?>
                                     },
                                 <?php endforeach; ?>
                             ],

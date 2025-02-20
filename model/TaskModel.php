@@ -26,7 +26,7 @@ class TaskModel extends SiteModel
             'is_photo_5_required'      => 'bool',
             'status'                   => 'int',
             'last_status_change_time'  => 'int',
-            'deadline_time'            => 'int',
+            'deadline_time_only'       => 'int',
             'done_time'                => 'int',
             'shift_id'                 => 'int',
             'user_id'                  => 'int',
@@ -58,7 +58,7 @@ class TaskModel extends SiteModel
               `last_status_change_time` INT DEFAULT NULL,
               `last_update_time` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
-              `deadline_time` INT DEFAULT NULL,
+              `deadline_time_only` INT DEFAULT NULL,
               `done_time` INT DEFAULT NULL,
               `shift_id` INT DEFAULT NULL,
               `user_id` INT DEFAULT NULL,
@@ -86,14 +86,14 @@ class TaskModel extends SiteModel
     public function __get($key)
     {
         return match ($key) {
-            'is_done'       => +$this->status === self::STATUS_DONE,
-            'is_failed'     => +$this->status === self::STATUS_FAILED,
-            'shift'         => new ShiftModel($this->shift_id),
-            'user'          => $this->shift->user,
-            'status_label'  => $this->statuses(+$this->status)['label'],
-            'creator_id'    => $this->shift->creator_id,
-            'creator'       => $this->shift->creator,
-            default         => parent::__get($key),
+            'is_done'      => +$this->status === self::STATUS_DONE,
+            'is_failed'    => +$this->status === self::STATUS_FAILED,
+            'shift'        => new ShiftModel($this->shift_id),
+            'user'         => $this->shift->user,
+            'status_label' => $this->statuses(+$this->status)['label'],
+            'creator_id'   => $this->shift->creator_id,
+            'creator'      => $this->shift->creator,
+            default        => parent::__get($key),
         };
     }
 

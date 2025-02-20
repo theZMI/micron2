@@ -16,7 +16,7 @@ export class TaskModel extends ModelWindowDB {
                 ret = new UserModel(+receiver.user_id);
                 break;
             case 'deadline_inFormat':
-                ret = formatDateTime(receiver.deadline_time);
+                ret = formatDateTime(receiver.deadline_time_only);
                 break;
             default:
                 ret = super.__get(target, prop, receiver);

@@ -25,7 +25,7 @@ foreach ($list as $k => $v) {
     $tableData[$v->id] = [
         $v->id,
         "<strong class='me-2'>{$v->task}</strong>" .
-        ( $v->deadline_time ? ('<span class="badge text-white text-bg-secondary">До '.FormatTimeInterval(+$v->deadline_time).'</span>') : '' ) . '<br>' .
+        ( $v->deadline_time_only ? ('<span class="badge text-white text-bg-secondary">До '.FormatTimeInterval(+$v->deadline_time_only).'</span>') : '' ) . '<br>' .
         "<div class='mt-1'>{$v->description}</div>",
         $v->status_label,
         $v->creator->full_name,

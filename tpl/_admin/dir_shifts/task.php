@@ -2,8 +2,8 @@
 
     <div class="tasks-block-task-task">
         <?= $task->task ?>
-        <?php if ($task->deadline_time): ?>
-            <div class="tasks-block-task-deadline ps-2 pe-2">До <?= FormatTimeInterval(+$task->deadline_time) ?></div>
+        <?php if ($task->deadline_time_only): ?>
+            <div class="tasks-block-task-deadline ps-2 pe-2">До <?= FormatTimeInterval(+$task->deadline_time_only) ?></div>
         <?php endif; ?>
         <div class="mb-2">
             <?= $task->status_label ?>

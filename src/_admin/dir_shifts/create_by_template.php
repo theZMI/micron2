@@ -28,7 +28,7 @@ if (+Get('step') === 2) {
             $newTaskModel->is_photo_3_required      = $task->is_photo_3_required;
             $newTaskModel->is_photo_4_required      = $task->is_photo_4_required;
             $newTaskModel->is_photo_5_required      = $task->is_photo_5_required;
-            $newTaskModel->deadline_time            = $task->deadline_time;
+            $newTaskModel->deadline_time_only       = $task->deadline_time;
             $newTaskModel->shift_id                 = $shift_id;
         }
 
