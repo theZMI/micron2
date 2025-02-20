@@ -9,6 +9,7 @@
     "ext-curl": "*",
     "ext-zlib": "*",
     "ext-iconv": "*",
+    "ext-mysqli": "*",
     "thezmi/dbsimple": "dev-master",
     "thezmi/dbsimple-models": "dev-master",
     "thezmi/output-formats": "dev-master",
