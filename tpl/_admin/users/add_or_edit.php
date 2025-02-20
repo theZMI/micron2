@@ -20,7 +20,7 @@
                     <select name="department_id" class="form-control">
                         <option value="0">Выберите...</option>
                         <?php foreach ($departments as $department): ?>
-                            <option value="<?= $department->id ?>"<?= intval($modelParam('department_id')) === +$department->id ? ' selected' : '' ?>><?= $department->department ?></option>
+                            <option value="<?= $department->id ?>"<?= intval($modelParam('department_id')) === +$department->id ? ' selected' : '' ?>><?= $department->name ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
