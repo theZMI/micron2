@@ -24,7 +24,9 @@
     "endroid/qr-code": "^5.0",
     "yoomoney/yookassa-sdk-php": "^3.2",
     "without-composer/onesignal-simple-push-notification": "1.0.0",
-    "nyholm/dsn": "^2.0"
+    "nyholm/dsn": "^2.0",
+    "jellybellydev/image-orientation-fix": "^3.2",
+    "phpoffice/phpspreadsheet": "^4.0"
   },
   "repositories": [
     {

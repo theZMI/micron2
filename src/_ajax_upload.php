@@ -1,5 +1,9 @@
 <?php
 
+use ImageOrientationFix\ImageOrientationFixer;
+
+ini_set('memory_limit', '1G');
+
 $fileName       = '';
 $isImageUpload  = $isImageUpload ?? false;
 $defWidth       = $defWidth ?? 0;
@@ -26,7 +30,11 @@ if ($isSet) {
             $uploadedFile = $uploader->GetInf('full_path');
             $isImage      = @is_array(getimagesize($uploadedFile));
             if ($isImage) {
-                fix_orientation($uploadedFile);
+                try {
+                    $iof = new ImageOrientationFixer($uploadedFile);
+                    $iof->fix();
+                } catch (\Throwable $e) {
+                }
             }
             $response['success']  = true;
             $response['fileName'] = $uploader->GetInf('file_name');
