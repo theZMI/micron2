@@ -13,7 +13,7 @@ foreach ($list as $k => $v) {
     $tableData[$v->id] = [
         $v->id,
         $v->full_name,
-        $v->department?->department,
+        $v->department?->name,
         $v->role ? $v->roles($v->role) : '---',
         $v->job_title,
         $v->login,

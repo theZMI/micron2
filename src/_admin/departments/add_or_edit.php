@@ -7,19 +7,19 @@ $modelParam = function ($param, $default = '') use (&$model) {
 
 $msg = '';
 if (Post('is_set')) {
-    $department = Post('department');
+    $name       = Post('name');
     $use_timer  = Post('use_timer') === 'on';
     $errs       = [];
 
-    if (empty($department)) {
+    if (empty($name)) {
         $errs[] = "Введите название отдела";
     }
 
     if (count($errs)) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
-        $model->department = $department;
-        $model->use_timer  = intval($use_timer);
+        $model->name      = $name;
+        $model->use_timer = intval($use_timer);
 
         $id = $model->flush();
 

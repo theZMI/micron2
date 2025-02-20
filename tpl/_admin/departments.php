@@ -19,7 +19,7 @@
                         <?php foreach ($list as $id => $v): ?>
                             <tr>
                                 <td><?= $v->id ?></td>
-                                <td><?= $v->department ?></td>
+                                <td><?= $v->name ?></td>
                                 <td>
                                     <?php if (count($v->users)): ?>
                                         <ol class="mb-0 ps-0 site-ol-list">

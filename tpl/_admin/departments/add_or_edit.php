@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col">
             <h1 class="mt-4 mb-4">
-                <span class="pull-start"><?= $model->isExists() ? "Отдел: ".$modelParam('department') : 'Новый отдел' ?></span>
+                <span class="pull-start"><?= $model->isExists() ? "Отдел: ".$modelParam('name') : 'Новый отдел' ?></span>
             </h1>
             <form action="<?= GetCurUrl() ?>" method="post">
                 <input type="hidden" name="is_set" value="1">
                 <?= $msg ?>
                 <div class="mb-4">
                     <label class="form-label">Название:</label>
-                    <input type="text" name="department" class="form-control" value="<?= $modelParam('department') ?>" required>
+                    <input type="text" name="name" class="form-control" value="<?= $modelParam('name') ?>" required>
                 </div>
                 <div class="form-check form-switch form-switch-lg mb-5">
                     <input class="form-check-input" type="checkbox" name="use_timer" id="flexCheckUseTimer" role="switch" <?= $modelParam('use_timer') ? 'checked' : '' ?>>
