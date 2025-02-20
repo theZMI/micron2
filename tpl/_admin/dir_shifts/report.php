@@ -21,6 +21,8 @@
                             <?php $shift = (new ShiftModel())->findOne(['dir_id' => $dir_id, 'user_id' => $user->id]) ?>
                             <div class="mb-3">
                                 <h4>Задачи:</h4>
+                                <?php IncludeCom('_admin/dir_shifts/report_tasks', ['shift' => $shift]) ?>
+                                <?php /*
                                 <?php if (empty($shift) || !count($shift->tasks)): ?>
                                     <div class="text-center pt-3 pb-3">
                                         Нет задач
@@ -32,6 +34,7 @@
                                         <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
+                                */ ?>
                             </div>
 
                             <div class="mb-3">
