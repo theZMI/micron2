@@ -2,10 +2,6 @@
 
 trait SingletonTrait
 {
-    private function __construct()
-    {
-    }
-
     public static function getInstance(): static
     {
         static $o = null;

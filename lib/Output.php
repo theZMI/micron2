@@ -2,6 +2,8 @@
 
 class Output
 {
+    private function __construct() { }
+
     use SingletonTrait;
 
     public function htmlValidate($c)

@@ -2,6 +2,8 @@
 
 class Input
 {
+    private function __construct() { }
+
     use SingletonTrait;
 
     // Очищает входные данные

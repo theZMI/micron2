@@ -37,7 +37,7 @@ class DbCacheModel extends \SiteModel implements ICache
 
     public function has(string $key): bool
     {
-        return (bool)$this->db->selectCell("SELECT `id` FROM ?# WHERE `key` = ?", $this->table, $key);
+        return boolval($this->db->selectCell("SELECT `id` FROM ?# WHERE `key` = ?", $this->table, $key));
     }
 
     public function get(string $key): mixed

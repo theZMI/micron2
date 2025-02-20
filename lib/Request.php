@@ -5,6 +5,8 @@
  */
 class Request
 {
+    private function __construct() { }
+
     use SingletonTrait;
 
     private $lastLangDetect = null;
