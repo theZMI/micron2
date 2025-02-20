@@ -14,6 +14,7 @@ class ShiftModel extends SiteModel
             'end_time'         => 'int',
             'status'           => 'int',
             'create_time'      => 'int',
+            'creator_id'       => 'int',
             'last_update_time' => 'int',
             'dir_id'           => 'int',
         ];
@@ -29,6 +30,7 @@ class ShiftModel extends SiteModel
               `end_time` INT DEFAULT NULL,
               `status` INT DEFAULT NULL,
               `create_time` INT DEFAULT NULL,
+              `creator_id` INT DEFAULT NULL,
               `last_update_time` INT DEFAULT NULL,
               `dir_id` INT DEFAULT NULL,
               PRIMARY KEY (`id`)
@@ -81,6 +83,7 @@ class ShiftModel extends SiteModel
             'progress'    => $calcProgress(),
             'user'        => new UserModel($this->user_id),
             'status_name' => $this->statuses(+$this->status)['name'],
+            'creator'     => new AdminModel($this->creator_id),
             default       => parent::__get($key)
         };
     }

@@ -60,6 +60,7 @@ if (Post('is_set')) {
         $shiftModel->start_time = $start_time;
         $shiftModel->end_time   = $end_time;
         $shiftModel->dir_id     = $dir_id;
+        $shiftModel->creator_id = $g_admin->id;
         $shift_id               = $shiftModel->flush();
         $saveShiftTasks         = function() use ($tasks, $worker_id, $shift_id) {
             $commonTasks = $tasks['common'] ?? [];
