@@ -3,7 +3,7 @@ export function trClick(td) {
     let hrefAlt = $(td).closest('tr').find('a:first');
     let gotoLink = href.length ? href.attr('href') : ( hrefAlt.length ? hrefAlt.attr('href') : '' );
 
-    if (!gotoLink) {
+    if (!gotoLink || gotoLink === '#') {
         return;
     }
 
