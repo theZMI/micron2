@@ -32,7 +32,8 @@
     </script>
 </head>
 
-<h1 class="mt-4 mb-4">Таблицы с мультисортировкой</h1>
+<h1 class="mt-4">Таблицы с мультисортировкой</h1>
+<p class="mb-4">Для более удобной работы смотри компонент: _dev/xl_table</p>
 
 <div id="table-with-filters" class="table-responsive mb-4 table-extra-condensed-wrapper">
     <table class="site-table">
