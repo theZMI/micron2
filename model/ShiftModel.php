@@ -47,8 +47,8 @@ class ShiftModel extends SiteModel
     public function statuses($status = null)
     {
         $all = [
-            self::STATUS_CREATED => ['name' => '<span class="badge text-white text-bg-secondary">В работе</span>'],
-            self::STATUS_DONE    => ['name' => '<span class="badge text-white text-bg-success">Закрыта</span>'],
+            self::STATUS_CREATED => ['name' => 'В работе', 'label' => '<span class="badge text-white text-bg-secondary">В работе</span>'],
+            self::STATUS_DONE    => ['name' => 'Закрыта', 'label' => '<span class="badge text-white text-bg-success">Закрыта</span>'],
         ];
         return is_null($status) ? $all : $all[$status];
     }
@@ -76,15 +76,16 @@ class ShiftModel extends SiteModel
         };
 
         return match ($key) {
-            'tasks'       => (new TaskModel())->find(['shift_id' => $this->id]),
-            'params'      => (new ShiftParamModel())->find(['shift_id' => $this->id]),
-            'dir'         => (new DirShiftsModel($this->dir_id)),
-            'is_template' => $this->dir->is_template,
-            'progress'    => $calcProgress(),
-            'user'        => new UserModel($this->user_id),
-            'status_name' => $this->statuses(+$this->status)['name'],
-            'creator'     => new AdminModel($this->creator_id),
-            default       => parent::__get($key)
+            'tasks'        => (new TaskModel())->find(['shift_id' => $this->id]),
+            'params'       => (new ShiftParamModel())->find(['shift_id' => $this->id]),
+            'dir'          => (new DirShiftsModel($this->dir_id)),
+            'is_template'  => $this->dir->is_template,
+            'progress'     => $calcProgress(),
+            'user'         => new UserModel($this->user_id),
+            'status_name'  => $this->statuses(+$this->status)['name'],
+            'status_label' => $this->statuses(+$this->status)['label'],
+            'creator'      => new AdminModel($this->creator_id),
+            default        => parent::__get($key)
         };
     }
 

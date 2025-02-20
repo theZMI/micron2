@@ -80,6 +80,13 @@ class DirShiftsModel extends SiteModel
             }
             $statuses = array_unique($statuses);
             return count($statuses) === 1 ? $statuses[0] : '';
+        } elseif ($key === 'status_label') {
+            $statuses = [];
+            foreach ($this->shifts as $shift) {
+                $statuses[] = $shift->status_label;
+            }
+            $statuses = array_unique($statuses);
+            return count($statuses) === 1 ? $statuses[0] : '';
         }
         return parent::__get($key);
     }
