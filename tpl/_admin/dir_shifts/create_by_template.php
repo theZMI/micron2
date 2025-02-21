@@ -8,7 +8,7 @@
                 <table class="site-table">
                     <?php if (count($list)): ?>
                         <tr>
-                            <th>ID</th>
+                            <th width="50">ID</th>
                             <th>Название</th>
                             <th colspan="1">Действия</th>
                         </tr>
@@ -17,7 +17,7 @@
                                 <td><?= $v->id ?></td>
                                 <td><?= $v->name ?></td>
                                 <td width="1%" class="text-center">
-                                    <a href="<?= GetCurUrl("step=2&template_id={$v->id}") ?>" class="btn btn-sm btn-primary rounded-pill" title="Создать на основе этого шаблона">Далее</a>
+                                    <a href="<?= GetCurUrl("step=2&template_id={$v->id}") ?>" class="btn btn-sm btn-primary rounded-pill ps-2 pe-2 text-nowrap" title="Создать на основе этого шаблона">Этот<i class="bi bi-chevron-right ms-1"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

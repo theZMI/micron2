@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid mb-4">
     <div class="row">
         <div class="col">
 
@@ -8,7 +8,7 @@
                     <i class="bi bi-plus-lg me-2"></i>Добавить
                 </a>
             </h1>
-            <div class="table-responsive table-extra-condensed-wrapper mb-4">
+            <div class="table-responsive table-extra-condensed-wrapper">
                 <table class="site-table">
                     <thead>
                     <tr>

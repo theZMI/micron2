@@ -7,11 +7,11 @@
             <form action="<?= GetCurUrl() ?>" method="post">
                 <input type="hidden" name="is_set" value="1">
                 <?= $msg ?>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Название:</label>
                     <input type="text" name="name" class="form-control" value="<?= $modelParam('name') ?>">
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Тип параметра:</label>
                     <select name="type" class="form-control">
                         <?php foreach (ParamModel::getTypes() as $k => $v): ?>

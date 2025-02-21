@@ -57,6 +57,12 @@ body {
     color: rgba(0, 0, 0, 0.25) !important;
   }
 
+  input.form-control,
+  select.form-control,
+  textarea.form-control {
+    background: #F5F5F5;
+  }
+
   // На больших экранах сделать отступ больше для меню и футера
   @include media-breakpoint-up(lg) {
     .container-fluid {
@@ -82,5 +88,23 @@ body {
 
   .progress-bar {
     text-shadow: 0 1px rgba(0,0,0, 0.25);
+  }
+
+  .modal {
+    &-dialog {
+      .modal-header,
+      .modal-footer {
+      }
+
+      .modal-header {
+        h3 {
+          line-height: 1.25;
+        }
+      }
+
+      .modal-body {
+        box-shadow: 0 0 15px rgba(0,0,0,0.1) inset;
+      }
+    }
   }
 }

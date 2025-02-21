@@ -7,15 +7,15 @@
             <form action="<?= GetCurUrl() ?>" method="post">
                 <input type="hidden" name="is_set" value="1">
                 <?= $msg ?>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">ФИО:</label>
                     <input type="text" name="full_name" class="form-control" value="<?= $modelParam('full_name') ?>">
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Телефон:</label>
                     <input type="text" name="phone" class="form-control phone-mask" value="<?= $modelParam('phone') ?>">
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Отдел:</label>
                     <select name="department_id" class="form-control">
                         <option value="0">Выберите...</option>
@@ -24,11 +24,11 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Должность:</label>
                     <input type="text" name="job_title" class="form-control" value="<?= $modelParam('job_title') ?>">
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Роль сотрудника:</label>
                     <select name="role" class="form-control">
                         <?php foreach ($model->roles() as $role => $roleName): ?>
@@ -37,7 +37,7 @@
                     </select>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Пароль:</label>
                     <?php if ($model->isExists()): ?>
                         <div>

@@ -1,5 +1,9 @@
 <?php
 
+$data = ReadXL(BASEPATH . 'tmp/example.xls', [12, 13]);
+Xmp($data);
+die;
+
 echo "This is test script";
 Xmp($_GET);
 Xmp($_POST);

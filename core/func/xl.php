@@ -1,6 +1,11 @@
 <?php
 
-function ReadXL(string $path)
+/**
+ * @param string $path - путь от XL-файла
+ * @param array $nDateFields - номера колонок в которых хранятся даты (в XL формате)
+ * @return array
+ */
+function ReadXL(string $path, $nDateFields = [])
 {
     $getXLReader = function($path) {
         return match (pathinfo($path, PATHINFO_EXTENSION)) {
@@ -9,13 +14,28 @@ function ReadXL(string $path)
             default => new \PhpOffice\PhpSpreadsheet\Reader\Xlsx($path),
         };
     };
+    $convertXLDatesToTimestamps = function() use (&$res, &$nDateFields) {
+        if (count($nDateFields)) {
+            foreach ($res as $k => $row) {
+                foreach ($row as $n => $cell) {
+                    if (in_array($n, $nDateFields)) {
+                        if (!is_numeric($cell)) {
+                            continue;
+                        }
+                        $res[$k][$n] = FromExcelToLinux($cell);
+                    }
+                }
+            }
+        }
+    };
 
     $reader = $getXLReader($path);
     $reader->setReadDataOnly(true);
     $spreadsheet = $reader->load($path);
-
     $sheet = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
-    return $sheet->toArray();
+    $res = $sheet->toArray();
+    $convertXLDatesToTimestamps();
+    return $res;
 }
 
 function FromExcelToLinux($excelTime) // $excelTime - это количество дней от 1900-го года

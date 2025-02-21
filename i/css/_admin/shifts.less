@@ -1,93 +1,46 @@
-.tasks-block {
+.tasks {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 10px;
   padding-bottom: 10px;
+}
 
-  &-task {
-    border: 1px solid #DDD;
-    padding: 10px;
-    width: 402px;
-    border-radius: 7px;
-    color: #000;
-    position: relative;
+.task {
+  width: 300px;
+  min-height: 150px;
+  transition: all 0.3s ease;
+  border: 1px solid #DDD;
+  background: #F5F5F5;
+  padding: 10px;
+  border-radius: 7px;
+  color: #000;
+  position: relative;
 
-    &-task {
-      font-weight: bold;
-    }
-
-    &-description {
-      font-size: 13px;
-    }
-
-    &-separator {
-      margin: 15px auto;
-      width: 50px;
-      height: 3px;
-      background: #EEE;
-      border-radius: 3px;
-    }
-
-    &-deadline {
-      padding: 2px 8px;
-      background: rgb(108, 117, 125);
-      color: #FFF;
-      font-size: 11px;
-      border-radius: 10px;
-      float: right;
-      margin-top: 3px;
-      font-weight: normal;
-    }
-
-    &-info-block {
-      line-height: 1.25;
-
-      &-label {
-        display: block;
-        color: #AAA;
-      }
-
-      &-info {
-
-      }
-    }
-
-    &-user-report {
-      &-avatar {
-        vertical-align: top;
-      }
-
-      &-comment {
-        display: inline-block;
-        position: relative;
-        background: #EEE;
-        border-radius: 10px;
-        margin-left: 7.5px;
-        max-width: calc(100% - 47px);
-
-        &-arrow {
-          position: absolute;
-          left: -15px;
-          top: 0;
-          color: #EEE;
-          font-size: 25px;
-        }
-
-        &-text {
-          padding: 7.5px 15px;
-          font-size: 13px;
-          min-height: 50px;
-
-          &-footer {
-            display: inline-block;
-            padding-top: 2.5px;
-            padding-bottom: 3.5px;
-            float: right;
-            color: #999;
-          }
-        }
-      }
-    }
+  &:hover {
+    border-color: #0d6efd;
   }
+
+  &-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  &-description {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+
+  &-deadline {
+    position: absolute;
+    right: -5px;
+    top: -9px;
+    font-size: 11px;
+    border-radius: 10px;
+    border: none 0;
+    padding: 3px 9px;
+  }
+}
+
+.btn-add-task {
 }

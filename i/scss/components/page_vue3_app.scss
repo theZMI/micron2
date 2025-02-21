@@ -1,0 +1,34 @@
+#page-app {
+  &[v-cloak] {
+    display: none;
+  }
+  &:not([v-cloak]) ~ .app-loading {
+    display: none;
+  }
+}
+
+.app-loading { // Индикатор загрузки приложения
+  display: grid;
+  place-content: center;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  &-icon {
+    border: 1px solid #DDD;
+    padding: 30px;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  &-status {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #000;
+  }
+}
