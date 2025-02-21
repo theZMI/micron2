@@ -127,7 +127,10 @@ $menu = [
                 'link' => SiteRoot('examples/live_filter'),
                 'name' => 'Мультифильтры (как в XL)',
             ],
-
+            [
+                'link' => SiteRoot('examples/xl'),
+                'name' => 'Работа с XL файлами',
+            ],
         ],
     ],
     [
