@@ -14,7 +14,7 @@ import "magicsuggest-alpine/magicsuggest.css";
 import "@scss/components/magicsuggest.scss";
 import "@webpack/src/MainMenuInit";
 import "@webpack/src/IMaskInit";
-import "@ts/helpers/pwd_shower";
+import "@ts/helpers/pwdShower";
 import { trClick } from "@ts/helpers/trClick";
 import { createApp } from "vue/dist/vue.esm-bundler";
 import { UserModel } from "@ts/models/UserModel";
