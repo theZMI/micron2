@@ -24,6 +24,10 @@ $menu = [
             ],
             'divider',
             [
+                'link' => SiteRoot('examples/api'),
+                'name' => 'Примеры API',
+            ],
+            [
                 'link' => SiteRoot('examples/ajax_form'),
                 'name' => 'Ajax-формы',
             ],
@@ -130,6 +134,18 @@ $menu = [
             [
                 'link' => SiteRoot('examples/xl'),
                 'name' => 'Работа с XL файлами',
+            ],
+            [
+                'link' => SiteRoot('examples/mobile_detector'),
+                'name' => 'Mobile detect',
+            ],
+            [
+                'link' => SiteRoot('examples/simple_captcha'),
+                'name' => 'Simple captcha',
+            ],
+            [
+                'link' => SiteRoot('examples/number_format_js'),
+                'name' => 'Работа с js ф-ей number_format()',
             ],
         ],
     ],
