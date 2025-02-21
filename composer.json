@@ -28,7 +28,8 @@
     "nyholm/dsn": "^2.0",
     "jellybellydev/image-orientation-fix": "^3.2",
     "phpoffice/phpspreadsheet": "^4.0",
-    "mobiledetect/mobiledetectlib": "^4.8"
+    "mobiledetect/mobiledetectlib": "^4.8",
+    "lorddashme/php-simple-captcha": "^1.2"
   },
   "repositories": [
     {
