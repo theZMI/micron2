@@ -73,6 +73,13 @@ class DirShiftsModel extends SiteModel
                 'percent_done'   => $total ? 100 * ($done / $total) : 0,
                 'percent_failed' => $total ? 100 * ($failed / $total) : 0,
             ];
+        } elseif ($key === 'status') {
+            $statuses = [];
+            foreach ($this->shifts as $shift) {
+                $statuses[] = $shift->status;
+            }
+            $statuses = array_unique($statuses);
+            return count($statuses) === 1 ? $statuses[0] : null;
         } elseif ($key === 'status_name') {
             $statuses = [];
             foreach ($this->shifts as $shift) {
@@ -93,22 +100,30 @@ class DirShiftsModel extends SiteModel
 
     public function find($params)
     {
+        $ret = parent::getList();
+
         $is_template = boolval($params['is_template'] ?? false);
         unset($params['is_template']);
 
         if (count($params) === 0) { // Если единственный параметр поиска это is_template
-            return array_filter(
-                parent::getList(),
+            $ret = array_filter(
+                $ret,
                 fn($v) => +$v->is_template === +$is_template
             );
         }
         if (isset($params['user_id'])) {
-            return array_filter(
-                parent::getList(),
+            $ret = array_filter(
+                $ret,
                 fn($v) => in_array(+$params['user_id'], $v->user_ids) && +$v->is_template === +$is_template
             );
         }
-        return [];
+        if (isset($params['status'])) {
+            $ret = array_filter(
+                $ret,
+                fn($v) => !is_null($v->status) && +$v->status === +$params['status']
+            );
+        }
+        return $ret;
     }
 
     public function getList($page = self::PAGE_ALL)
