@@ -129,10 +129,7 @@
                             <div class="pt-3 pb-3">
                                 <div class="form-check form-switch form-switch-md mb-2" v-for="param in possibleParams" :key="param.id">
                                     <input type="checkbox" role="switch" class="form-check-input" :id="`user_param_id__${worker.id}__${param.id}`" v-model="params[worker.id]" :value="param.id">
-                                    <label class="form-check-label ms-3 mt-1" :for="`user_param_id__${worker.id}__${param.id}`">
-                                        {{ param.name }}
-                                        <span class="badge bg-secondary rounded-pill">{{ param.type_name }}</span>
-                                    </label>
+                                    <label class="form-check-label ms-3 mt-1" :for="`user_param_id__${worker.id}__${param.id}`">{{ param.name }}</label>
                                 </div>
                             </div>
                         </div>
