@@ -5,10 +5,10 @@ if (!isset($shift)) {
 }
 
 $list                  = $shift->tasks;
-$tableHeader           = ['ID', 'Задача', 'Статус', 'Поставил задачу', 'Комментарий', 'Исполнена в'];
-$tableHeaderEnd        = '<th width="1%" colspan="2">Действия</th>';
-$tableHeaderEndFilters = '<td colspan="2"></td>';
-$colWidths             = ['ID' => '50', 'Задача' => 'auto', 'Комментарий' => 'auto'];
+$tableHeader           = ['ID', 'Задача', 'Статус', 'Комментарий', 'Исполнена в'];
+$tableHeaderEnd        = ''; // '<th width="1%" colspan="2">Действия</th>';
+$tableHeaderEndFilters = ''; // '<td colspan="2"></td>';
+$colWidths             = ['ID' => '50', 'Задача' => '33%', 'Комментарий' => 'auto'];
 $tableData             = [];
 $tableDataEnd          = [];
 foreach ($list as $k => $v) {
@@ -18,7 +18,6 @@ foreach ($list as $k => $v) {
         <?php if (strval($v->photo_1)): ?>
             <img src="<?= $v->photo_1 ?>" alt="" class="rounded img-fluid">
         <?php endif; ?>
-        <div class="text-end text-muted">Обновлено: <?= OutputFormats::dateTimeRu(+$v->last_status_change_time) ?></div>
     <?php
     $userComment = ob_get_clean();
 
@@ -28,11 +27,11 @@ foreach ($list as $k => $v) {
         ( $v->deadline_time_only ? ('<span class="badge text-white text-bg-secondary">До '.FormatTimeInterval(+$v->deadline_time_only).'</span>') : '' ) . '<br>' .
         "<div class='mt-1'>{$v->description}</div>",
         $v->status_label,
-        $v->creator->full_name,
         $userComment,
         OutputFormats::dateTime($v->done_time, false),
     ];
 
+    /*
     ob_start();
     ?>
         <td width="1%" class="text-center" style="display: none;">
@@ -43,6 +42,8 @@ foreach ($list as $k => $v) {
         </td>
     <?php
     $tableDataEnd[$v->id] = ob_get_clean();
+    */
+    $tableDataEnd[$v->id] = '';
 }
 $defaultTableValues = [];
 $tableFilters = [
