@@ -105,13 +105,13 @@ class ExtraPacker
     // По сути тот же самый array_merge
     private static function merge(): array
     {
-        $arrs         = func_get_args();
-        $ret          = [];
-        $retOnlyAddrs = [];          // Массив только адресов к файлам (нужен просто для более лаконичного вычисления)
+        $arrs      = func_get_args();
+        $ret       = [];
+        $onlyAddrs = []; // Массив только адресов к файлам (нужен просто для более лаконичного вычисления)
 
         foreach ($arrs as $arr) {
             foreach ($arr as $elem) {
-                if (in_array($elem['addr'], $retOnlyAddrs)) {
+                if (in_array($elem['addr'], $onlyAddrs)) {
                     foreach ($ret as $k => $v) {
                         if ($v['addr'] == $elem['addr']) {
                             if ($v['time'] < $elem['time']) {
@@ -121,7 +121,7 @@ class ExtraPacker
                     }
                 } else {
                     $ret[]          = $elem;
-                    $retOnlyAddrs[] = $elem['addr'];
+                    $onlyAddrs[] = $elem['addr'];
                 }
             }
         }
@@ -209,20 +209,12 @@ class ExtraPacker
             return true;
         }
 
-        $ret = false;
-        foreach ($now as $v) {
-            if (!in_array($v, $storage)) {
-                $ret = true;
-                break;
-            }
-        }
-
-        return $ret;
+        return !empty(array_diff($now, $storage));
     }
 
     private static function canUseGZIP(): bool
     {
-        return strstr($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') !== false && extension_loaded('zlib');
+        return str_contains($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') && extension_loaded('zlib');
     }
 
     private function htmlPack($html)
@@ -388,12 +380,12 @@ class ExtraPacker
 
     public function pack($html)
     {
-        if (strpos($html, self::TAG_CSS) === false && strpos($html, self::TAG_JS)) {
+        if (!str_contains($html, self::TAG_CSS) && !str_contains($html, self::TAG_JS)) {
             return $html;
         }
 
         ini_set('memory_limit', '1G');
-        ini_set('max_execution_time', '50');
+        ini_set('max_execution_time', '99');
 
         $before = microtime(true);
         $html   = $this->packJs ? $this->jsPack($html) : $html;
