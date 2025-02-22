@@ -22,30 +22,11 @@
                             <div class="mb-3">
                                 <h4>Задачи:</h4>
                                 <?php IncludeCom('_admin/dir_shifts/report_tasks', ['shift' => $shift]) ?>
-                                <?php /*
-                                <?php if (empty($shift) || !count($shift->tasks)): ?>
-                                    <div class="text-center pt-3 pb-3">
-                                        Нет задач
-                                    </div>
-                                <?php else: ?>
-                                    <div class="tasks-block">
-                                        <?php foreach($shift->tasks as $task): ?>
-                                            <?php IncludeCom('_admin/dir_shifts/task', ['task' => $task]) ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
-                                */ ?>
                             </div>
 
                             <div class="mb-3">
-                                <h4>Параметры смены:</h4>
-                                <div class="tasks-block">
-                                    <?php foreach ($shift->params as $param) {
-                                        echo '<div class="tasks-block-task">';
-                                        IncludeCom('_admin/params/shift_param', ['model' => $param]);
-                                        echo '</div>';
-                                    } ?>
-                                </div>
+                                <h4>Параметры:</h4>
+                                <?php IncludeCom('_admin/dir_shifts/report_params', ['shift' => $shift]) ?>
                             </div>
                         </div>
                     <?php $isFirst = false; endforeach; ?>
