@@ -209,7 +209,10 @@ class ExtraPacker
             return true;
         }
 
-        return !empty(array_diff($now, $storage));
+        return !empty(array_diff(
+            array_map(fn($v) => "{$v['time']}__{$v['addr']}", $now),
+            array_map(fn($v) => "{$v['time']}__{$v['addr']}", $storage)
+        ));
     }
 
     private static function canUseGZIP(): bool
