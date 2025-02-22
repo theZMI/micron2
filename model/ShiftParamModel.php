@@ -42,16 +42,26 @@ class ShiftParamModel extends SiteModel
         parent::__construct('shift_params', $id);
     }
 
+    public function statuses($status = null)
+    {
+        $all = [
+            self::STATUS_CREATED => ['name' => 'В работе...', 'label' => '<span class="text-white badge rounded-pill ps-2 pe-2 text-bg-secondary">В работе...</span>'],
+            self::STATUS_DONE    => ['name' => 'Установлен',  'label' => '<span class="text-white badge rounded-pill ps-2 pe-2 text-bg-success">Установлен</span>'],
+        ];
+        return is_null($status) ? $all : $all[$status];
+    }
+
     public function __get($key)
     {
         if ($key === 'param') {
             return new ParamModel($this->param_id);
-        }
-        elseif ($key === 'value') {
+        } elseif ($key === 'value') {
             $valueField = $this->param->getValueFieldName();
             return $this->$valueField;
         } elseif ($key === 'is_done') {
             return +$this->status === self::STATUS_DONE;
+        } elseif ($key === 'status_label') {
+            return $this->statuses(+$this->status)['label'];
         }
         return parent::__get($key);
     }

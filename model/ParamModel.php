@@ -9,7 +9,7 @@ class ParamModel extends SiteModel
     const TYPE_TIME     = 50;
 
     const STATUS_VISIBLE = 0;
-    const STATUS_HIDDEN = 1;
+    const STATUS_HIDDEN  = 1;
 
     public function scheme()
     {
