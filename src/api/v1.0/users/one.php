@@ -1,6 +1,5 @@
 <?php
 
-//die('me call');
 ini_set('memory_limit', '512M');
 
 $model         = $g_user;
