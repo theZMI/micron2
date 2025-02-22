@@ -91,8 +91,6 @@ class TaskModel extends SiteModel
             'shift'        => new ShiftModel($this->shift_id),
             'user'         => $this->shift->user,
             'status_label' => $this->statuses(+$this->status)['label'],
-            'creator_id'   => $this->shift->creator_id,
-            'creator'      => $this->shift->creator,
             default        => parent::__get($key),
         };
     }
