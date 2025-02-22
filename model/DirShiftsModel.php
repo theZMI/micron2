@@ -86,14 +86,14 @@ class DirShiftsModel extends SiteModel
                 $statuses[] = $shift->status_name;
             }
             $statuses = array_unique($statuses);
-            return count($statuses) === 1 ? $statuses[0] : '';
+            return count($statuses) === 1 ? $statuses[0] : 'В работе';
         } elseif ($key === 'status_label') {
             $statuses = [];
             foreach ($this->shifts as $shift) {
                 $statuses[] = $shift->status_label;
             }
             $statuses = array_unique($statuses);
-            return count($statuses) === 1 ? $statuses[0] : '';
+            return count($statuses) === 1 ? $statuses[0] : '<span class="badge text-white text-bg-secondary">В работе</span>';
         }
         return parent::__get($key);
     }
