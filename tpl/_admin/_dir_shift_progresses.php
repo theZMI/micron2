@@ -15,7 +15,7 @@
         <i class="bi bi-arrow-down"></i>
     </button>
 </div>
-<div class="more-info pt-2 pb-2" style="display: none;">
+<div class="more-info-content pt-2 pb-2" style="display: none;">
     <table class="table table-borderless border border-0 mb-0">
         <?php foreach ($model->shifts as $shift): ?>
             <tr>

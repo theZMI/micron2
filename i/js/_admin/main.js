@@ -5,6 +5,6 @@ $(() => {
             'transform',
             $(btn).css('transform') === 'none' ? 'rotate(180deg)' : ''
         );
-        $(btn).parent().next('.more-info').toggle();
+        $(btn).parent().next('.more-info-content').toggle();
     })
 });
