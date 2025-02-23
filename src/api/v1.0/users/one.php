@@ -2,7 +2,7 @@
 
 ini_set('memory_limit', '512M');
 
-$model         = $g_user;
+$model         = isset($id) ? new UserModel($id) : $g_user;
 $newPassword   = Post('new_password');
 $canEditFields = [
     'email',
