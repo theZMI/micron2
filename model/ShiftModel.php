@@ -121,6 +121,10 @@ class ShiftModel extends SiteModel
             $ret     = array_map(fn($id) => new self($id), $ids);
             return array_filter($ret, fn($v) => +$v->is_template === +$params['is_template']); // Если указано is_template=true, то работает только по шаблонам, иначе по сменам
         }
+        if (isset($params['time_from']) && isset($params['time_to'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `start_time` >= ?d AND `end_time` <= ?d", $this->table, $params['time_from'], $params['time_to']);
+            return array_map(fn($id) => new self($id), $ids);
+        }
 
         return [];
     }
