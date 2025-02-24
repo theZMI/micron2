@@ -12,7 +12,7 @@ foreach ($list as $k => $v) {
     $tableData[$v->id] = [
         $v->id,
         $v->name,
-        OutputFormats::dateTime($v->shifts[0]->create_time, false),
+        count($v->shifts) ? OutputFormats::dateTime($v->shifts[0]->create_time, false) : 0,
     ];
     ob_start();
     ?>
