@@ -26,7 +26,7 @@
                 <div class="tasks-block-task-user-report-comment-text">
                     <div><?= nl2br(strval($task->user_comment)) ?></div>
                     <?php if (strval($task->photo_1)): ?>
-                        <img src="<?= $task->photo_1 ?>" alt="" class="rounded img-fluid">
+                        <img src="<?= $task->photo_1 ?>" alt="" class="rounded img-fluid" style="max-width: 400px;">
                     <?php endif; ?>
                     <div class="tasks-block-task-user-report-comment-text-footer">Обновлено: <?= OutputFormats::dateTimeRu(+$task->last_status_change_time) ?></div>
                 </div>
