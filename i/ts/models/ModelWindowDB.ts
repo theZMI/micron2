@@ -14,6 +14,10 @@ export class ModelWindowDB extends Model {
         return all.find(v => +v.id === id);
     }
 
+    hasChanges() {
+        return true;
+    }
+
     flush(): number {
         const all = window.DB[this.table];
         for (const k in all) {
