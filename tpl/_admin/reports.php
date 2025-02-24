@@ -3,6 +3,9 @@
         <div class="col">
             <h1 class="mt-4 mb-4">
                 <span class="pull-start me-3">Отчёты</span>
+                <a href="<?= SiteRoot('_admin/reports/generate') ?>" class="btn btn-primary rounded-pill pull-end">
+                    <i class="bi bi-plus-lg me-2"></i>Недельный отчёт
+                </a>
             </h1>
             <?php
                 IncludeCom('_dev/xl_table', [
