@@ -28,7 +28,10 @@
 			options.before.call(this, contains, containsNot);
 
 			$(filterEl).show();
-			var searchers = g_searchers;
+			var filterGroupName = $(inputEl).data('searchers-group') || 'g_searchers';
+			console.log('filterGroupName=', filterGroupName, $(inputEl).val());
+			var searchers = window[filterGroupName];
+			console.log('searchers=', searchers);
 			if (searchers) {
 				for (var inputNum in searchers) {
 					var inputVal = searchers[inputNum];

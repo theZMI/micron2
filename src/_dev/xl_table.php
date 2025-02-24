@@ -17,3 +17,4 @@ if (!isset($tableData)) throw new RuntimeException("tableData must be set");
 $tableDataEnd          = $tableDataEnd ?? '';
 $defaultTableValues    = $defaultTableValues ?? [];
 $tableFilters          = $tableFilters ?? [];
+$divID                 = uniqid('');

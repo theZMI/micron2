@@ -1,25 +1,27 @@
 <head>
     <script type="text/javascript">
-        let g_searchers;
+        window['g_searchers_<?= $divID ?>'] = [];
 
         $(() => {
             <?php $countSearchers = count($tableHeader); ?>
             <?php for ($i = 1; $i <= $countSearchers; $i++): ?>
-            $('#table-with-filters').liveFilter(
-                '.live-filter-input-<?= $i ?>',
-                '.live-filter-data-block',
+            $('#table-with-filters-<?= $divID ?>').liveFilter(
+                '#table-with-filters-<?= $divID ?> .live-filter-input-<?= $i ?>',
+                '#table-with-filters-<?= $divID ?> .live-filter-data-block',
                 {
                     filterChildSelector: '.live-filter-data-block-filterinfo-<?= $i ?>',
                     before: function (elem, contains, containsNot) {
                         let searchers = {};
                         let selector = '';
                         <?php for ($j = 1; $j <= $countSearchers; $j++): ?>
-                        selector = '#table-with-filters .live-filter-input-<?= $j ?>';
-                        if ($(selector).val()) {
-                            searchers[<?= $j ?>] = $(selector).val();
-                        }
+                            selector = '#table-with-filters-<?= $divID ?> .live-filter-input-<?= $j ?>';
+                            if ($(selector).val()) {
+                                searchers[<?= $j ?>] = $(selector).val();
+                            }
                         <?php endfor ?>
-                        g_searchers = searchers;
+                        console.log('searchers = ', searchers);
+                        window['g_searchers_<?= $divID ?>'] = searchers;
+                        console.log('set into g_searchers_<?= $divID ?>', searchers);
                     },
                     after: function (elem, contains, containsNot) {
                     }
@@ -27,13 +29,13 @@
             );
             <?php endfor; ?>
 
-            $('#table-with-filters').find('input:first, select:first').trigger('change');
+            $('#table-with-filters-<?= $divID ?>').find('input:first, select:first').trigger('change');
         });
     </script>
 </head>
 
 
-<div id="table-with-filters" class="table-responsive mb-4 table-extra-condensed-wrapper">
+<div id="table-with-filters-<?= $divID ?>" class="table-responsive mb-4 table-extra-condensed-wrapper">
     <table class="site-table">
         <?php if (count($tableData)): ?>
             <thead>
@@ -70,14 +72,14 @@
                         ?>
                         <?php if ($isEmpty): ?>
                         <?php elseif ($isSelect): ?>
-                            <select class="form-control input-for-live-search live-filter-input-<?= $i ?>">
+                            <select class="form-control input-for-live-search live-filter-input-<?= $i ?>" data-searchers-group="g_searchers_<?= $divID ?>">
                                 <option value="">Неважно</option>
                                 <?php foreach ($cells as $cell): ?>
                                     <option value="begin_<?= $cell ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
                                 <?php endforeach; ?>
                             </select>
                         <?php else: ?>
-                            <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= $defaultTableValues[$v] ?? '' ?>" />
+                            <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= $defaultTableValues[$v] ?? '' ?>"  data-searchers-group="g_searchers_<?= $divID ?>" />
                         <?php endif; ?>
                     </td>
                 <?php $i++; endforeach; ?>

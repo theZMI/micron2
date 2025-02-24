@@ -1,6 +1,6 @@
 <head>
     <script type="text/javascript">
-        let g_searchers;
+        window.g_searchers = [];
 
         $(() => {
             <?php $countSearchers = count($tableHeader); ?>
@@ -19,7 +19,7 @@
                                 searchers[<?= $j ?>] = $(selector).val();
                             }
                         <?php endfor ?>
-                        g_searchers = searchers;
+                        window.g_searchers = searchers;
                     },
                     after: function (elem, contains, containsNot) {
                     }
