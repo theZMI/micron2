@@ -44,12 +44,12 @@ ol.site-ol-list {
     &:before {
       content: counter(item);
       background: rgb(108, 117, 125);
-      border-radius: 100%;
+      border-radius: 10px;
       color: #FFF;
       display: inline-block;
       margin-right: 5px;
       text-align: center;
-      width: 15px;
+      width: 22px;
       font-size: 11px;
       padding: 2px;
       line-height: 1;
