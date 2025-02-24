@@ -16,13 +16,40 @@
                     <input type="text" name="phone" class="form-control phone-mask" value="<?= $modelParam('phone') ?>">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Отдел:</label>
-                    <select name="department_id" class="form-control">
-                        <option value="0">Выберите...</option>
-                        <?php foreach ($departments as $department): ?>
-                            <option value="<?= $department->id ?>"<?= intval($modelParam('department_id')) === +$department->id ? ' selected' : '' ?>><?= $department->name ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <head>
+                        <script>
+                            $(() => {
+                                $('#ms-department-id').magicSuggest({
+                                    placeholder: 'Выбрать...',
+                                    data: [
+                                        <?php foreach ($departments as $department): ?>
+                                            {
+                                                id: <?= +$department->id ?>,
+                                                name: "<?= $department->name ?>"
+                                            },
+                                        <?php endforeach; ?>
+                                    ],
+                                    value: [
+                                        <?php foreach ($departments as $department): ?>
+                                            <?php
+                                                if (!in_array(+$department->id, $modelParam('department_ids'))) {
+                                                    continue;
+                                                }
+                                            ?>
+                                            {
+                                                id: <?= +$department->id ?>,
+                                                name: "<?= $department->name ?>"
+                                            },
+                                        <?php endforeach; ?>
+                                    ],
+                                    allowFreeEntries: false, // Разрешить собственный вариант
+                                    maxSelection: 99, // Максимальное количество вариантов
+                                });
+                            });
+                        </script>
+                    </head>
+                    <label class="form-label">Отдел</label>
+                    <input type="text" name="department_ids" class="form-control" id="ms-department-id">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Должность:</label>

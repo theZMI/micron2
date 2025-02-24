@@ -110,14 +110,16 @@ class CommonUserModel extends SiteModel
                 return DEFAULT_TIME_ZONE;
             case 'avatar_full_url':
                 return Root(Config(['uploader', $this->table, 'upload_path']) . $this->avatar);
-            case 'department_id':
-                $m = new UserDepartmentModel();
-                $list = $m->find(['user_id' => $this->id]);
-                return empty($list) ? [] : $list[0]->department_id;
-            case 'department':
-                return new DepartmentModel($this->department_id);
+            case 'department_ids':
+                $list = (new UserDepartmentModel())->find(['user_id' => $this->id]);
+                return empty($list) ? [] : array_map(fn($department) => $department->department_id, $list);
+            case 'departments':
+                return array_map(fn($department_id) => new DepartmentModel($department_id), $this->department_ids);
             case 'use_timer':
-                return $this->department->use_timer;
+                return array_reduce(
+                    $this->departments,
+                    fn($total, $department) => $total += $department->use_timer
+                );
             default:
                 $ret = parent::__get($key);
         }
@@ -126,15 +128,17 @@ class CommonUserModel extends SiteModel
 
     public function __set($key, $value)
     {
-        if ($key === 'department_id') {
+        if ($key === 'department_ids') {
             // Удаляем старые коннекты так как сейчас у нас 1 человек может быть в одном отделе
             $conns = (new UserDepartmentModel())->find(['user_id' => $this->id]);
             array_walk($conns, fn($conn) => $conn->delete());
 
-            $m = new UserDepartmentModel();
-            $m->user_id = $this->id;
-            $m->department_id = $value;
-            return $m;
+            foreach ($value as $department_id) {
+                $m                = new UserDepartmentModel();
+                $m->user_id       = $this->id;
+                $m->department_id = $department_id;
+            }
+            return true;
         }
         if ($key === 'phone') {
             $value = PhoneFilter($value);
@@ -220,14 +224,14 @@ class CommonUserModel extends SiteModel
     {
         global $g_admin;
 
-        $login         = $g_admin->login;
-        $user_id       = (new UserModel())->getIdByLogin($login);
-        $user          = new UserModel($user_id);
-        $department_id = intval($user->isExists() ? $user->department_id : 0);
+        $login          = $g_admin->login;
+        $user_id        = (new UserModel())->getIdByLogin($login);
+        $user           = new UserModel($user_id);
+        $department_ids = $user->isExists() ? $user->department_ids : [];
 
         $list = parent::getList($page);
-        if ($department_id) {
-            $list = array_filter($list, fn($v) => intval($v->department_id) === $department_id);
+        if (!empty($department_ids)) {
+            $list = array_filter( $list, fn($v) => in_array($v->department_id, $department_ids) );
         }
         return $list;
     }

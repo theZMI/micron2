@@ -8,17 +8,17 @@ $modelParam  = function ($param, $default = '') use (&$model) {
 
 $msg = '';
 if (Post('is_set')) {
-    $email         = Post('email');
-    $full_name     = explode(' ', Post('full_name', ''));
-    $surname       = $full_name[0] ?? '';
-    $first_name    = $full_name[1] ?? '';
-    $patronymic    = $full_name[2] ?? '';
-    $password      = Post('password');
-    $department_id = intval(Post('department_id'));
-    $phone         = PhoneFilter(Post('phone'));
-    $role          = intval(Post('role'));
-    $job_title     = Post('job_title');
-    $errs          = [];
+    $email          = Post('email');
+    $full_name      = explode(' ', Post('full_name', ''));
+    $surname        = $full_name[0] ?? '';
+    $first_name     = $full_name[1] ?? '';
+    $patronymic     = $full_name[2] ?? '';
+    $password       = Post('password');
+    $department_ids = array_values(Post('department_ids', []));
+    $phone          = PhoneFilter(Post('phone'));
+    $role           = intval(Post('role'));
+    $job_title      = Post('job_title');
+    $errs           = [];
 
     if (empty($full_name)) {
         $errs[] = "Пожалуйста впишите ФИО сотрудника";
@@ -35,17 +35,17 @@ if (Post('is_set')) {
     if (count($errs)) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
-        $model->surname       = $surname;
-        $model->first_name    = $first_name;
-        $model->patronymic    = $patronymic;
-        $model->email         = $email;
-        $model->login         = $email;
-        $model->status        = UserModel::STATUS_ACTIVE;
-        $model->gender        = UserModel::GENDER_UNKNOWN;
-        $model->department_id = $department_id;
-        $model->phone         = $phone;
-        $model->role          = $role;
-        $model->job_title     = $job_title;
+        $model->surname        = $surname;
+        $model->first_name     = $first_name;
+        $model->patronymic     = $patronymic;
+        $model->email          = $email;
+        $model->login          = $email;
+        $model->status         = UserModel::STATUS_ACTIVE;
+        $model->gender         = UserModel::GENDER_UNKNOWN;
+        $model->department_ids = $department_ids;
+        $model->phone          = $phone;
+        $model->role           = $role;
+        $model->job_title      = $job_title;
 
         if ($password) { // Если пароль задан, то устанавливаем его
             $model->pwd_hash = UserModel::makeHash($password);
