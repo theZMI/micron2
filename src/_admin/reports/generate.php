@@ -3,8 +3,8 @@
 $msg = '';
 
 if (Post('is_set')) {
-    $time_from = strtotime(Post('time_from') .  ' 00:00:00');
-    $time_to   = strtotime(Post('time_to') . ' 23:59:59');
+    $time_from = strtotime( substr(Post('time_from'), 0, 10) .  ' 00:00:00' );
+    $time_to   = strtotime( substr(Post('time_to'), 0, 10) . ' 23:59:59' );
     $shifts    = (new ShiftModel())->find(['time_from' => $time_from, 'time_to' => $time_to]);
 
     $tasks = [];

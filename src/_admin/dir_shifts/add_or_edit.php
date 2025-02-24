@@ -15,8 +15,8 @@ if (Post('is_set')) {
     $errs       = [];
     $worker_ids = Post('worker_ids');
     $tasks      = Post('tasks'); // [ common => [{task: string, description: string, deadline: int}...], worker_id => [...] ]
-    $start_time = strtotime(Post('start_time') . ' 00:00:00');
-    $end_time   = strtotime(Post('end_time') . ' 23:59:59');
+    $start_time = strtotime( substr(Post('start_time'), 0, 10) . ' 00:00:00' );
+    $end_time   = strtotime( substr(Post('end_time'), 0, 10) . ' 23:59:59' );
     $dir_name   = Post('dir_name');
     $dirModel   = new DirShiftsModel(+Get('id'));
     $wasWorkers = $dirModel->isExists() ? $dirModel->user_ids : [];
