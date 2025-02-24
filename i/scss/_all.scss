@@ -30,7 +30,7 @@
 
 // Общий стиль для таблиц на сайте (применяется для таблиц с фильтрацией примерно как в XL)
 .site-table {
-  @extend #{'.table', '.table-extra-condensed', '.table-bordered', '.table-sorted', '.table-sorted-by-middle'};
+  @extend #{'.table', '.table-hover', '.table-extra-condensed', '.table-bordered', '.table-sorted', '.table-sorted-by-middle'};
 }
 
 // ol-li со индикаторами стилизованными по badge
