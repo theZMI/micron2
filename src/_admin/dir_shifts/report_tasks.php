@@ -16,7 +16,7 @@ foreach ($list as $k => $v) {
     ?>
         <div><?= nl2br(strval($v->user_comment)) ?></div>
         <?php if (strval($v->photo_1)): ?>
-            <img src="<?= $v->photo_1 ?>" alt="" class="rounded img-fluid">
+            <img src="<?= $v->photo_1 ?>" alt="" class="rounded img-fluid" style="max-width: 400px;">
         <?php endif; ?>
     <?php
     $userComment = ob_get_clean();

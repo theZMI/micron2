@@ -2,9 +2,9 @@
     <div class="param-value param-value-text"><?= $model->value ?></div>
 <?php endif ?>
 <?php if (+$model->param->type === ParamModel::TYPE_IMAGE): ?>
-    <div class="param-value param-value-teximage">
+    <div class="param-value param-value-image">
         <?php if ($model->value): ?>
-            <img src="<?= $model->value ?>" alt="Preview to <?= $model->id ?>" class="rounded img-fluid">
+            <img src="<?= $model->value ?>" alt="Preview to <?= $model->id ?>" class="rounded img-fluid" style="max-width: 400px;">
         <?php else: ?>
             <span class="text-muted">Нет изображения</span>
         <?php endif; ?>
