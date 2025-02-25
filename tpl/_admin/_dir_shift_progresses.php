@@ -20,8 +20,8 @@
         <?php foreach ($model->shifts as $shift): ?>
             <tr>
                 <td class="border border-0 text-nowrap text-end pe-3"><?= $shift->user->full_name ?></td>
-                <td class="border border-0">
-                    <div class="progress-stacked" style="width: 125px;">
+                <td class="border border-0" style="width: 50%">
+                    <div class="progress-stacked">
                         <div class="progress" role="progressbar" style="width: <?= intval($shift->progress['percent_done']) ?>%" aria-valuenow="<?= intval($shift->progress['percent_done']) ?>" aria-valuemin="0" aria-valuemax="100">
                             <div class="progress-bar progress-bar-striped">
                                 <?= intval($shift->progress['done']) ?> / <?= intval($shift->progress['total']) ?>
