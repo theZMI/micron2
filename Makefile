@@ -1,3 +1,5 @@
 build-assets:
-	cd i/webpack \
- 	&& npm run build
+	cd i/ts \
+	&& tsc *.ts \
+	&& cd ../webpack \
+ 	&& npm run build -d

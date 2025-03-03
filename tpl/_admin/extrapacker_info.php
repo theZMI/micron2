@@ -12,17 +12,17 @@
                     <div class="ps-3">
                         <h4><?= ucfirst($type) ?></h4>
                         <div class="mb-5">
-                            <strong>Время запаковки:</strong><br>
+                            <strong>Время архивации:</strong><br>
                             <p class="ps-3"><?= FormatDate($arr[$type]['timestamp']) ?> UTC</p>
                         </div>
                         <div class="mb-5">
-                            <strong>Время работы запаковщика:</strong>
+                            <strong>Время работы extraPacker-а:</strong>
                             <div class="ps-3">
                                 <p><?= OutputFormats::number($arr[$type]['pack_time']["{$type}_pack_time"]) ?>с.</p>
                             </div>
                         </div>
                         <div class="mb-5">
-                            <strong>Запакованная файлы <?= ucfirst($type) ?>:</strong><br>
+                            <strong>Запакованные файлы <?= ucfirst($type) ?>:</strong><br>
                             <ul class="list-unstyled ps-3">
                                 <?php foreach ($arr[$type]['files'] as $file): ?>
                                     <li class="mb-1">

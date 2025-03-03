@@ -1,1 +1,0 @@
-<?php require BASEPATH . 'tpl/_admin/dir_shifts/add_or_edit.php'; ?>
