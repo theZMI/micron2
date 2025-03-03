@@ -1,5 +1,5 @@
-import { addMagicMethods } from "@ts/helpers/addMagicMethods";
-import { ModelWindowDB } from "@ts/models/ModelWindowDB";
+import { addMagicMethods } from "@/helpers/addMagicMethods";
+import { ModelWindowDB } from "@/models/ModelWindowDB";
 
 export class UserModel extends ModelWindowDB {
     constructor(id = null) {

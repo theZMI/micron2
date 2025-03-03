@@ -114,9 +114,10 @@ module.exports = {
         extensions: ['.ts', '.js', '.json', '.scss', '.less', '.css'],
         alias: {
             // Need duplicate into tsconfig.json for phpstorm's highlight
-            '@': path.resolve(__dirname, '..'),
-            '@js': path.resolve(__dirname, '../js'),
+            '@root': path.resolve(__dirname, '..'),
+            '@': path.resolve(__dirname, '../ts'),
             '@ts': path.resolve(__dirname, '../ts'),
+            '@js': path.resolve(__dirname, '../js'),
             '@css': path.resolve(__dirname, '../css'),
             '@data': path.resolve(__dirname, '../data'),
             '@less': path.resolve(__dirname, '../less'),
