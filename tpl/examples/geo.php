@@ -1,59 +1,59 @@
 <h1 class="mt-4 mb-4">GEO данные и ф-ии работы с ними</h1>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-6">
-        Данные GEO-позиции по IP:
         [code=Php]
-        Xmp(GetLocationByIP());
+        // Данные GEO-позиции по IP:
+        __(GetLocationByIP());
         [/code]
     </div>
     <div class="col-6">
         <?php
-        Xmp(GetLocationByIP());
+        __(GetLocationByIP());
         ?>
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-6">
-        Список стран:
         [code=Php]
-        Xmp(GetCountries());
+        // Список стран:
+        __(GetCountries());
         [/code]
     </div>
     <div class="col-6">
         <div style="max-height: 500px; overflow-y: scroll">
             <?php
-            Xmp(GetCountries());
+            __(GetCountries());
             ?>
         </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-6">
-        Страна по коду:
         [code=Php]
-        Xmp(GetCountryByCode('US'));
+        // Страна по коду:
+        __(GetCountryByCode('US'));
         [/code]
     </div>
     <div class="col-6">
         <?php
-        Xmp(GetCountryByCode('US'));
+        __(GetCountryByCode('US'));
         ?>
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-6">
-        Координаты по адресу:
         [code=Php]
-        Xmp(GetCoordinatesByAddress('калининградская область южный 54'));
+        // Координаты по адресу:
+        __(GetCoordinatesByAddress('калининградская область южный 54'));
         [/code]
     </div>
     <div class="col-6">
         <?php
-        Xmp(GetCoordinatesByAddress('калининградская область южный 54'));
+        __(GetCoordinatesByAddress('калининградская область южный 54'));
         ?>
     </div>
 </div>

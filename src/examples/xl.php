@@ -10,8 +10,8 @@ if ($downloadAsXL) {
         ['a' => 11, 'b' => 22, 'c' => 33, 'd' => 44, 'e' => 55],
         ['a' => '01-01-2025', 'b' => '01-01-2025 12:00:00', 'c' => time(), 'd' => '2025-01-01', 'e' => '2025/01/01'],
     ];
-    DownloadAsXL($data, 'example_xl_file.xls');
+    DownloadAsXL($data, 'micron_example_xl_file.xls');
 } elseif ($readLocalXL) {
-    $data = ReadXL(BASEPATH . 'tmp/example_xl_file.xls', [12, 13]);
-    Xmp($data);
+    $data = ReadXL(BASEPATH . 'i/data/example_xl_file.xls', [12, 13]);
+    __($data);
 }

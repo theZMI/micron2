@@ -14,7 +14,7 @@
         class UserProfessionModel extends MockupModel
         {
             // Определяем все наши захардкоженные данные прямо тут
-            protected function _getAllFromPseudoDB()
+            protected function _pseudoDB()
             {
                 return [
                     1 => ['id' => 1, 'name' => 'Программист'],
@@ -28,20 +28,20 @@
         // Теперь можем в компонентах использовать псевдо-модель будто она настоящая:
         $model = new UserProfessionModel(4);
         echo "<strong>Под ID=4 у нас в БД:</strong>";
-        Xmp($model->getData());
+        __($model->getData());
         echo "<br>";
         echo "<strong>А весь список в БД:</strong>";
-        Xmp($model->getList());
+        __($model->getList());
         [/code]
     </div>
     <div class="col" style="font-size: 13px;">
         <?php
         $model = new UserProfessionModel(4);
         echo "<strong>Под ID=4 у нас в БД:</strong>";
-        Xmp($model->getData());
+        __($model->getData());
         echo "<br>";
         echo "<strong>А весь список в БД:</strong>";
-        Xmp($model->getList());
+        __($model->getList());
         ?>
     </div>
 </div>
