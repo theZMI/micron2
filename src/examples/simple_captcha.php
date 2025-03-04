@@ -10,7 +10,10 @@ $checkCaptchaCode   = function(&$realCaptchaCode = '') use ($captcha) {
     $realCode = $captcha->getSession();
     $realCode = $realCaptchaCode = $realCode['code'] ?? '';
     $userCode = Post('captcha_code');
-    return mb_strtoupper($realCode) === mb_strtoupper($userCode);
+
+    $realCode = TranslateSimilarRuLettersToEn(mb_strtoupper($realCode));
+    $userCode = TranslateSimilarRuLettersToEn(mb_strtoupper($userCode));
+    return $realCode === $userCode;
 };
 
 // Обработка формы
