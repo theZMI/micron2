@@ -2,7 +2,7 @@
 
 class TelegramNotificator implements INotificator
 {
-    public function _request($uri, $curlParams = [])
+    private function _request($uri, $curlParams = [])
     {
         $url = 'https://api.telegram.org/bot' . Config('telegram_notificator')['token'] . '/' . $uri;
         $ch  = curl_init();
@@ -10,16 +10,6 @@ class TelegramNotificator implements INotificator
             CURLOPT_URL            => $url,
             CURLOPT_RETURNTRANSFER => true
         ], $curlParams));
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-//        curl_setopt($ch, CURLOPT_POST, 1);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-//            "Content-type: application/x-www-form-urlencoded"
-//        ]);
-
         $response = curl_exec($ch);
         curl_close($ch);
 
@@ -100,7 +90,7 @@ class TelegramNotificator implements INotificator
             ]
         );
 
-        if (!$response['ok']) {
+        if (!$fileResponse['ok']) {
             return null; // Не удалось получить информацию о файле
         }
 
