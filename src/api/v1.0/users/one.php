@@ -29,7 +29,7 @@ if (Post('is_set')) {
         }
         if ($k === 'avatar') {
             try {
-                $model->$k = SaveImageFromBase64(strval($v), "/upl/users/" . +$model->id);
+                $model->$k = SaveImageFromBase64(strval($v), "/upl/users/{$model->id}_".time());
             } catch (\Throwable $exception) {
             }
             continue;
@@ -45,6 +45,4 @@ $model->flush();
 $userData = $model->getDataToApi();
 unset($userData['pwd_hash']);
 
-(new ApiResponse())->normal(
-    array_merge($userData, ['token' => $g_user->pwd_hash])
-);
+(new ApiResponse())->normal($userData);
