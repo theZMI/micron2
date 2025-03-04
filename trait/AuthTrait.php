@@ -16,6 +16,11 @@ trait AuthTrait
             $this->db->selectCell("SELECT `id` FROM ?# WHERE `login` = ?", $this->table, $login);
     }
 
+    public function isLoginBusy($login)
+    {
+        return !!$this->getIdByLogin($login);
+    }
+
     public function isCorrectAuth($login, $password_hash)
     {
         $id    = (new static())->getIdByLogin($login);
@@ -38,11 +43,6 @@ trait AuthTrait
     public function isAuth()
     {
         return !!$this->curId();
-    }
-
-    public function isLoginBusy($login)
-    {
-        return $this->db->selectCell("SELECT COUNT(`id`) FROM ?# WHERE `login` = ?", $this->table, $login);
     }
 
     public function login($login, $pwd_hash)
