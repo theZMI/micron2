@@ -154,12 +154,12 @@ class CommonUserModel extends SiteModel
             $found = $this->db->selectCol("SELECT `id` FROM ?# WHERE `email` = ?", $this->table, $params['email']);
             $ids   = array_intersect($ids, $found);
         }
-        if (isset($params['telegram_login'])) {
-            $found = $this->db->selectCol("SELECT `id` FROM ?# WHERE `telegram_login` = ?", $this->table, $params['telegram_login']);
-            $ids   = array_intersect($ids, $found);
-        }
         if (isset($params['phone'])) {
             $found = $this->db->selectCol("SELECT `id` FROM ?# WHERE `phone` = ?", $this->table, PhoneFilter($params['phone']));
+            $ids   = array_intersect($ids, $found);
+        }
+        if (isset($params['telegram_login'])) {
+            $found = $this->db->selectCol("SELECT `id` FROM ?# WHERE `telegram_login` = ?", $this->table, $params['telegram_login']);
             $ids   = array_intersect($ids, $found);
         }
         if (isset($params['telegram_chat_id'])) {
