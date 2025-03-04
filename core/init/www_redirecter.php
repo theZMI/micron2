@@ -5,7 +5,7 @@
 $serverName    = stripos($_SERVER['SERVER_NAME'], 'www.') === 0 ? substr($_SERVER['SERVER_NAME'], 4) : $_SERVER['SERVER_NAME'];
 $params        = http_build_query(array_filter($_GET, fn($k) => $k !== 'micron_query', ARRAY_FILTER_USE_KEY));
 $requestURI    = GetQuery() . (strlen($params) ? "?$params" : '');
-$requestURI    = $requestURI === Config('defaultComponent') ? '/' : "/{$requestURI}";
+$requestURI    = $requestURI === Config('default_component') ? '/' : "/{$requestURI}";
 $isHttps       = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
 $protocol      = $isHttps ? 'https' : 'http';
 $input         = Input::getInstance();

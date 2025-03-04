@@ -143,7 +143,7 @@ class ExtraPacker_Config
         $noErrorsCode = '';
 
         // Если не debug режим, то выключаем javascript ошибки
-        if (!Config(['phpIni', 'display_errors'])) {
+        if (!Config(['php_ini', 'display_errors'])) {
             ob_start();
             ?>
             function __MyErrHandler(msg) {

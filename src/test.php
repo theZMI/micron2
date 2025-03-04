@@ -1,8 +1,8 @@
 <?php
 
 echo "This is test script";
-Xmp($_GET);
-Xmp($_POST);
+__($_GET);
+__($_POST);
 echo "Filtered par_3: " . Post('par_3');
 
 echo "Independence include EN-version:";

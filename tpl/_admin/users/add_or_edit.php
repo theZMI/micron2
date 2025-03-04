@@ -12,58 +12,13 @@
                     <input type="text" name="full_name" class="form-control" value="<?= $modelParam('full_name') ?>">
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">E-mail:</label>
+                    <input type="email" name="email" class="form-control" value="<?= $modelParam('email') ?>">
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Телефон:</label>
                     <input type="text" name="phone" class="form-control phone-mask" value="<?= $modelParam('phone') ?>">
                 </div>
-                <div class="mb-3">
-                    <head>
-                        <script>
-                            $(() => {
-                                $('#ms-department-id').magicSuggest({
-                                    placeholder: 'Выбрать...',
-                                    data: [
-                                        <?php foreach ($departments as $department): ?>
-                                            {
-                                                id: <?= +$department->id ?>,
-                                                name: "<?= $department->name ?>"
-                                            },
-                                        <?php endforeach; ?>
-                                    ],
-                                    value: [
-                                        <?php foreach ($departments as $department): ?>
-                                            <?php
-                                                if (!in_array(+$department->id, $modelParam('department_ids'))) {
-                                                    continue;
-                                                }
-                                            ?>
-                                            {
-                                                id: <?= +$department->id ?>,
-                                                name: "<?= $department->name ?>"
-                                            },
-                                        <?php endforeach; ?>
-                                    ],
-                                    allowFreeEntries: false, // Разрешить собственный вариант
-                                    maxSelection: 99, // Максимальное количество вариантов
-                                });
-                            });
-                        </script>
-                    </head>
-                    <label class="form-label">Отдел</label>
-                    <input type="text" name="department_ids" class="form-control" id="ms-department-id">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Должность:</label>
-                    <input type="text" name="job_title" class="form-control" value="<?= $modelParam('job_title') ?>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Роль сотрудника:</label>
-                    <select name="role" class="form-control">
-                        <?php foreach ($model->roles() as $role => $roleName): ?>
-                            <option value="<?= $role ?>"<?= intval($modelParam('role')) === $role ? ' selected' : '' ?>><?= strip_tags($roleName) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
                 <div class="mb-3">
                     <label class="form-label">Пароль:</label>
                     <?php if ($model->isExists()): ?>

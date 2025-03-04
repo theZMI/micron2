@@ -85,7 +85,7 @@ class ErrorLogger
         };
         $errorHandler      = $func ?: function ($errno, $errstr, $errfile, $errline, $trace) use ($logInDb, $logInFile) {
             $dbLogger = null;
-            if (Config('logErrorsIntoDb')) {
+            if (Config('log_errors_into_db')) {
                 $dbLogger = $logInDb($errno, $errstr, $errfile, $errline, $trace);
             }
 

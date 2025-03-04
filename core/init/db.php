@@ -1,3 +1,3 @@
 <?php
 
-Dbs::getInstance(Config('dbSimple'));
+Dbs::getInstance(Config('db_simple'));

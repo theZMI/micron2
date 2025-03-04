@@ -2,7 +2,7 @@
 
 const DEFAULT_TIME_ZONE = 'Europe/Kaliningrad';
 
-Config('phpIni', [
+Config('php_ini', [
     'error_reporting'        => E_ALL, // Выдавать все ошибки
     'display_errors'         => Env('DEBUG_MODE'), // Выводить ли ошибки в браузер
     'log_errors'             => true,

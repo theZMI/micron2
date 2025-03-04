@@ -2,6 +2,13 @@
 
 $action = Get('a', 'list');
 $id     = +Get('id');
+$print  = function ($data) {
+    try {
+        echo __($data);
+    } catch (\Throwable $e) {
+        Xmp($e);
+    }
+};
 
 ini_set('memory_limit', '1G');
 

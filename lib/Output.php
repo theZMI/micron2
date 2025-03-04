@@ -32,7 +32,7 @@ class Output
      */
     public function getContent($c)
     {
-        foreach (Config('prepareFunctions') as $func) {
+        foreach (Config('prepare_functions') as $func) {
             $c = call_user_func($func, $c);
         }
         return $c;
@@ -43,7 +43,7 @@ class Output
         require_once BASEPATH . 'lib/ExtraPacker/Config.php';
         require_once BASEPATH . 'lib/ExtraPacker/ExtraPacker.php';
 
-        $conf           = Config('extraPacker');
+        $conf           = Config('extra_packer');
         $packedFilesDir = BASEPATH . 'tmp/' . $conf['dir'];
         $extraPacker    = new ExtraPacker(
             ['ExtraPacker_Config', 'getPathJsFileFromUrl'],

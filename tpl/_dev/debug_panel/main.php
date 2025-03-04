@@ -13,7 +13,7 @@
         </li>
         <li>
             <span class="icon time"></span>
-            <?= number_format(floatval(microtime(true) - Config('startExecTime')), 3) ?> s
+            <?= number_format(floatval(microtime(true) - Config('start_exec_time')), 3) ?> s
         </li>
         <li>
             <span class="icon mem"></span>
@@ -142,7 +142,7 @@
                     <td>Query</td>
                     <td><?= GetQuery() ?></td>
                 </tr>
-                <?php foreach (Config('phpIni') as $k => $v): ?>
+                <?php foreach (Config('php_ini') as $k => $v): ?>
                     <tr>
                         <td><?= $k ?></td>
                         <td><?= VarDump($v) ?></td>

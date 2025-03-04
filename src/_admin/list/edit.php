@@ -25,7 +25,7 @@ if (Post('is_edit')) {
         $_POST[base64_decode($k)] = $v;
         unset($_POST[$k]);
     }
-    if ($file !== (Config('mainTpl') . '.php')) {
+    if ($file !== (Config('main_tpl') . '.php')) {
         if (!empty($title)) {
             $lines[] = '$g_lang["m_title"]       = "' . $title . '";';
         }

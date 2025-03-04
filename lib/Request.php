@@ -30,7 +30,7 @@ class Request
     public function getQuery($q = null)
     {
         $langs   = array_keys(Config('langs'));
-        $defPage = Config('defaultComponent');
+        $defPage = Config('default_component');
         $q       = is_null($q)
             ? (empty($_GET['micron_query']) ? $defPage : trim($_GET['micron_query'], "/"))
             : $q;

@@ -2,7 +2,7 @@
 
 use WideImage\WideImage;
 
-Config('isLoadInMainTpl', false);
+Config('is_load_in_main_tpl', false);
 
 $field              = Get('field');
 $defH               = intval(Get('def_h'));

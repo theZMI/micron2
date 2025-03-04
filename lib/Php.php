@@ -69,7 +69,7 @@ class Php
 
     public function __construct()
     {
-        $ini = Config('phpIni');
+        $ini = Config('php_ini');
         array_walk(
             $ini,
             fn($v, $k) => ini_set($k, $v)

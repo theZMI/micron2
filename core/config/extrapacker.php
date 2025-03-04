@@ -2,7 +2,7 @@
 
 require_once BASEPATH . 'core/config/webpack.php';
 
-Config('extraPacker', [
+Config('extra_packer', [
     'dir' => '_auto_merge_css_js',
 
     'packHtml' => false,

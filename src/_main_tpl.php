@@ -3,7 +3,7 @@
 // Оборачиваем главный контент
 $htmlAttrs = '';
 array_filter(
-    Config('htmlContainerAttrs'),
+    Config('html_container_attrs'),
     function ($v, $k) use (&$htmlAttrs) {
         $htmlAttrs .= " $k='{$v}'";
     },

@@ -2,7 +2,7 @@
 
 class UserProfessionModel extends MockupModel
 {
-    protected function _getAllFromPseudoDB()
+    protected function _pseudoDB()
     {
         return [
             1 => ['id' => 1, 'name' => 'Программист'],

@@ -130,8 +130,8 @@ function SiteRoot($uri = '')
     $isDefaultComponent = in_array(
         $ret,
         [
-            Env('SITE_ROOT_URL') . Config('defaultComponent'),
-            Env('SITE_ROOT_URL') . '?micron_query=' . Config('defaultComponent'),
+            Env('SITE_ROOT_URL') . Config('default_component'),
+            Env('SITE_ROOT_URL') . '?micron_query=' . Config('default_component'),
         ]
     );
     return $isDefaultComponent ? Env('SITE_ROOT_URL') : $ret;

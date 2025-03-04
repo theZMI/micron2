@@ -46,10 +46,9 @@ class UserPwdRecoverModel extends SiteModel
 
     public function isValidCode($userCode, $userEmail)
     {
-        $user    = (new UserModel())->findOne(['email' => $userEmail]) ?: new UserModel();
-        $code_id = $this->db->selectCell("SELECT `id` FROM ?# WHERE `user_id` = ? ORDER BY `create_time` DESC LIMIT 1", $this->table, $user->id);
-        $model   = new self($code_id);
-        // TODO: Ввести проверку ttl
-        return $model->isExists() && $model->code === $userCode;
+        $user  = (new UserModel())->findOne(['email' => $userEmail]) ?: new UserModel();
+        $id    = $this->db->selectCell("SELECT `id` FROM ?# WHERE `user_id` = ? ORDER BY `create_time` DESC LIMIT 1", $this->table, $user->id);
+        $model = new self($id);
+        return $model->isExists() && $model->code === strval($userCode) && +$model->ttl >= time();
     }
 }

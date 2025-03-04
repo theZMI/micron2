@@ -1,9 +1,9 @@
 <?php
 
-Config('dbSimple', [
+Config('db_simple', [
     'logDbInfo'  => Env('DEBUG_MODE'), // Логировать ли все запросы к БД? (по умолчанию можно посмотреть в DebugPanel)
     'logDbError' => true, // Логировать запросы в которых произошла ошибка (по умолчанию в dbLogFile складываются)
-    'dbLogFile'  => BASEPATH . 'tmp/db_errors.log',
+    'dbLogFile'  => BASEPATH . 'tmp/' . Env('DATABASE_LOG_FILE'),
     'databases'  => [
         'db' => [
             'dsn'        => Env('DATABASE_DSN'),

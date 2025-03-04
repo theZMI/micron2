@@ -12,7 +12,7 @@
                         <label for="floatingName">Имя <span class="text-danger">*</span></label>
                     </div>
                     <div class="form-floating input-with-bottom-line-only mb-3">
-                        <input type="text" class="form-control" name="last_name" value="<?= Post('last_name') ?>" id="floatingLastName" placeholder="Фамилия" required="required">
+                        <input type="text" class="form-control" name="surname" value="<?= Post('surname') ?>" id="floatingLastName" placeholder="Фамилия" required="required">
                         <label for="floatingLastName">Фамилия <span class="text-danger">*</span></label>
                     </div>
                     <div class="form-floating input-with-bottom-line-only mb-3">

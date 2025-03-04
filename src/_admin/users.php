@@ -3,7 +3,7 @@
 $model                 = new UserModel();
 $list                  = $model->getList();
 $action                = Get('a');
-$tableHeader           = ['ID', 'ФИО', 'Отдел', 'Роль', 'Должность', 'Логин', 'Телефон'];
+$tableHeader           = ['ID', 'ФИО', 'Логин', 'Телефон'];
 $tableHeaderEnd        = '<th width="1%" colspan="2">Действия</th>';
 $tableHeaderEndFilters = '<td colspan="2"></td>';
 $colWidths             = ['ID' => '50', 'ФИО' => 'auto'];
@@ -13,9 +13,6 @@ foreach ($list as $k => $v) {
     $tableData[$v->id] = [
         $v->id,
         $v->full_name,
-        implode('<br>', array_map(fn($d) => $d->name, $v->departments)),
-        $v->role ? $v->roles($v->role) : '---',
-        $v->job_title,
         $v->login,
         OutputFormats::mobilePhone((string)$v->phone),
     ];

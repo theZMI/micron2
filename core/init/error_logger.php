@@ -1,5 +1,5 @@
 <?php
 
-if (Config('useErrorLogger')) {
+if (Config('use_error_logger')) {
     new ErrorLogger();
 }

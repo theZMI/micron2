@@ -116,8 +116,12 @@ $menu = [
                 'name' => 'Для редиректов',
             ],
             [
-                'link' => SiteRoot('examples/vue_app'),
+                'link' => SiteRoot('examples/vue3_app'),
                 'name' => 'Vue3 приложение',
+            ],
+            [
+                'link' => SiteRoot('examples/vue3_default_app'),
+                'name' => 'Vue3 приложение с дефолтным шаблоном',
             ],
             [
                 'link' => SiteRoot('examples/round_to'),

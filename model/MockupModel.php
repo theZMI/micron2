@@ -4,11 +4,11 @@ abstract class MockupModel extends \Models\ModelExtends
 {
     protected $fakeData = [];
 
-    abstract protected function _getAllFromPseudoDB();
+    abstract protected function _pseudoDB();
 
     public function __construct($id = null)
     {
-        $all            = $this->_getAllFromPseudoDB();
+        $all            = $this->_pseudoDB();
         $this->fakeData = $all[$id] ?? [];
         // Not call parent constructor
     }
@@ -20,7 +20,7 @@ abstract class MockupModel extends \Models\ModelExtends
 
     public function getList($page = self::PAGE_ALL)
     {
-        $all   = $this->_getAllFromPseudoDB();
+        $all   = $this->_pseudoDB();
         $ret   = [];
         $class = get_called_class();
         foreach ($all as $k => $v) {

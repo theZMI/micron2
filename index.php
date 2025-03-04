@@ -25,9 +25,9 @@ SimpleRouter::start();
 $content = ob_get_clean();
 
 // If it's regular page, then we show it into main template
-if (Config('isLoadInMainTpl')) {
+if (Config('is_load_in_main_tpl')) {
     ob_start();
-    IncludeCom(Config('mainTpl'), ['content' => $content]);
+    IncludeCom(Config('main_tpl'), ['content' => $content]);
     $content = ob_get_clean();
 }
 
