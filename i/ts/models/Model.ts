@@ -1,4 +1,4 @@
-import { getNow } from "@/helpers/format_date";
+import { getNow } from "@/helpers/datetime";
 
 export abstract class Model {
     public data: {[key: string]: any} = {};

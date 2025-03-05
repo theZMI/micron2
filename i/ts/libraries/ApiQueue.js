@@ -1,5 +1,5 @@
 import Api from "@/libraries/Api";
-import { getNow } from "@/helpers/format_date";
+import { getNow } from "@/helpers/datetime";
 
 export default {
     TICK_TIME: 250,

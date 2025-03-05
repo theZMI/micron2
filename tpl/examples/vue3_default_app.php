@@ -7,7 +7,7 @@
 <?php IncludeCom('_dev/page_vue3_app_template', ['content' => ob_get_clean()]) ?>
 
 <script type="module">
-    import { formatTimer } from "/i/js/_dev/format_date.js";
+    import { formatTimer } from "/i/js/_dev/datetime.js";
 
     const loadingStopper = () => {
         let sum = 0;

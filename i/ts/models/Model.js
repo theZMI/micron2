@@ -1,4 +1,4 @@
-import { getNow } from "@/helpers/format_date";
+import { getNow } from "@/helpers/datetime";
 export class Model {
     getDataFromDB(id) {
         return this.getTableData().find(v => +v.id === +id) || {};
