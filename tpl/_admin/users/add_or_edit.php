@@ -1,7 +1,7 @@
 <div class="container-fluid mb-4">
     <div class="row">
         <div class="col">
-            <h1 class="mt-4 mb-4">
+            <h1 class="my-4">
                 <span class="pull-start"><?= $model->isExists() ? $modelParam('full_name') : 'Новый пользователь' ?></span>
             </h1>
             <form action="<?= GetCurUrl() ?>" method="post">

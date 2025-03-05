@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Default template to vue3 application</h1>
+<h1 class="my-4">Default template to vue3 application</h1>
 <p>In this template we add special loader which shown while vue application don't applied to #page-app</p>
 <?php ob_start() ?>
     <div style="padding: 30px; border-radius: 10px; background: #EEE;">

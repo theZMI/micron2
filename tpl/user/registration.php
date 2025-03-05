@@ -3,7 +3,7 @@
         <div class="col">
 
             <div class="registration-form">
-                <h1 class="mt-4 mb-4">Регистрация</h1>
+                <h1 class="my-4">Регистрация</h1>
                 <form action="<?= GetCurUrl() ?>" method="post">
                     <input type="hidden" name="is_register" value="1">
                     <?= $msg ?>

@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Примеры для number_format.js</h1>
+<h1 class="my-4">Примеры для number_format.js</h1>
 
 <script type="text/javascript" src="<?= Root('i/js/_dev/number_format.js') ?>"></script>
 <script>

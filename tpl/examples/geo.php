@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">GEO данные и ф-ии работы с ними</h1>
+<h1 class="my-4">GEO данные и ф-ии работы с ними</h1>
 
 <div class="row mb-3">
     <div class="col-6">

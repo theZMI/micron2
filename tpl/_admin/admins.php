@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
 
-            <h1 class="mt-4 mb-4">
+            <h1 class="my-4">
                 <span class="pull-start me-3">Администраторы</span>
                 <a href="<?= SiteRoot('_admin/admins/add_or_edit') ?>" class="btn btn-primary rounded-pill pull-end">
                     <i class="bi bi-plus-lg me-2"></i>Добавить

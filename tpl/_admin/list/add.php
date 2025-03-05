@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
 
-            <h1 class="mt-4 mb-4">Создать новую страницу</h1>
+            <h1 class="my-4">Создать новую страницу</h1>
             <form action="<?= GetCurUrl() ?>" method="post" class="form-horizontal">
                 <input type="hidden" name="is_create" value="1"/>
                 <?= $msg ?>

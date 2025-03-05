@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">QR codes:</h1>
+<h1 class="my-4">QR codes:</h1>
 <div class="row">
     <div class="col-12">
         [code=Php]

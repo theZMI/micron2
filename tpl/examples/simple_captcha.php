@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Простая captcha:</h1>
+<h1 class="my-4">Простая captcha:</h1>
 <form action="<?= GetCurUrl() ?>" method="post">
     <input type="hidden" name="is_set" value="1">
     <?= $msg ?>

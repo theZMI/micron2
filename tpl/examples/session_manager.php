@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Session manager</h1>
+<h1 class="my-4">Session manager</h1>
 <p>При использовании SessionManager не будет происходить блокировки скрипта целиком, а только на время работы с сессией.</p>
 <div class="row">
     <div class="col-6">

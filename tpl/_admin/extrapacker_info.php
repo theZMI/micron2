@@ -1,7 +1,7 @@
 <div class="container-fluid mb-4">
     <div class="row">
         <div class="col">
-            <h1 class="mt-4 mb-4">Информация по склеенным extraPacker-ом файлам</h1>
+            <h1 class="my-4">Информация по склеенным extraPacker-ом файлам</h1>
         </div>
     </div>
     <div class="row">

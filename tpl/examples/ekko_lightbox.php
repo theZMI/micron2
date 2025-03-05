@@ -2,7 +2,7 @@
     Show in lightbox
 </a>
 
-<h1 class="mt-4 mb-4">Gallery</h1>
+<h1 class="my-4">Gallery</h1>
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="row">

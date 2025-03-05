@@ -3,7 +3,7 @@
 <div class="container-fluid mb-4">
     <div class="row">
         <div class="col">
-            <h1 class="mt-4 mb-4">Лог ошибок</h1>
+            <h1 class="my-4">Лог ошибок</h1>
 
             <div class="table-responsive mb-4 table-extra-condensed-wrapper">
                 <table class="site-table">

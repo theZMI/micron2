@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Micron cache</h1>
+<h1 class="my-4">Micron cache</h1>
 <p>
     Скрипт при первом вызове сохраняет данные в кеш, при повторном вызове скрипта берёт данные из кеша.<br>
     В model/MicronCache можно указать драйвер для сохранения (DbCacheModel или FileCacheModel).<br>

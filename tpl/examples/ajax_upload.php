@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Example of ajax upload (for files and images)</h1>
+<h1 class="my-4">Example of ajax upload (for files and images)</h1>
 <form action="<?= GetCurUrl() ?>" id="ajax-example-form" <?= Uploader::FORM_LOAD ?>>
     <input type="hidden" name="is_set" value="1">
     <?= $msg ?>

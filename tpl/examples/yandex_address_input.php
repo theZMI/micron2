@@ -6,7 +6,7 @@
 </script>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=215f771a-e251-4871-b409-b1dfb06ed996&suggest_apikey=45ccec0e-0618-4571-b0fa-9e5ec4a080ad&lang=ru_RU&mode=debug&load=package.full&onload=mscDistance.Ymaps.ready&ns=ymaps" type="text/javascript"></script>
 
-<h1 class="mt-4 mb-4">Yandex address input</h1>
+<h1 class="my-4">Yandex address input</h1>
 <div class="form-group">
     <label>Адрес</label>
     <input type="text" name="address" class="form-control" id="id-suggest" value=""/>

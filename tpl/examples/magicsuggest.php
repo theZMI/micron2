@@ -20,7 +20,7 @@
     </script>
 </head>
 
-<h1 class="mt-4 mb-4">Magicsuggest</h1>
+<h1 class="my-4">Magicsuggest</h1>
 <div class="mb-3">
     <label class="form-label">Magicsuggest</label>
     <input type="text" name="params[param_number_1]" class="form-control" id="ms-params-test">

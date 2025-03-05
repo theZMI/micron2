@@ -1,4 +1,4 @@
-<h1 class="mt-4 mb-4">Форматы вывода данных</h1>
+<h1 class="my-4">Форматы вывода данных</h1>
 
 <div class="row mb-4">
     <div class="col-12">

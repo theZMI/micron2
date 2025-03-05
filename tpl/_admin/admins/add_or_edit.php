@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
 
-            <h1 class="mt-4 mb-4">
+            <h1 class="my-4">
                 <span class="pull-start"><h1><?= $admin_id ? "Редактирование администратора" : "Новый администратор" ?></h1></span>
             </h1>
             <form action="<?= GetCurUrl() ?>" method="post">

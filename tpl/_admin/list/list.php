@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
 
-            <h1 class="mt-4 mb-4">
+            <h1 class="my-4">
                 <span>
                     Редактирование страниц сайта <span class="badge bg-secondary text-uppercase"><?= $lang ?></span>
                 </span>

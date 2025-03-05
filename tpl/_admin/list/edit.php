@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
 
-            <h1 class="mt-4 mb-4"><?= $file ?> <span class="badge bg-secondary text-uppercase"><?= $lang ?></span></h1>
+            <h1 class="my-4"><?= $file ?> <span class="badge bg-secondary text-uppercase"><?= $lang ?></span></h1>
             <form action="<?= GetCurUrl() ?>" method="post" class="form-horizontal">
                 <input type="hidden" name="is_edit" value="1"/>
                 <?= $msg ?>
