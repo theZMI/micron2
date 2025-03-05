@@ -159,7 +159,7 @@ $menu = [
     ],
 ];
 
-$countMessages = 1;
+$countMessages = $g_user->countNotifies();
 $rightMenu     = [
     [
         'link'    => '#offcanvasUserMenu',

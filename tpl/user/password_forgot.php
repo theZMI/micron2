@@ -8,7 +8,7 @@
             <?= $msg ?>
             <div class="mb-5">
                 <label class="form-label"></label>
-                <input type="text" name="user_code" class="form-control form-control-lg is-code-input text-center" placeholder="• • • • •" maxlength="5" value="<?= Post('user_code') ?>">
+                <input type="text" name="user_code" class="form-control form-control-lg is-code-input text-center" placeholder="✱✱✱✱✱" maxlength="5" value="<?= Post('user_code') ?>">
                 <p class="text-muted text-center mt-2">Введите код полученный вами на e-mail: <strong><?= Post('email') ?></strong></p>
             </div>
             <div class="text-center">

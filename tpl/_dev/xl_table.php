@@ -14,10 +14,10 @@
                         let searchers = {};
                         let selector = '';
                         <?php for ($j = 1; $j <= $countSearchers; $j++): ?>
-                            selector = '#table-with-filters-<?= $divID ?> .live-filter-input-<?= $j ?>';
-                            if ($(selector).val()) {
-                                searchers[<?= $j ?>] = $(selector).val();
-                            }
+                        selector = '#table-with-filters-<?= $divID ?> .live-filter-input-<?= $j ?>';
+                        if ($(selector).val()) {
+                            searchers[<?= $j ?>] = $(selector).val();
+                        }
                         <?php endfor ?>
                         console.log('searchers = ', searchers);
                         window['g_searchers_<?= $divID ?>'] = searchers;
@@ -42,7 +42,7 @@
             <tr>
                 <?php $i = 1; foreach ($tableHeader as $v): ?>
                     <th width="<?= $colWidths[$v] ?? '1%' ?>"><?= $v ?></th>
-                <?php $i++; endforeach; ?>
+                    <?php $i++; endforeach; ?>
                 <?= $tableHeaderEnd ?>
             </tr>
             <tr>
@@ -64,8 +64,8 @@
                         if ($filter === 'auto')
                         {
                             $isSelect = $uniq <= 10 && $uniq < $total // Показывать select если вариантов не больше 10-ти
-                                        ||
-                                        ($uniq <= 20 && $uniq <= 0.33*$total && $uniq < $total); // Если select сокращает кол-во пунктов до 1/3 от общего числа вариантов, но не больше 20
+                                ||
+                                ($uniq <= 20 && $uniq <= 0.33*$total && $uniq < $total); // Если select сокращает кол-во пунктов до 1/3 от общего числа вариантов, но не больше 20
                         } else {
                             $isSelect = $filter === 'select';
                         }
@@ -75,14 +75,14 @@
                             <select class="form-control input-for-live-search live-filter-input-<?= $i ?>" data-searchers-group="g_searchers_<?= $divID ?>">
                                 <option value="">Неважно</option>
                                 <?php foreach ($cells as $cell): ?>
-                                    <option value="begin_<?= $cell ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
+                                    <option value="begin_<?= $smartStripTags($cell, true) ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
                                 <?php endforeach; ?>
                             </select>
                         <?php else: ?>
                             <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= $defaultTableValues[$v] ?? '' ?>"  data-searchers-group="g_searchers_<?= $divID ?>" />
                         <?php endif; ?>
                     </td>
-                <?php $i++; endforeach; ?>
+                    <?php $i++; endforeach; ?>
                 <?= $tableHeaderEndFilters ?>
             </tr>
             </thead>
@@ -93,18 +93,18 @@
                         <?php $colName = $tableHeader[$i-1]; ?>
                         <td onclick="trClick(this)" class="<?= isset($colWidths[$colName]) ? Translit("col-class-{$colName}") : 'text-nowrap' ?> ps-2 pe-2">
                             <?= $cell ?>
-                            <div class="hidden d-none live-filter-data-block-filterinfo-<?= $i ?>">begin_<?= strip_tags($cell) ?>_end</div>
+                            <div class="hidden d-none live-filter-data-block-filterinfo-<?= $i ?>">begin_<?= $smartStripTags($cell, true) ?>_end</div>
                         </td>
-                    <?php $i++; endforeach; ?>
+                        <?php $i++; endforeach; ?>
                     <?= $tableDataEnd[$id] ?>
                 </tr>
             <?php endforeach; ?>
             </tbody>
         <?php else: ?>
             <tbody>
-                <tr>
-                    <td class="text-center">Нет данных</td>
-                </tr>
+            <tr>
+                <td class="text-center">Нет данных</td>
+            </tr>
             </tbody>
         <?php endif ?>
     </table>

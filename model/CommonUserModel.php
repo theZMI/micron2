@@ -209,4 +209,9 @@ class CommonUserModel extends SiteModel
         $data['use_timer'] = $this->use_timer;
         return $data;
     }
+
+    public function countNotifies() {
+        // TODO: Здесь должно вычисляться количество нотификаций у юзера
+        return 1;
+    }
 }

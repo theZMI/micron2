@@ -18,3 +18,14 @@ $tableDataEnd          = $tableDataEnd ?? '';
 $defaultTableValues    = $defaultTableValues ?? [];
 $tableFilters          = $tableFilters ?? [];
 $divID                 = uniqid('');
+$smartStripTags        = function ($html, $openComments = false) {
+    $html = preg_replace_callback(
+        '/<!--.*?-->|<[^>]+>/s',
+        function ($matches) {
+            return str_starts_with($matches[0], '<!--') ? $matches[0] : '';
+        },
+        $html
+    );
+    $html = $openComments ? strtr($html, ['<!--' => '', '-->' => '']) : $html;
+    return trim($html);
+};
