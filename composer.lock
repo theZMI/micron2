@@ -1834,15 +1834,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theZMI/components__dbSimple.git",
-                "reference": "78373e5aa6d20102c4a187a0136055e8fbc92ea8"
+                "reference": "dec4f0310ba89bcbb71ba2814044e1556af1ce48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theZMI/components__dbSimple/zipball/78373e5aa6d20102c4a187a0136055e8fbc92ea8",
-                "reference": "78373e5aa6d20102c4a187a0136055e8fbc92ea8",
+                "url": "https://api.github.com/repos/theZMI/components__dbSimple/zipball/dec4f0310ba89bcbb71ba2814044e1556af1ce48",
+                "reference": "dec4f0310ba89bcbb71ba2814044e1556af1ce48",
                 "shasum": ""
             },
             "require": {
+                "ext-mysqli": "*",
                 "php": ">=7.1"
             },
             "default-branch": true,
@@ -1870,7 +1871,7 @@
                 "issues": "https://github.com/theZMI/components__dbSimple/issues",
                 "source": "https://github.com/theZMI/components__dbSimple/tree/master"
             },
-            "time": "2024-10-16T17:50:05+00:00"
+            "time": "2025-03-12T21:54:15+00:00"
         },
         {
             "name": "thezmi/dbsimple-models",
@@ -1878,12 +1879,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theZMI/components__dbSimpleModels.git",
-                "reference": "853c84d73e99619e1791ce9002f79699b49c3c5f"
+                "reference": "3b1ad7571e22da20291ff533b22eef3b98628050"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theZMI/components__dbSimpleModels/zipball/853c84d73e99619e1791ce9002f79699b49c3c5f",
-                "reference": "853c84d73e99619e1791ce9002f79699b49c3c5f",
+                "url": "https://api.github.com/repos/theZMI/components__dbSimpleModels/zipball/3b1ad7571e22da20291ff533b22eef3b98628050",
+                "reference": "3b1ad7571e22da20291ff533b22eef3b98628050",
                 "shasum": ""
             },
             "require": {
@@ -1914,7 +1915,7 @@
                 "issues": "https://github.com/theZMI/components__dbSimpleModels/issues",
                 "source": "https://github.com/theZMI/components__dbSimpleModels/tree/master"
             },
-            "time": "2022-04-08T00:42:12+00:00"
+            "time": "2026-05-27T14:56:52+00:00"
         },
         {
             "name": "thezmi/filelogger",
@@ -1922,12 +1923,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theZMI/components__filelogger.git",
-                "reference": "e95dbe9bf087967963ace4118b4214081a63da89"
+                "reference": "2c1abba0705e709242ce80f43689b8f92d403c41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theZMI/components__filelogger/zipball/e95dbe9bf087967963ace4118b4214081a63da89",
-                "reference": "e95dbe9bf087967963ace4118b4214081a63da89",
+                "url": "https://api.github.com/repos/theZMI/components__filelogger/zipball/2c1abba0705e709242ce80f43689b8f92d403c41",
+                "reference": "2c1abba0705e709242ce80f43689b8f92d403c41",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1959,7 @@
                 "issues": "https://github.com/theZMI/components__filelogger/issues",
                 "source": "https://github.com/theZMI/components__filelogger/tree/master"
             },
-            "time": "2021-01-18T17:14:02+00:00"
+            "time": "2025-10-19T16:12:36+00:00"
         },
         {
             "name": "thezmi/filesys",
@@ -2380,9 +2381,9 @@
     "stability-flags": {
         "thezmi/dbsimple": 20,
         "thezmi/dbsimple-models": 20,
-        "thezmi/output-formats": 20,
+        "thezmi/filelogger": 20,
         "thezmi/filesys": 20,
-        "thezmi/filelogger": 20
+        "thezmi/output-formats": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -2396,6 +2397,6 @@
         "ext-iconv": "*",
         "ext-mysqli": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

@@ -7,7 +7,7 @@ require_once BASEPATH . 'core/func/get_client_ip.php';
 function GetLocationByIP($ip = null)
 {
     $ip = $ip ?: GetClientIP();
-    return Env('DEBUG_MODE') ? _GetLocationByIPMockup($ip) : _GetLocationByIP($ip);
+    return IsLocalEnv() ? _GetLocationByIPMockup($ip) : _GetLocationByIP($ip);
 }
 
 function _GetLocationByIPMockup($ip)

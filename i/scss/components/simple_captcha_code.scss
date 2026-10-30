@@ -1,0 +1,36 @@
+.simple-captcha-code {
+  text-align: center;
+  max-width: 370px;
+
+  &-input {
+    height: 77px;
+    max-width: 162px;
+    text-align: center;
+    font-size: 25px;
+    letter-spacing: 5px;
+  }
+
+  &-spacer {
+    height: 30px;
+  }
+
+  &-in-modal-wnd {
+    margin-top: 30px;
+
+    .text-start.mb-1 {
+      display: none;
+    }
+  }
+}
+
+.simple-captcha-code-2 {
+  text-align: center;
+
+  &-in-modal-wnd {
+    margin-top: 30px;
+
+    .text-start.mb-1 {
+      display: none;
+    }
+  }
+}

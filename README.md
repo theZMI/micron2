@@ -91,8 +91,33 @@ Micron в данном случае:
   либо объявите ф-ю и подключите в /core/init/router.php согласно Пути 1<br>
   либо определите правило отбора нужных url-ов if-ом прямо в вашем, созданном файле<br>
 
-### Debug-panel
-Вызовите страницу с параметром ?debug_panel=1 и если у вас выставлен DEBUG_MODE=true, то внизу страницы (справа в свёрнутом виде) будет выведена debug-panel сайта в которой можно посмотреть запросы, время исполнения, настройки сайта, подключённые файлы и пр.
+### Debug-panel и бенчмарк
+При `DEBUG_MODE=1` внизу страницы (справа в свёрнутом виде) выводится debug-panel сайта, в которой можно посмотреть запросы, время исполнения, настройки сайта, подключённые файлы и пр. В ответы без главного шаблона (JSON, AJAX) панель не добавляется.<br>
+Клик по времени/памяти открывает бенчмарк: время и память по этапам запроса, по каждому компоненту и каждому запросу к БД, а так же итог отдельно для PHP, БД и внешних сервисов.<br>
+Свои замеры: `BM('Services / Название')` в начале и ещё раз в конце участка кода (метки, начинающиеся с `Services / `, попадают в итог по сервисам).
+
+### Секции `<bottom>`
+Аналогично `<head>`, компонент может написать `<bottom>...</bottom>` - содержимое всех таких секций собирается и вставляется перед `</body>` (удобно для скриптов, которым нужна вся разметка страницы).
+
+### Кеш запросов к БД
+`$db->select(AddDbCache("SELECT ..."))` - запрос кешируется (по умолчанию на время одного запроса к сайту, см. `pCacheFunc` в `core/config/db.php`).
+
+### Локальная разработка (`ENV=local`)
+При `ENV=local` в .env SMS не отправляются, а пишутся в `tmp/sms_mockup.log`, геолокация по IP отдаёт тестовые данные, service worker PWA не регистрируется. Проверка в коде: `IsLocalEnv()`.
+
+### Полезные классы и хелперы
+- `FlashParam` - значение, которое переживёт редирект: `(new FlashParam())->set('msg', 'Сохранено')`, на следующей странице `->get('msg')`
+- `BreadCrumb::getInstance()->add(['link' => SiteRoot('catalog'), 'text' => 'Каталог'])` - хлебные крошки (выводятся в главном шаблоне, если шагов больше одного)
+- `SendNotice($user, 'Текст', ['telegram', 'email', 'sms'])` - уведомление по всем включённым и подтверждённым у пользователя каналам
+- `GenNewCaptchaCode()` / `CheckCaptchaCode(Post('captcha_code'))` - картинка-капча; `CheckRecaptchaCode(Post('g-recaptcha-response'))` - Google reCAPTCHA (ключи `RECAPTCHA_SITE_KEY`/`RECAPTCHA_SECRET_KEY` в .env)
+- `GeneratePinCode($user)` / `CheckPinCode($user, GetCodeFromForm())` - одноразовые коды подтверждения
+
+### Готовые компоненты (`tpl/_dev`)
+- `_dev/simple_captcha_code`, `_dev/simple_captcha_code_in_modal_wnd` - капча-картинка (`['captcha' => GetCaptchaInstance()]`); `_dev/simple_captcha_code_2`, `_dev/simple_captcha_code_2_in_modal_wnd` - Google reCAPTCHA
+- `_dev/pin_code_block` - поля ввода одноразового кода (автопереход, вставка из буфера, автосабмит, таймер повторной отправки); на странице нужно Vue-приложение с `mixins: [window.pinCodeForm]`
+- `_dev/rating_stars` - звёзды рейтинга (`['rating' => 3, 'jsCallback' => 'onRate']`)
+- `_dev/bootstrap_validator` - валидация форм на клиенте
+- `_dev/pwa` (в `<head>`) и `_dev/network_status` - PWA и индикатор сети; `manifest.json` и `service_worker.js` кладутся в корень сайта и подключаются, только если они есть
 
 ### Примеры
 Смотрите примеры работы в папках src/examples и tpl/examples (так же можно вызвать через меню)

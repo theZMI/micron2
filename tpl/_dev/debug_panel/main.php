@@ -12,36 +12,139 @@
             <span class="icon hide-profile" onclick="g_debug.togglePanel()"></span>
         </li>
         <li>
-            <span class="icon time"></span>
-            <?= number_format(floatval(microtime(true) - Config('start_exec_time')), 3) ?> s
+            <a href="javascript:g_debug.toggle('i-benchmark')">
+                <span class="icon time"></span>
+                <?= number_format($totalTime, 3) ?> s
+            </a>
         </li>
         <li>
-            <span class="icon mem"></span>
-            <?= $debug->memoryUsage() ?>
+            <a href="javascript:g_debug.toggle('i-benchmark')">
+                <span class="icon mem"></span>
+                <?= $debug->memoryUsage() ?>
+            </a>
         </li>
         <li>
-            <span class="icon db"></span>
-            <a href="javascript:g_debug.toggle('i-databasa-log')">SQL</a>
+            <a href="javascript:g_debug.toggle('i-databasa-log')">
+                <span class="icon db"></span>
+                SQL
+            </a>
         </li>
         <li>
-            <span class="icon vars"></span>
-            <a href="javascript:g_debug.toggle('i-vars-log')">Vars <span class="small">(G: <?= count($_GET) ?> / P: <?= count($_POST) ?> / C: <?= count($_COOKIE) ?> / F: <?= count($_FILES) ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-vars-log')">
+                <span class="icon vars"></span>
+                Vars <span class="small">(G: <?= count($_GET) ?> / P: <?= count($_POST) ?> / C: <?= count($_COOKIE) ?> / F: <?= count($_FILES) ?>)</span>
+            </a>
         </li>
         <li>
-            <span class="icon files"></span>
-            <a href="javascript:g_debug.toggle('i-files')">Files <span class="small">(<?= count($debug->files()) ?>)</span></a>
+            <a href="javascript:g_debug.toggle('i-files')">
+                <span class="icon files"></span>
+                Files <span class="small">(<?= count($debug->files()) ?>)</span>
+            </a>
         </li>
         <li>
-            <span class="icon engine"></span>
-            <a href="javascript:g_debug.toggle('i-engine')">Engine</a>
+            <a href="javascript:g_debug.toggle('i-engine')">
+                <span class="icon engine"></span>
+                Engine
+            </a>
         </li>
         <li>
-            <span class="icon ini-values"></span>
-            <a href="javascript:g_debug.toggle('i-ini-values')">Ini + Exts</a>
+            <a href="javascript:g_debug.toggle('i-ini-values')">
+                <span class="icon ini-values"></span>
+                INI + Exts
+            </a>
         </li>
     </ul>
 
     <div id="i-debug-panel-all-panels" style="display: none;">
+        <div id="i-benchmark" style="display: none;">
+            <table style="max-width: 100%; overflow: scroll;">
+                <thead>
+                <tr>
+                    <th>Mark</th>
+                    <th>Exec time</th>
+                    <th>Used memory</th>
+                </tr>
+                </thead>
+                <?php $stat = Benchmark::getInstance()->stat() ?>
+                <?php if (!empty($stat)): ?>
+                    <tbody>
+                    <?php foreach ($stat['full_stat'] as $mark => $v): ?>
+                        <tr>
+                            <td>
+                                <?= str_contains($mark, '[more]') ? substr($mark, 0, stripos($mark, '[more]')) : $mark ?>
+                                <?= str_contains($mark, '[more]') ? '<a href="javascript:g_debug.toggle(\'i-more-info-'.md5($mark).'\')">[+]</a>' : '' ?>
+                                <div id="i-more-info-<?= md5($mark) ?>" style="display: none; white-space: pre;"><?= $mark ?></div>
+                            </td>
+                            <td>
+                                <?= number_format($v['execTime'], 5) ?>
+                                <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $v['execTime'], 'max' => $totalTime]) ?>
+                            </td>
+                            <td>
+                                <?= MemoryInFormat($v['usedMemory']) ?>
+                                <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $v['usedMemory'], 'max' => $totalMem]) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="99">
+                            &nbsp;
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>PHP (без debug-панели):</td>
+                        <td>
+                            <?= number_format($stat['PHP']['execTime'], 5) ?>
+                            (<?= +$stat['PHP']['count'] ?>)
+                            <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $stat['PHP']['execTime'], 'max' => $totalTime]) ?>
+                        </td>
+                        <td>
+                            <?= MemoryInFormat($stat['PHP']['usedMemory']) ?>
+                            <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $stat['PHP']['usedMemory'], 'max' => $totalMem]) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Databases:</td>
+                        <td>
+                            <?= number_format($stat['Databases']['execTime'], 5) ?>
+                            (<?= +$stat['Databases']['count'] ?>)
+                            <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $stat['Databases']['execTime'], 'max' => $totalTime]) ?>
+                        </td>
+                        <td>
+                            <?= MemoryInFormat($stat['Databases']['usedMemory']) ?>
+                            <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $stat['Databases']['usedMemory'], 'max' => $totalMem]) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Services:</td>
+                        <td>
+                            <?= number_format($stat['Services']['execTime'], 5) ?>
+                            (<?= +$stat['Services']['count'] ?>)
+                            <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $stat['Services']['execTime'], 'max' => $totalTime]) ?>
+                        </td>
+                        <td>
+                            <?= MemoryInFormat($stat['Services']['usedMemory']) ?>
+                            <?php IncludeCom('_dev/debug_panel/progress_bar', ['val' => $stat['Services']['usedMemory'], 'max' => $totalMem]) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total:</td>
+                        <td><?= number_format($stat['full_stat']['Request']['execTime'], 5) ?></td>
+                        <td><?= MemoryInFormat(memory_get_usage()) ?></td>
+                    </tr>
+                    </tfoot>
+                <?php else: ?>
+                    <tbody>
+                    <tr>
+                        <td colspan="99" class="text-center">Benchmark switch off</td>
+                    </tr>
+                    </tbody>
+                <?php endif; ?>
+            </table>
+            <div style="clear: both"></div>
+        </div>
+
         <div id="i-databasa-log" class="debug-panel" style="display: none;">
             <?= $debug->db() ?>
         </div>

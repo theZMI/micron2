@@ -1,0 +1,62 @@
+@bv-brand-danger: red;
+@bv-border-radius-base: 10px;
+@bv-input-group-addon-bg: 10px;
+
+
+.help-block {
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+.help-block.with-errors {
+  display: none;
+  color: red;
+  line-height: 1;
+
+  .list-of-errors {
+    line-height: 1.5;
+    display: inline-block;
+    background: @bv-brand-danger;
+    color: #FFF;
+    text-shadow: none;
+    padding: 1px 8px;
+    border-radius: @bv-border-radius-base;
+    font-size: 13px;
+  }
+}
+
+// При ошибке выделяем только красным только текст, а не shadow и border
+.has-error {
+  .input-group-addon,
+  .form-control {
+    box-shadow: none;
+    color: @bv-brand-danger;
+
+    &:hover, &:active, &:focus {
+    }
+
+    &::placeholder {
+      color: @bv-brand-danger;
+    }
+  }
+
+  &.form-floating {
+    .form-control {
+      color: unset;
+
+      &::placeholder {
+        color: transparent;
+      }
+    }
+  }
+
+  .input-group-addon {
+    background-color: @bv-input-group-addon-bg;
+  }
+}
+
+// Блок со списком ошибок от валидатора
+.list-of-errors {
+  margin-top: 0;
+  margin-bottom: 0;
+}

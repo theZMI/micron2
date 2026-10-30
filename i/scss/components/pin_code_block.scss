@@ -1,0 +1,48 @@
+.pin-code-block {
+  &-inputs {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .col-3 {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  &-input {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 40px;
+    letter-spacing: 0;
+    text-align: center;
+    height: auto;
+    //border-color: #FFF;
+  }
+
+  &-error-block {
+    text-align: center;
+    margin: 0;
+    padding: 7px 0 15px 0;
+  }
+
+  &-resend-block {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    height: 30px;
+    text-align: center;
+    color: #AAA;
+
+    .btn-link {
+      padding: 0;
+    }
+
+    &-timer {
+      color: #FFF;
+      background: #AAA;
+      border-radius: $border-radius;
+      padding: 2px 8px;
+      margin-left: 5px;
+    }
+  }
+}

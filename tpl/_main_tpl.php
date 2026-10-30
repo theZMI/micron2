@@ -24,6 +24,7 @@
 <body class="d-flex flex-column">
 <div id="wrapper" class="d-flex flex-column flex-grow-1">
     <?php IncludeCom('_main_tpl/menu') ?>
+    <?php IncludeCom('_main_tpl/breadcrumb') ?>
     <div class="container d-flex flex-column flex-grow-1">
         <div class="row flex-grow-1">
             <div class="col d-flex flex-column flex-grow-1">

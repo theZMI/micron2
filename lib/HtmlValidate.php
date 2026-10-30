@@ -3,7 +3,7 @@
 /**
  * Валидатор html кода
  *
- * Сливает head-ы в один
+ * Сливает head-ы в один, а содержимое всех <bottom>...</bottom> переносит в конец body
  */
 class HtmlValidate
 {
@@ -12,6 +12,7 @@ class HtmlValidate
     public function __construct($html)
     {
         $this->html = $this->headBodyMerge($html);
+        $this->html = $this->mergeBottoms($this->html);
     }
 
     public function get()
@@ -95,5 +96,26 @@ class HtmlValidate
         }
 
         return $html;
+    }
+
+    /**
+     * Собирает все <bottom>...</bottom> из компонентов и вставляет их содержимое перед </body>
+     * (удобно для скриптов, которые должны выполняться после загрузки всей разметки)
+     */
+    private function mergeBottoms($html)
+    {
+        preg_match_all('~<bottom>(.*?)</bottom>~is', $html, $m);
+        if (!count($m[0])) {
+            return $html;
+        }
+
+        $bottom = implode('', array_filter(array_unique($m[1])));
+        $html   = str_replace($m[0], '', $html);
+
+        // Если страница без главного шаблона (нет </body>), то просто дописываем в конец, чтобы ничего не потерять
+        $bodyClosePos = strripos($html, '</body>');
+        return $bodyClosePos === false
+            ? $html . $bottom
+            : substr_replace($html, $bottom, $bodyClosePos, 0);
     }
 }

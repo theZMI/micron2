@@ -24,6 +24,9 @@ class Output
         if (!Env('DEBUG_MODE')) {
             return $c;
         }
+        if (!Config('is_load_in_main_tpl')) { // В ответы без главного шаблона (JSON, AJAX, файлы) панель не добавляем
+            return $c;
+        }
         return $c . $this->getDebug();
     }
 
@@ -33,7 +36,10 @@ class Output
     public function getContent($c)
     {
         foreach (Config('prepare_functions') as $func) {
+            $fName = implode('->', array_map(fn($o) => is_scalar($o) ? $o : get_class($o), $func));
+            BM("Request / Prepare content / $fName");
             $c = call_user_func($func, $c);
+            BM("Request / Prepare content / $fName");
         }
         return $c;
     }

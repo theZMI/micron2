@@ -18,10 +18,14 @@ import "@ts/helpers/pwdShower";
 import { trClick } from "@ts/helpers/trClick";
 import { createApp } from "vue/dist/vue.esm-bundler";
 import { UserModel } from "@ts/models/UserModel";
+import { updateNetworkStatus } from "@ts/components/network_status";
+import pinCodeForm from "@webpack/src/pinCodeForm";
 
 window.bootstrap = bootstrap;
 window.Vue = { createApp };
 window.UserModel = UserModel;
 window.trClick = trClick;
+window.updateNetworkStatus = updateNetworkStatus; // Индикатор сети (компонент _dev/network_status), вызывается из _dev/pwa
+window.pinCodeForm = pinCodeForm; // Vue-mixin для компонента _dev/pin_code_block
 
 $.webpackCompitedAt = parseInt(Date.now() / 1000);

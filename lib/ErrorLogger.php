@@ -129,6 +129,9 @@ class ErrorLogger
                 ];
             }
             ob_start();
+            if (!headers_sent()) {
+                header(Php::status(500));
+            }
             IncludeCom(ini_get('display_errors') ? '_dev/error_logger_show' : '500', ['logger' => $logger]);
             $infoAboutError = ob_get_clean();
 

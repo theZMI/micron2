@@ -1,0 +1,53 @@
+.network-status {
+  text-align: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  min-width: 28px;
+  min-height: 28px;
+  width: fit-content;
+  margin: 0 auto;
+  line-height: 1;
+  padding: 5px;
+  border-radius: 0 0 5px 5px;
+  color: #000;
+  z-index: 99;
+  display: none;
+
+  &-informer-loading,
+  &-informer-error,
+  &-informer-success {
+    display: none;
+  }
+
+  &-loading {
+    display: block;
+    background: #444;
+
+    .network-status-informer-loading {
+      display: block;
+      text-align: center;
+      margin: 1px auto 0 auto;
+    }
+  }
+
+  &-error {
+    display: block;
+    background: $danger;
+
+    .network-status-informer-error {
+      display: block;
+    }
+  }
+
+  &-success {
+    //display: block;
+    display: none;
+    background: $success;
+
+    .network-status-informer-success {
+      display: block;
+    }
+  }
+}

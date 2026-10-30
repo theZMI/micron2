@@ -61,33 +61,22 @@ class Request
         return empty($q) ? $defPage : (new InputClean(Config('charset')))->_clean_input_data($q);
     }
 
-    public function getCurUrl($_pars = '')
+    /**
+     * Текущий url с изменёнными GET-параметрами
+     *
+     * @param string $appendQuery - параметры вида a=1&b=2, которые добавятся (или заменят текущие). Значение M_DELETE_PARAM удаляет параметр
+     */
+    public function getCurUrl($appendQuery = '')
     {
-        $pars = '';
-        $all  = $_GET;
+        parse_str((string)$appendQuery, $appendParams);
+        $getParams = array_merge($_GET, $appendParams); // То что передано в $appendQuery перетирает то что в $_GET
+        $getParams = array_filter($getParams, function ($v, $k) { // Убираем служебный micron_query и параметры, помеченные на удаление
+            return $k !== 'micron_query' && $v !== M_DELETE_PARAM;
+        }, ARRAY_FILTER_USE_BOTH);
+        $newQuery  = http_build_query($getParams); // Корректно кодирует значения и массивы
 
-        foreach (array_filter(explode('&', $_pars)) as $v) {
-            if (strpos($v, '=') === false) {
-                $all[$v] = null;
-            } else {
-                $t = explode('=', $v);
-                list($id, $val) = $t;
-                $all[$id] = urldecode($val);
-            }
-        }
-
-        foreach ($all as $k => $v) {
-            if ($k == 'micron_query') {
-                continue;
-            }
-            if ($v == M_DELETE_PARAM) {
-                continue;
-            }
-            $pars .= ("{$k}=" . urlencode(strval($v)) . "&");
-        }
-        $pars = substr($pars, 0, -1) ? ('&' . substr($pars, 0, -1)) : '';
-
-        return SiteRoot($this->getQuery() . $pars);
+        // Путь берём из getQuery() (без языкового префикса), язык добавит SiteRoot
+        return SiteRoot($this->getQuery() . ($newQuery ? "&{$newQuery}" : ''));
     }
 
     public function getLastLang()

@@ -6,6 +6,8 @@
  */
 class UserPwdRecoverModel extends SiteModel
 {
+    const CODE_LENGTH = 6; // Сколько цифр в коде
+
     public function scheme()
     {
         return [
@@ -64,7 +66,7 @@ class UserPwdRecoverModel extends SiteModel
         $this->db->query("DELETE FROM ?# WHERE `user_id` = ?d", $this->table, $user_id);
 
         $this->user_id     = $user_id;
-        $this->code        = sprintf('%06d', random_int(0, 999999));
+        $this->code        = str_pad((string)random_int(0, 10 ** self::CODE_LENGTH - 1), self::CODE_LENGTH, '0', STR_PAD_LEFT);
         $this->attempts    = 0;
         $this->ttl         = time() + Config(['user_model', 'pwd_recover_time']);
         $this->create_time = time();

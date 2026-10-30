@@ -1,0 +1,39 @@
+@rating-star-color-active: #FFCC36;
+@rating-star-color-inactive: #DDD;
+
+/* Rating Star Widgets Style */
+.rating-stars {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+
+    > li.star {
+      display: inline-block;
+      padding-right: 0.75rem;
+
+      > i.bi {
+        color: @rating-star-color-inactive; /* Color on idle state */
+      }
+
+      &.hover > i.bi,
+      &.selected > i.bi {
+        color: @rating-star-color-active;
+        //text-shadow: 0 1px 7px #ffe24f;
+
+        &:before {
+          content: "\f586";
+        }
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+}

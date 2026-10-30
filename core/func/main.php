@@ -36,6 +36,10 @@ function IncludeCom($_micron_file, $_micron_params = [])
 {
     global $g_lang, $g_admin, $g_user;
 
+    $micron_component_id   = "Component / $_micron_file [more]" . $_micron_file . '-' . md5(json_encode($_micron_params)) . '-' . uniqid() . '[/more]';
+    $micron_is_debug_panel = stripos($_micron_file, '_dev/debug_panel') !== false;
+    $micron_is_debug_panel ?: BM($micron_component_id);
+
     $_micron_file = GetQuery($_micron_file);
     foreach ($_micron_params as $micron_name => $micron_value) {
         $$micron_name = $micron_value;
@@ -53,16 +57,20 @@ function IncludeCom($_micron_file, $_micron_params = [])
     // Подключаем все возможные файлы компонента
     ob_start();
         foreach ($micron_files as $micron_f) {
-            if (is_readable($micron_f)) {
-                $micron_has++;
-                require $micron_f;
-                if (isset($GLOBALS['__breakCurrentCom__']) && $GLOBALS['__breakCurrentCom__']) {
-                    $GLOBALS['__breakCurrentCom__'] = 0;
-                    break;
-                }
+            if (!is_readable($micron_f)) {
+                continue;
+            }
+
+            $micron_has++;
+            require $micron_f;
+            if (!empty($GLOBALS['__breakCurrentCom__'])) {
+                $GLOBALS['__breakCurrentCom__'] = 0;
+                break;
             }
         }
     echo ob_get_clean();
+
+    $micron_is_debug_panel ?: BM($micron_component_id);
 
     return $micron_has;
 }
