@@ -15,6 +15,8 @@ Config('browserdatacache_allow_dirs', [
     // Вариант более безопасный, предусматривает строгое перечисление хранилищ
     BASEPATH . 'i/',
     BASEPATH . 'upl/',
-    BASEPATH . 'tmp/',
-    BASEPATH . 'lib/',
+    BASEPATH . 'tmp/_auto_merge_css_js/',
+    BASEPATH . 'tmp/_admin_auto_merge_css_js/',
+    BASEPATH . 'tmp/qrcodes/',
+    BASEPATH . 'lib/CKEditor/',
 ]);

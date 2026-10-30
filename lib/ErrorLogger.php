@@ -2,6 +2,28 @@
 
 class ErrorLogger
 {
+    // Ошибки, после которых выполнение скрипта останавливается всегда
+    const FATAL_ERRORS = E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR;
+
+    // Ключи, значения которых нельзя писать в лог (пароли, токены, ключи доступа)
+    const SECRET_KEYS_PATTERN = '/pass|pwd|secret|token|salt|dsn|key|cookie|authorization/i';
+
+    // Заменяет значения секретных ключей на *** (рекурсивно)
+    public static function redact($data)
+    {
+        if (!is_array($data)) {
+            return $data;
+        }
+        foreach ($data as $k => $v) {
+            if (is_string($k) && preg_match(self::SECRET_KEYS_PATTERN, $k)) {
+                $data[$k] = '***';
+            } elseif (is_array($v)) {
+                $data[$k] = self::redact($v);
+            }
+        }
+        return $data;
+    }
+
     public function __construct($func = null)
     {
         $backtraceToString = function ($backtrace) {
@@ -53,11 +75,11 @@ class ErrorLogger
             $browser = new Browser();
 
             $logger->create_time     = time();
-            $logger->_get            = json_encode($_GET);
-            $logger->_post           = json_encode($_POST);
-            $logger->_cookie         = json_encode($_COOKIE);
-            $logger->_session        = isset($_SESSION) ? json_encode($_SESSION) : '';
-            $logger->_server         = json_encode($_SERVER);
+            $logger->_get            = json_encode(self::redact($_GET));
+            $logger->_post           = json_encode(self::redact($_POST));
+            $logger->_cookie         = json_encode(array_keys($_COOKIE)); // Только имена: в cookie лежат токены авторизации
+            $logger->_session        = isset($_SESSION) ? json_encode(self::redact($_SESSION)) : '';
+            $logger->_server         = json_encode(self::redact($_SERVER));
             $logger->_files          = isset($_FILES) ? json_encode($_FILES) : '';
             $logger->backtrace       = $backtraceToString($trace);
             $logger->sql             = json_encode(MyDataBaseLog::$dbLog);
@@ -65,9 +87,9 @@ class ErrorLogger
             $logger->browser         = $browser->getBrowser();
             $logger->browser_version = $browser->getVersion();
             $logger->platform        = $browser->getPlatform();
-            $logger->g_config        = json_encode(Config());
+            $logger->g_config        = json_encode(self::redact(Config()));
             $logger->g_lang          = json_encode($g_lang);
-            $logger->g_user          = method_exists($g_user, 'getData') ? json_encode($g_user->getData()) : null;
+            $logger->g_user          = method_exists($g_user, 'getData') ? json_encode(self::redact($g_user->getData())) : null;
             $logger->errno           = $errno;
             $logger->errstr          = $errstr;
             $logger->errfile         = $errfile;
@@ -114,13 +136,25 @@ class ErrorLogger
             die;
         };
 
-        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorHandler) {
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorHandler, $logInFile) {
             if (!($errno & error_reporting())) {
-                return;
+                return true;
             }
             $trace = debug_backtrace();
             array_shift($trace);
+
+            // Предупреждения (warning, notice, deprecated) в продакшене только пишем в лог-файл и продолжаем работу,
+            // а в DEBUG_MODE (или при stop_on_warnings = true) останавливаемся, чтобы разработчик их сразу увидел
+            if (!($errno & self::FATAL_ERRORS) && !Config('stop_on_warnings')) {
+                if (ini_get('log_errors')) {
+                    $logInFile($errno, $errstr, $errfile, $errline, $trace);
+                }
+                return true;
+            }
             $errorHandler($errno, $errstr, $errfile, $errline, $trace);
+        });
+        set_exception_handler(function (\Throwable $e) use ($errorHandler) {
+            $errorHandler(E_ERROR, get_class($e) . ': ' . $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
         });
         register_shutdown_function(function () use ($errorHandler) {
             $error = error_get_last();

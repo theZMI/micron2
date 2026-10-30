@@ -21,6 +21,15 @@ RequireOnceAll(BASEPATH . 'lang/' . LANG . '/_autoload');
 $g_lang['m_defaultTitle'] = L('m_title');
 
 RequireOnceAll(BASEPATH . 'core/config');
-RequireOnceAll(BASEPATH . 'core/init');
+
+// Порядок инициализации важен, поэтому подключаем файлы явно
+require_once BASEPATH . 'core/init/db.php';
+require_once BASEPATH . 'core/init/error_logger.php';
+require_once BASEPATH . 'core/init/main.php';
+require_once BASEPATH . 'core/init/www_redirecter.php';
+require_once BASEPATH . 'core/init/pay_system.php';
+require_once BASEPATH . 'core/init/_admin/menu.php'; // После того, как меню админки заполнено в core/config/_admin/menu
+require_once BASEPATH . 'core/init/router.php';
+RequireOnceAll(BASEPATH . 'core/init'); // Остальные (пользовательские) init-файлы
 
 Cors();

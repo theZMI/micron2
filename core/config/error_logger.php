@@ -5,3 +5,4 @@
 // В файл который указан в php.ini->error_log и при включённом php.ini->log_errors (эти параметры задаются в core/config/php_ini.php
 Config('use_error_logger', true); // Использовать ли собственный улавливатель ошибок
 Config('log_errors_into_db', Config('use_error_logger'));
+Config('stop_on_warnings', (bool)Env('DEBUG_MODE')); // Останавливать ли скрипт на warning/notice/deprecated (в продакшене они только пишутся в лог-файл)

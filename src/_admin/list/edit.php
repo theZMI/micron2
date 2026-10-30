@@ -3,15 +3,23 @@
 $lang       = Get('lang');
 $file       = Get('file');
 $msg        = '';
+
+// Редактировать можно только существующие языковые файлы внутри lang/
+$langFile = realpath(BASEPATH . "lang/{$lang}/{$file}");
+if (!$langFile || !str_starts_with($langFile, realpath(BASEPATH . 'lang') . '/') || !str_ends_with($langFile, '.php')) {
+    IncludeCom('404');
+    ExitCom();
+    return;
+}
 $exceptions = ['m_title', 'm_description', 'm_keyWords'];
 
 if (Post('is_edit')) {
     $prefix  = "<?php\r\n\r\n";
     $postfix = '';
     $lines   = [];
-    $title   = addslashes(Post('m_title'));
-    $desc    = addslashes(Post('m_description'));
-    $kw      = addslashes(Post('m_keyWords'));
+    $title   = (string)Post('m_title');
+    $desc    = (string)Post('m_description');
+    $kw      = (string)Post('m_keyWords');
 
     unset($_POST['is_edit']);
     unset($_POST['m_title']);
@@ -27,20 +35,19 @@ if (Post('is_edit')) {
     }
     if ($file !== (Config('main_tpl') . '.php')) {
         if (!empty($title)) {
-            $lines[] = '$g_lang["m_title"]       = "' . $title . '";';
+            $lines[] = '$g_lang["m_title"]       = ' . var_export($title, true) . ';';
         }
         if (!empty($desc)) {
-            $lines[] = '$g_lang["m_description"] = "' . $desc . '";';
+            $lines[] = '$g_lang["m_description"] = ' . var_export($desc, true) . ';';
         }
         if (!empty($kw)) {
-            $lines[] = '$g_lang["m_keyWords"]    = "' . $kw . '";';
+            $lines[] = '$g_lang["m_keyWords"]    = ' . var_export($kw, true) . ';';
         }
     }
+    // var_export экранирует ключи и значения, поэтому из формы нельзя внедрить php-код в языковой файл
     foreach ($_POST as $k => $v) {
-        $v       = addslashes($v);
-        $v       = str_replace("\r", '', $v);
-        $v       = str_replace("\n", '\n', $v);
-        $lines[] = '$g_lang["' . $k . '"] = "' . $v . '";';
+        $v       = str_replace("\r", '', (string)$v);
+        $lines[] = '$g_lang[' . var_export((string)$k, true) . '] = ' . var_export($v, true) . ';';
     }
     $text = $prefix . implode("\r\n", $lines) . $postfix;
 

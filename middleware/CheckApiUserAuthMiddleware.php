@@ -9,20 +9,10 @@ class CheckApiUserAuthMiddleware implements IMiddleware
     {
         global $g_user;
 
-        $headers = getallheaders();
-        foreach ($headers as $k => $v) {
-            $headers[strtolower($k)] = $v;
+        $user_id = \UserModel::idByApiToken(ApiAuthToken());
+        if (!$user_id) {
+            (new \ApiResponse())->error("Access denied", 401);
         }
-
-        $apiResponse   = new \ApiResponse();
-        $login         = $headers[strtolower('API-User-Auth-Login')] ?? '';
-        $password_hash = $headers[strtolower('API-User-Auth-Token')] ?? '';
-        $isAuth        = (new \UserModel())->isCorrectAuth($login, $password_hash);
-        $user_id       = (new \UserModel())->getIdByLogin($login);
-        $g_user        = new \UserModel($user_id);
-
-        if (!$isAuth) {
-            $apiResponse->error("Access denied", 401);
-        }
+        $g_user = new \UserModel($user_id);
     }
 }

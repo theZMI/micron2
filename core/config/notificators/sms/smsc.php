@@ -1,7 +1,7 @@
 <?php
 
 Config('smsc_notificator', [
-    'sender'   => 'Operado',
-    'login'    => 'thezmi',
-    'password' => 'asdqwe123!@#'
+    'sender'   => Env('SMSC_SENDER'),
+    'login'    => Env('SMSC_LOGIN'),
+    'password' => Env('SMSC_PASSWORD'),
 ]);

@@ -59,7 +59,7 @@ class CommonUserModel extends SiteModel
             "CREATE TABLE IF NOT EXISTS ?# (
               `id` INT NOT NULL AUTO_INCREMENT,
               `login` VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-              `pwd_hash` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+              `pwd_hash` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `status` INT DEFAULT NULL,
 
               `avatar` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -111,7 +111,7 @@ class CommonUserModel extends SiteModel
             case 'full_name':
                 return implode(' ', [$this->surname, $this->first_name, $this->patronymic]);
             case 'avatar_url':
-                return Root(Config(['uploader', $this->table, 'upload_path']) . $this->avatar);
+                return Root(_StrReplaceFirst(BASEPATH, '', (string)Config(['uploader', $this->table, 'upload_path'])) . $this->avatar);
             default:
                 $ret = parent::__get($key);
         }
@@ -129,8 +129,7 @@ class CommonUserModel extends SiteModel
 
     public static function genPassword()
     {
-        $pwd = md5(uniqid(mt_rand(), 1));
-        return substr($pwd, 0, 10);
+        return bin2hex(random_bytes(8));
     }
 
     public function isEmailBusy($email)
@@ -167,7 +166,8 @@ class CommonUserModel extends SiteModel
             $ids   = array_intersect($ids, $found);
         }
         // ...
-        $id = count($ids) ? $ids[0] : null;
+        $ids = array_values($ids); // array_intersect сохраняет ключи, поэтому переиндексируем
+        $id  = count($ids) ? $ids[0] : null;
         return $id ? new static($id) : null;
     }
 
@@ -191,7 +191,7 @@ class CommonUserModel extends SiteModel
             $ids   = array_intersect($ids, $found);
         }
         // ...
-        return array_map(fn($ids) => new static($ids), $ids);
+        return array_map(fn($id) => new static($id), array_values($ids)); // array_intersect сохраняет ключи, поэтому переиндексируем
     }
 
     public function count($statuses = [])
@@ -203,10 +203,11 @@ class CommonUserModel extends SiteModel
         );
     }
 
-    public function getDataToApi()
+    // Данные для отдачи наружу (API): без хеша пароля
+    public function getPublicData()
     {
         $data = $this->getData();
-        $data['use_timer'] = $this->use_timer;
+        unset($data['pwd_hash']);
         return $data;
     }
 

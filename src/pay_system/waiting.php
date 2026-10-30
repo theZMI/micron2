@@ -1,5 +1,9 @@
 <?php
 
+if (!class_exists('ShopOrderModel')) {
+    throw new Exception('Создайте в проекте модель заказа ShopOrderModel (implements IShopOrderModel)');
+}
+
 $shop_order_id   = +Get('id');
 $shopOrderModel  = new ShopOrderModel($shop_order_id);
 $paymentModel    = new PaymentModel(PaymentModel::getIdByShopOrderId($shop_order_id));
@@ -18,5 +22,5 @@ if ($status === 'paid') {
     UrlRedirect::go(SiteRoot("pay_system/succeeded&id={$shop_order_id}"));
 }
 if ($status === 'failed') {
-    UrlRedirect::go(SiteRoot("pay_system/fail&id={$shop_order_id}"));
+    UrlRedirect::go(SiteRoot("pay_system/failed&id={$shop_order_id}"));
 }

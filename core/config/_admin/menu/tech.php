@@ -15,7 +15,7 @@ Config(['admin_menu_right', 'PUSH'], [
             'name' => 'Администраторы',
         ],
         [
-            'link' => SiteRoot('_tests/email_checker'),
+            'link' => SiteRoot('_admin/tests/email_checker'),
             'name' => 'Отправить тестовое письмо',
         ],
         [
@@ -27,12 +27,16 @@ Config(['admin_menu_right', 'PUSH'], [
             'name' => 'Сделать backup БД',
         ],
         [
-            'link' => SiteRoot('pay_system/_cron_check'),
+            'link' => SiteRoot('_cron/pay_system_check'),
             'name' => 'Проверить waiting-платежи',
         ],
         [
             'link' => SiteRoot('_admin/extrapacker_info'),
             'name' => 'Информация по склеенным extraPacker-ом файлам',
+        ],
+        [
+            'link' => SiteRoot('_admin/migrate'),
+            'name' => 'Миграции БД',
         ],
         [
             'link' => SiteRoot('_admin/toggle_site_maintenance'),

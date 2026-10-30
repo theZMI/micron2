@@ -1,3 +1,8 @@
+# Логи и служебные файлы наружу не отдаём (склеенные css/js и картинки - можно)
+<FilesMatch "\.(log|txt|sql|json|xls|xlsx|csv)$">
+    Require all denied
+</FilesMatch>
+
 # Запрет листинга всех папок и под-папок
 Options -Indexes
 

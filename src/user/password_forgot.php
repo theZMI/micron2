@@ -22,6 +22,9 @@ if (Post('is_pwd_recover_order')) {
         $userModel = (new UserModel())->findOne(['email' => $email]) ?: new UserModel();
         if (!$userModel->isExists()) {
             $msg = MsgErr(L("Не найден пользователь с данным e-mail"));
+        } elseif (!(new UserPwdRecoverModel())->canResend($userModel->id)) {
+            $msg              = MsgErr("Код уже отправлен, новый можно запросить через минуту");
+            $isCheckCodeBlock = true;
         } else {
             $code_id    = (new UserPwdRecoverModel())->generate($userModel->id);
             $pwdRecover = new UserPwdRecoverModel($code_id);
@@ -51,10 +54,12 @@ if (Post('is_check_pwd_recover_code')) {
     $isValidCode = (new UserPwdRecoverModel())->isValidCode($user_code, $email);
 
     if ($isValidCode) {
-        $userModel = (new UserModel())->findOne(['email' => $email]) ?: new UserModel();
+        $userModel = (new UserModel())->findOne(['email' => $email]);
         $userModel->is_email_verified = true;
-        $userModel->login($userModel->email, $userModel->pwd_hash);
+        $userModel->flush();
+        $userModel->startSession();
         UrlRedirect::go(SiteRoot('user/dashboard'));
     }
-    $msg = MsgErr("Неверный код");
+    $msg              = MsgErr("Неверный или просроченный код");
+    $isCheckCodeBlock = true;
 }

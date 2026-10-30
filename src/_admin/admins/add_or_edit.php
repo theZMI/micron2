@@ -42,8 +42,9 @@ if (Post('is_apply')) {
 
     if (empty($errs)) {
         $admin->login = $login;
-        if (!empty($pwd)) {
-            $admin->pwd_hash = $admin->makeHash($pwd);
+        $isPwdChanged = !empty($pwd);
+        if ($isPwdChanged) {
+            $admin->pwd_hash = AdminModel::hashPassword($pwd);
         }
         $admin->surname    = $surname;
         $admin->first_name = $first_name;
@@ -53,6 +54,9 @@ if (Post('is_apply')) {
         $admin->phone      = $phone;
 
         $id = $admin->flush();
+        if ($id && $isPwdChanged && $admin_id) {
+            $admin->revokeAllSessions(); // После смены пароля старые сессии больше не действуют
+        }
         if ($id) {
             $msg   = MsgOk("Операция успешно выполнена");
             $_POST = [];

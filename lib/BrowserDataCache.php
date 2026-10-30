@@ -98,22 +98,16 @@ class BrowserDataCache
         $file = str_replace("\\", "/", $file);
         $ext  = self::ext($file);
 
-        if (!in_array($ext, Config('browserdatacache_allow_filetypes'))) {
-            trigger_error("Not allowed file type ($file -> $ext) for BrowserDataCache!", E_USER_ERROR);
+        if (!$file || !in_array($ext, Config('browserdatacache_allow_filetypes'))) {
+            return false;
         }
 
-        $isInAllowDir = false;
         foreach (Config('browserdatacache_allow_dirs') as $dir) {
-            if (stripos($file, $dir) !== false) {
-                $isInAllowDir = true;
-                break;
+            if (str_starts_with($file, $dir)) {
+                return $file;
             }
         }
-        if (!$isInAllowDir) {
-            trigger_error("File {$file} from disallow directory for BrowserDataCache", E_USER_ERROR);
-        }
-
-        return $file;
+        return false;
     }
 
     /**
@@ -127,8 +121,7 @@ class BrowserDataCache
     public static function outFile($file, $pPrepareOutFile = null)
     {
         // Если это файл и он доступен для чтения
-        if (is_file($file) && is_readable($file)) {
-            $file = self::secure($file);
+        if (is_file($file) && is_readable($file) && ($file = self::secure($file))) {
             $exts = Config('browserdatacache_mime_types');
 
             header('HTTP/1.0 200 OK');

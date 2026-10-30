@@ -10,7 +10,7 @@ if (is_null($editor)) {
 
     $editor = new CKEditor(Root('lib/CKEditor/'));
 
-    $editor->config['filebrowserUploadUrl'] = SiteRoot('_dev/ckeditor/uploader');
+    $editor->config['filebrowserUploadUrl'] = SiteRoot('_admin/ckeditor_upload');
     $editor->config['toolbar']              = $toolbar;
     $editor->config['height']               = $height;
 }

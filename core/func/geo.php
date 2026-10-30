@@ -43,11 +43,12 @@ function _GetLocationByIP($ip)
         if (MemoryHas($cacheKey)) {
             $ipInfo = MemoryGet($cacheKey);
         } else {
-            $ipInfo = file_get_contents("http://ip-api.com/json/{$ip}?lang=" . LANG);
-            $ipInfo = json_decode($ipInfo, true);
+            $context = stream_context_create(['http' => ['timeout' => 2]]); // Не держим страницу, если сервис геолокации не отвечает
+            $ipInfo  = @file_get_contents("http://ip-api.com/json/{$ip}?lang=" . LANG, false, $context);
+            $ipInfo  = $ipInfo === false ? null : json_decode($ipInfo, true);
             MemorySet($cacheKey, $ipInfo);
         }
-        $ret = isset($ipInfo['status']) && $ipInfo['status'] !== 'fail' ? $ipInfo : [];
+        $ret = isset($ipInfo['status']) && $ipInfo['status'] !== 'fail' ? $ipInfo + $ret : $ret;
     } catch (\Throwable $e) {
         $GLOBALS['_lastGeoError'] = $e;
     }

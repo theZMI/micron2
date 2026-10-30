@@ -2,13 +2,16 @@
     <div class="container">
         <div class="row">
             <div class="col">
+                <?php $geo = GetLocationByIP(); ?>
+                <?php if (!empty($geo['countryCode'])): ?>
                 <div class="float-start">
                     <button class="btn btn-link border-0 ps-0 geo-position-button" type="button">
-                        <div style="background-image: url('https://flagcdn.com/<?= strtolower(GetLocationByIP()['countryCode']) ?>.svg')" class="geo-position-button-flag align-top me-1"></div>
-                        <span><?= GetLocationByIP()['city'] ?></span>
-                        <span class="text-black-50">(<?= GetLocationByIP()['country'] ?>)</span>
+                        <div style="background-image: url('https://flagcdn.com/<?= strtolower($geo['countryCode']) ?>.svg')" class="geo-position-button-flag align-top me-1"></div>
+                        <span><?= htmlspecialchars((string)$geo['city']) ?></span>
+                        <span class="text-black-50">(<?= htmlspecialchars((string)$geo['country']) ?>)</span>
                     </button>
                 </div>
+                <?php endif; ?>
                 <div class="float-end">
                     <div class="fast-contacts-info d-none d-sm-block">
                         <a href="tel:<?= PhoneFilter(SUPPORT_PHONE) ?>" class="btn btn-link border-0"><span><?= SUPPORT_PHONE ?></span></a>

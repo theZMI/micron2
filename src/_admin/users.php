@@ -34,7 +34,10 @@ $tableFilters = [
 
 switch ($action) {
     case 'delete':
-        $list[+Get('id')]->delete();
+        if (isset($list[+Get('id')])) {
+            $list[+Get('id')]->revokeAllSessions();
+            $list[+Get('id')]->delete();
+        }
         UrlRedirect::go(GetCurUrl('a='.M_DELETE_PARAM.'&id='.M_DELETE_PARAM));
         break;
 }

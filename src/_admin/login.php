@@ -75,7 +75,7 @@ if (Post('is_login')) {
     }
 
     if (!count($errs)) {
-        $isLogin = $g_admin->login($login, $g_admin->makeHash($pwd));
+        $isLogin = $g_admin->login($login, $pwd);
         $isLogin ? UrlRedirect::go(SiteRoot('_admin/home')) : ($errs[] = "Неверный логин или пароль");
     }
 

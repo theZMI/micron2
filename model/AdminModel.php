@@ -14,12 +14,12 @@ class AdminModel extends SiteModel
         return [
             'id'               => 'int',
             'login'            => 'string',
-            'pwd_hash'         => 'string',
             'phone'            => 'string',
             'email'            => 'string',
             'surname'          => 'string',
             'first_name'       => 'string',
             'patronymic'       => 'string',
+            'pwd_hash'         => 'string',
             'desc'             => 'string',
             'create_time'      => 'int',
             'last_update_time' => 'int',
@@ -32,12 +32,12 @@ class AdminModel extends SiteModel
             "CREATE TABLE IF NOT EXISTS ?# (
                 `id` INT NOT NULL AUTO_INCREMENT,
                 `login` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-                `pwd_hash` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `phone` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `email` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `surname` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `first_name` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `patronymic` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+                `pwd_hash` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `desc` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
                 `create_time` INT DEFAULT NULL,
                 `last_update_time` INT DEFAULT NULL,
@@ -47,12 +47,15 @@ class AdminModel extends SiteModel
             $this->table
         );
 
-        if (!$this->countAdmins()) {
+        // Первого админа создаём из .env (ADMIN_DEFAULT_LOGIN/ADMIN_DEFAULT_PASSWORD), если они заданы
+        $defLogin = (string)Config(['admin_area', 'def_login']);
+        $defPwd   = (string)Config(['admin_area', 'def_pwd']);
+        if ($defLogin !== '' && $defPwd !== '' && !$this->countAdmins()) {
             $this->db->query(
                 "INSERT INTO ?# SET `login` = ?, `pwd_hash` = ?, `create_time` = ?d",
                 $this->table,
-                Config(['admin_area', 'def_login']),
-                $this->makeHash(Config(['admin_area', 'def_pwd'])),
+                $defLogin,
+                static::hashPassword($defPwd),
                 time()
             );
         }
@@ -79,12 +82,26 @@ class AdminModel extends SiteModel
     {
         switch ($key) {
             case 'timezone':
-                return DEFAULT_TIME_ZONE;
+                $ret = DEFAULT_TIME_ZONE;
+                break;
             case 'full_name':
                 return implode(' ', [$this->surname, $this->first_name, $this->patronymic]);
             default:
                 $ret = parent::__get($key);
         }
         return $ret;
+    }
+
+    public function find($params)
+    {
+        $ids = [];
+        if (isset($params['surname']) && isset($params['first_name']) && isset($params['patronymic'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `surname` = ? AND `first_name` = ? AND `patronymic` = ?", $this->table, $params['surname'], $params['first_name'], $params['patronymic']);
+        } elseif (isset($params['surname']) && isset($params['first_name'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `surname` = ? AND `first_name` = ?", $this->table, $params['surname'], $params['first_name']);
+        } elseif (isset($params['surname'])) {
+            $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `surname` = ?", $this->table, $params['surname']);
+        }
+        return array_map(fn($id) => new self($id), $ids);
     }
 }

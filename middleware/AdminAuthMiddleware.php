@@ -14,6 +14,11 @@ class AdminAuthMiddleware implements IMiddleware
 
         (new CommonMiddleware())->handle($request);
 
+        // Переходы в админку с чужих сайтов (ссылки вида ?a=delete) не выполняем, а просто открываем главную админки
+        if (IsCrossSiteRequest() && GetQuery() !== '_admin/home') {
+            \UrlRedirect::go(SiteRoot('_admin/home'));
+        }
+
         if (IS_ADMIN_AUTH) {
             return;
         }

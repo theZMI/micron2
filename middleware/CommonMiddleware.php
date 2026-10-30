@@ -48,11 +48,27 @@ class CommonMiddleware implements IMiddleware
         }
     }
 
+    // Защита от CSRF: изменяющие запросы (POST, PUT...) с чужих сайтов не принимаем. API авторизуется заголовком, а не cookie, поэтому его не трогаем
+    private function checkCsrf()
+    {
+        if (IS_API || !IsUnsafeHttpMethod() || !IsCrossSiteRequest()) {
+            return;
+        }
+        header(\Php::status(403));
+        die('Forbidden: cross-site request');
+    }
+
     public function handle(Request $request): void
     {
+        if (defined('IS_COMMON_MIDDLEWARE_DONE')) {
+            return;
+        }
+        define('IS_COMMON_MIDDLEWARE_DONE', true);
+
+        $this->forApi();
+        $this->checkCsrf();
         $this->forAdmin();
         $this->forUser();
-        $this->forApi();
         $this->checkCloseSite();
     }
 }

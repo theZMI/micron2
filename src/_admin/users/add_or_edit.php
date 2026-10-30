@@ -8,7 +8,7 @@ $modelParam  = function ($param, $default = '') use (&$model) {
 $msg = '';
 if (Post('is_set')) {
     $email          = Post('email');
-    $full_name      = explode(' ', Post('full_name', ''));
+    $full_name      = explode(' ', trim((string)Post('full_name', '')));
     $surname        = $full_name[0] ?? '';
     $first_name     = $full_name[1] ?? '';
     $patronymic     = $full_name[2] ?? '';
@@ -16,13 +16,13 @@ if (Post('is_set')) {
     $phone          = PhoneFilter(Post('phone'));
     $errs           = [];
 
-    if (empty($full_name)) {
+    if ($surname === '') {
         $errs[] = "Пожалуйста впишите ФИО сотрудника";
     }
     if (empty($email)) {
         $en_first_name = Translit($first_name);
         $en_patronymic = Translit($patronymic);
-        $email        = strtolower( Translit("virtual-email-$surname.".$en_first_name[0].'.'.$en_patronymic[0]) . "@thezmi.pro" );
+        $email        = strtolower( Translit("virtual-email-$surname.".mb_substr($en_first_name, 0, 1).'.'.mb_substr($en_patronymic, 0, 1)) . "@thezmi.pro" );
     }
     if (!$model->isExists() && $model->isEmailBusy($email)) {
         $errs[] = "Пользователь с таким e-mail уже зарегистрирован";
@@ -40,13 +40,17 @@ if (Post('is_set')) {
         $model->gender         = UserModel::GENDER_UNKNOWN;
         $model->phone          = $phone;
 
+        $isNew = !$model->isExists();
         if ($password) { // Если пароль задан, то устанавливаем его
-            $model->pwd_hash = UserModel::makeHash($password);
-        } elseif (!$model->isExists()) { // Если пароль не задан, но это мы только-только создаём юзера, то генерим пароль
-            $model->pwd_hash = UserModel::makeHash(UserModel::genPassword());
+            $model->pwd_hash = UserModel::hashPassword($password);
+        } elseif ($isNew) { // Если пароль не задан, но это мы только-только создаём юзера, то генерим пароль
+            $model->pwd_hash = UserModel::hashPassword(UserModel::genPassword());
         }
 
         $user_id = $model->flush();
+        if (!$isNew && $password) {
+            $model->revokeAllSessions(); // После смены пароля старые сессии больше не действуют
+        }
         UrlRedirect::go(
             SiteRoot("_admin/users&sel_id={$user_id}")
         );

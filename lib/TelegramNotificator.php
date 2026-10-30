@@ -6,10 +6,10 @@ class TelegramNotificator implements INotificator
     {
         $url = 'https://api.telegram.org/bot' . Config('telegram_notificator')['token'] . '/' . $uri;
         $ch  = curl_init();
-        curl_setopt_array($ch, array_merge([
+        curl_setopt_array($ch, $curlParams + [ // "+", а не array_merge: ключи CURLOPT_* - числа и array_merge их перенумерует
             CURLOPT_URL            => $url,
             CURLOPT_RETURNTRANSFER => true
-        ], $curlParams));
+        ]);
         $response = curl_exec($ch);
         curl_close($ch);
 
@@ -18,10 +18,10 @@ class TelegramNotificator implements INotificator
 
     public function send($userTo, $message, $params = [])
     {
-        return $this->_request(
-            "sendMessage?chat_id={$userTo->telegram_chat_id}" .
-            '&text=' . urlencode($message)
-        );
+        return $this->_request('sendMessage?' . http_build_query([
+            'chat_id' => (string)$userTo->telegram_chat_id,
+            'text'    => $message,
+        ]));
     }
 
     public function requestPhone($userModel, $btnText = 'Отправить мой номер', $message = 'Нажмите «Отправить мой номер» чтобы поделиться номером телефона')
@@ -30,7 +30,7 @@ class TelegramNotificator implements INotificator
             'keyboard'          => [
                 [
                     [
-                        'text'            => urlencode($btnText),
+                        'text'            => $btnText,
                         'request_contact' => true
                     ]
                 ]
@@ -39,20 +39,20 @@ class TelegramNotificator implements INotificator
             'one_time_keyboard' => true,
         ];
 
-        return $this->_request(
-            "sendMessage?chat_id={$userModel->telegram_chat_id}" .
-            '&text=' . urlencode($message) .
-            '&reply_markup=' . json_encode($keyboard)
-        );
+        return $this->_request('sendMessage?' . http_build_query([
+            'chat_id'      => (string)$userModel->telegram_chat_id,
+            'text'         => $message,
+            'reply_markup' => json_encode($keyboard),
+        ]));
     }
 
     public function removeKeyboard($userModel, $message = 'Номер получили, спасибо!')
     {
-        return $this->_request(
-            "sendMessage?chat_id={$userModel->telegram_chat_id}" .
-            '&text=' . urlencode($message) .
-            '&reply_markup=' . json_encode(['remove_keyboard' => true])
-        );
+        return $this->_request('sendMessage?' . http_build_query([
+            'chat_id'      => (string)$userModel->telegram_chat_id,
+            'text'         => $message,
+            'reply_markup' => json_encode(['remove_keyboard' => true]),
+        ]));
     }
 
     public function getAvatar($userModel, $pathToSave = null)
@@ -64,15 +64,16 @@ class TelegramNotificator implements INotificator
         $response = $this->_request(
             'getUserProfilePhotos',
             [
-                [CURLOPT_POST => 1],
-                [CURLOPT_POSTFIELDS => http_build_query($post)],
-                [CURLOPT_HTTPHEADER => ['Content-type: application/x-www-form-urlencoded']],
+                CURLOPT_POST       => 1,
+                CURLOPT_POSTFIELDS => http_build_query($post),
+                CURLOPT_HTTPHEADER => ['Content-type: application/x-www-form-urlencoded'],
             ]
         );
 
-        if (!$response['ok']) {
+        if (empty($response['ok'])) {
             return null; // Не удалось получить фотографии профиля пользователя
         }
+        $photos = $response['result']['photos'] ?? [];
         if (empty($photos)) {
             return null; // У пользователя нет фотографий профиля
         }
@@ -84,13 +85,13 @@ class TelegramNotificator implements INotificator
         $fileResponse = $this->_request(
             'getFile',
             [
-                [CURLOPT_POST => 1],
-                [CURLOPT_POSTFIELDS => http_build_query($post)],
-                [CURLOPT_HTTPHEADER => ['Content-type: application/x-www-form-urlencoded']],
+                CURLOPT_POST       => 1,
+                CURLOPT_POSTFIELDS => http_build_query($post),
+                CURLOPT_HTTPHEADER => ['Content-type: application/x-www-form-urlencoded'],
             ]
         );
 
-        if (!$fileResponse['ok']) {
+        if (empty($fileResponse['ok'])) {
             return null; // Не удалось получить информацию о файле
         }
 

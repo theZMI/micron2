@@ -47,7 +47,7 @@ abstract class PaySystem_Base
             $bankResponse['pay_link']
         );
         if (!$isSaved) {
-            throw new Exception("Error to save payment into local DB");
+            throw new \Exception("Error to save payment into local DB");
         }
 
         return (string)$paymentModel->pay_link;

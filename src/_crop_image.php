@@ -21,23 +21,24 @@ $isImageInAccessDir = false;
 
 if (strlen($sThumbs)) {
     foreach (explode('|', $sThumbs) as $w_and_h) {
-        $t = [];
-        foreach (explode('x', $w_and_h) as $w_or_h) {
-            $t[] = $w_or_h;
+        $t = array_map('intval', explode('x', $w_and_h));
+        if (count($t) === 2 && $t[0] > 0 && $t[1] > 0) {
+            $thumbs[] = $t;
         }
-        $thumbs[] = $t;
     }
 }
 
 foreach ($accessDirs as $dir) {
-    if (stripos("{$aPath['dirname']}/", $dir) !== false) {
+    if ($path && str_starts_with($path, $dir) && @getimagesize($path) !== false) {
         $isImageInAccessDir = true;
         break;
     }
 }
 
 if (!$isImageInAccessDir) {
-    trigger_error("Access denied", E_USER_ERROR);
+    IncludeCom('403');
+    ExitCom();
+    return;
 }
 
 if (Post('is_set')) {

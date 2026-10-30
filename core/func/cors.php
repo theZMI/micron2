@@ -1,39 +1,25 @@
 <?php
 
 /**
- *  An example CORS-compliant method.  It will allow any GET, POST, or OPTIONS requests from any
- *  origin.
- *
- *  In a production environment, you probably want to be more restrictive, but this gives you
- *  the general idea of what is involved.  For the nitty-gritty low-down, read:
- *
- *  - https://developer.mozilla.org/en/HTTP_access_control
- *  - http://www.w3.org/TR/cors/
- *
+ * CORS: разрешаем кросс-доменные запросы только с доменов из CORS_ALLOWED_ORIGINS (.env, через запятую).
+ * Запросы с того же домена, что и сайт, CORS-заголовков не требуют.
  */
 function Cors()
 {
-    // Allow from any origin
-    if (isset($_SERVER['HTTP_ORIGIN'])) {
-        // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
-        // you want to allow, and if so:
-        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if ($origin !== '' && in_array(rtrim($origin, '/'), Config('cors_allowed_origins'), true)) {
+        header("Access-Control-Allow-Origin: {$origin}");
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Max-Age: 86400');    // cache for 1 day
+        header('Vary: Origin');
+
+        if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
+            header("Access-Control-Allow-Methods: OPTIONS, GET, POST, PATCH, PUT, DELETE");
+            header("Access-Control-Allow-Headers: Content-Type, X-Requested-With, API-User-Auth-Token");
+        }
     }
 
-    // Access-Control headers are received during OPTIONS requests
-    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-
-        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) // may also be using PUT, PATCH, HEAD etc
-        {
-            header("Access-Control-Allow-Methods: OPTIONS, GET, POST, PATCH, PUT, DELETE");
-        }
-
-        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-        }
-
+    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
         exit(0);
     }
 }

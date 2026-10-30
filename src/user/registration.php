@@ -36,7 +36,7 @@ if (Post('is_register')) {
         $model->email      = $email;
         $model->login      = $email;
         $model->phone      = $phone;
-        $model->pwd_hash   = UserModel::makeHash(UserModel::genPassword());
+        $model->pwd_hash   = UserModel::hashPassword(UserModel::genPassword());
         $model->status     = UserModel::STATUS_ACTIVE;
         $model->gender     = UserModel::GENDER_UNKNOWN;
 

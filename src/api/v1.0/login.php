@@ -59,18 +59,11 @@ try {
     $apiResponse->error($exception->getMessage());
 }
 
-$userModel     = new UserModel($user_id);
-$password_hash = UserModel::makeHash(Post('password'));
-$isCorrectAuth = $user_id && $userModel->pwd_hash === $password_hash;
-$response      = $isCorrectAuth ? $password_hash : '';
-
-
-if ($isCorrectAuth) {
-    $userData = $userModel->getDataToApi();
-    unset($userData['pwd_hash']);
+$userModel = new UserModel($user_id);
+if ($user_id && $userModel->verifyPassword((string)Post('password'))) {
     $apiResponse->normal(
-        array_merge($userData, ['token' => $password_hash])
+        array_merge($userModel->getPublicData(), ['token' => $userModel->issueApiToken()])
     );
     return;
 }
-$apiResponse->error('Неверный логин или пароль');
+$apiResponse->error('Неверный логин или пароль', 401);

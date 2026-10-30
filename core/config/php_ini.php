@@ -10,6 +10,10 @@ Config('php_ini', [
     'ignore_repeated_errors' => true,
     'memory_limit'           => '32M', // Максимальное количество памяти на выполнение скрипта
     'max_execution_time'     => '15', // Максимальное время выполнения скрипта
-    'max_input_time'         => '15' // Время в течении которого скрипту разрешено получать данные
+    'max_input_time'         => '15', // Время в течении которого скрипту разрешено получать данные
+    'session.cookie_httponly' => 1, // Cookie сессии недоступна из JS
+    'session.cookie_samesite' => 'Lax', // и не отправляется с чужих сайтов при POST-запросах
+    'session.cookie_secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    'session.use_strict_mode' => 1,
     // "upload_max_filesize" и "post_max_size" - Для изменения размера загружаемых данных (файлов или POST) но задавать нужно через "php.ini | .htaccess | httpd.conf"
 ]);

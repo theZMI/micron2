@@ -2,8 +2,15 @@
 
 ini_set('memory_limit', '512M');
 
-$model         = isset($id) ? new UserModel($id) : $g_user;
-$newPassword   = Post('new_password');
+$apiResponse = new ApiResponse();
+
+// Пользователь может читать и менять только свои данные
+if (isset($id) && (int)$id !== (int)$g_user->id) {
+    $apiResponse->error('Access denied', 403);
+}
+
+$model         = $g_user;
+$newPassword   = (string)Post('new_password');
 $canEditFields = [
     'email',
     'phone',
@@ -19,30 +26,32 @@ $canEditFields = [
     'notification_by_phone',
     'notification_by_email',
     'notification_by_telegram',
-    'job_title',
 ];
 
 if (Post('is_set')) {
-    foreach ($_POST as $k => $v) {
-        if (!in_array($k, $canEditFields)) {
+    foreach ($canEditFields as $k) {
+        if (!isset($_POST[$k])) {
             continue;
         }
         if ($k === 'avatar') {
             try {
-                $model->$k = SaveImageFromBase64(strval($v), "/upl/users/{$model->id}_".time());
+                $model->avatar = SaveImageFromBase64(strval($_POST[$k]), "/upl/users/" . +$model->id . '_' . time());
             } catch (\Throwable $exception) {
             }
             continue;
         }
-        $model->$k = $v;
+        if ($k === 'email' && Post($k) !== $model->email && $model->isEmailBusy(Post($k))) {
+            $apiResponse->error('Пользователь с таким e-mail уже зарегистрирован');
+        }
+        $model->$k = Post($k);
     }
-    if ($newPassword) {
-        $model->pwd_hash = UserModel::makeHash($newPassword);
+    if ($newPassword !== '') {
+        $model->pwd_hash = UserModel::hashPassword($newPassword);
+        $model->flush();
+        $model->revokeAllSessions(); // Старые токены больше не действуют, выдаём новый
+        $apiResponse->normal(array_merge($model->getPublicData(), ['token' => $model->issueApiToken()]));
     }
+    $model->flush();
 }
 
-$model->flush();
-$userData = $model->getDataToApi();
-unset($userData['pwd_hash']);
-
-(new ApiResponse())->normal($userData);
+$apiResponse->normal($model->getPublicData());
