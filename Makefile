@@ -3,3 +3,7 @@ build-assets:
 	&& tsc *.ts \
 	&& cd ../webpack \
  	&& npm run build -d
+
+analyze-assets:
+	cd i/webpack \
+	&& npm run analyze

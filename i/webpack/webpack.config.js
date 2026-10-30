@@ -7,6 +7,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer') // Analyze o
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
+const isAnalyze = process.env.ANALYZE === '1' // Отчёт BundleAnalyzerPlugin: npm run analyze (или make analyze-assets)
 
 const optimization = () => {
     let config = {}
@@ -93,8 +94,8 @@ const plugins = () => {
             filename: `[name].css`
         })
     ]
-    if (isProduction) {
-        plugins.push(new BundleAnalyzerPlugin())
+    if (isAnalyze) {
+        plugins.push(new BundleAnalyzerPlugin()) // Поднимает сервер с отчётом и не завершается сам, поэтому только по флагу
     }
     return plugins
 }
