@@ -55,6 +55,10 @@ if (Post('is_check_pwd_recover_code')) {
 
     if ($isValidCode) {
         $userModel = (new UserModel())->findOne(['email' => $email]);
+        if (!$userModel->is_email_verified) {
+            // Владелец e-mail подтвердил его впервые: закрываем сессии, открытые до этого (например тем, кто вписал чужой e-mail в свой аккаунт)
+            $userModel->revokeAllSessions();
+        }
         $userModel->is_email_verified = true;
         $userModel->flush();
         $userModel->startSession();

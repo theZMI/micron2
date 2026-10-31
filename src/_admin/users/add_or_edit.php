@@ -1,6 +1,6 @@
 <?php
 
-$model       = new UserModel(+Get('id'));
+$model       = new UserModel(intval(Get('id')));
 $modelParam  = function ($param, $default = '') use (&$model) {
     return ModelParam($model, $param, Post($param, $default));
 };

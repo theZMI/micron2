@@ -24,7 +24,10 @@ function CheckCaptchaCode($userCode, &$outputWasCode = ''): bool
     $realCode      = $realCode['code'] ?? '';
     $outputWasCode = $realCode;
 
-    $realCode = TranslateSimilarRuLettersToEn(mb_strtoupper($realCode));
-    $userCode = TranslateSimilarRuLettersToEn(mb_strtoupper($userCode));
-    return $realCode === $userCode;
+    // Код одноразовый: после проверки (верной или нет) он больше не подходит, иначе один раз разгаданный код можно слать бесконечно
+    SessionManager::delete('LDM_SIMPLE_CAPTCHA');
+
+    $realCode = TranslateSimilarRuLettersToEn(mb_strtoupper((string)$realCode));
+    $userCode = TranslateSimilarRuLettersToEn(mb_strtoupper(trim((string)$userCode)));
+    return $realCode !== '' && $realCode === $userCode; // Без кода в сессии (капчу не показывали) проверка не проходит
 }

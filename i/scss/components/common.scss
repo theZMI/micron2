@@ -59,7 +59,8 @@ body {
 
   input.form-control,
   select.form-control,
-  textarea.form-control {
+  textarea.form-control,
+  .form-control.ms-ctn, .form-control.ms-ctn .ms-sel-ctn input { // Поля MagicSuggest
     background: #F5F5F5;
   }
 

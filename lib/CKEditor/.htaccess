@@ -43,3 +43,8 @@ php_flag engine off
 
 # Назначаем обработчик
 AddType "text/html" .php .cgi .pl .fcgi .fpl .phtml .shtml .php2 .php3 .php4 .php5 .asp .jsp
+# Серверные скрипты отсюда не отдаём вообще (правила выше отключают PHP только при mod_php, а это работает и при php-fpm).
+# ckeditor.php подключается из кода через require, и это правило его не затрагивает
+<FilesMatch "\.(php[0-9]?|phtml|phps|pht|phar|asp|aspx|pl|cgi|fcgi)$">
+    Require all denied
+</FilesMatch>

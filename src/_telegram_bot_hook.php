@@ -5,7 +5,7 @@ $output      = json_decode(file_get_contents('php://input'), true);
 $chat_id     = $output['message']['chat']['id'] ?? '';
 $username    = $output['message']['chat']['username'] ?? '';
 $message     = $output['message']['text'] ?? '';
-$userModel   = (new UserModel())->findOne(['telegram_login' => $username]) ?: new UserModel();
+$userModel   = ($username !== '' ? (new UserModel())->findOne(['telegram_login' => $username]) : null) ?: new UserModel(); // Без username в телеграме привязать некого
 $isUserFound = $userModel->isExists();
 $notificator = new TelegramNotificator();
 

@@ -24,7 +24,7 @@ class Downloader
 
         $isInAllowDir = false;
         foreach (Config('download_allow_dirs') as $dir) {
-            if (stripos($file, $dir) !== false) {
+            if (str_starts_with($file, rtrim(realpath($dir) ?: $dir, '/') . '/')) {
                 $isInAllowDir = true;
                 break;
             }
@@ -44,6 +44,11 @@ class Downloader
         $mimes = Config('browserdatacache_mime_types') ?: [];
         $mime = $mimes[$ext] ?? 'application/octet-stream';
         $isIE         = isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], "MSIE");
+
+        // Сбрасываем буферы вывода (index.php оборачивает страницу в ob_start), иначе большой файл целиком ляжет в память
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
 
         header("Content-Type: {$mime}");
         header("Content-Disposition: attachment; filename={$downloadName}");

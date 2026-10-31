@@ -15,7 +15,7 @@ foreach ($dirs as $site => $dir) {
     foreach (['css', 'js'] as $subDir) {
         $fullDir = BASEPATH . "tmp/{$dir}/{$subDir}/";
         $trans   = is_readable($fullDir . 'trans.txt') ? FileSys::readFile($fullDir . 'trans.txt') : 0;
-        $info    = is_readable($fullDir . 'inf.txt') ? unserialize(FileSys::readFile($fullDir . 'inf.txt')) : [];
+        $info    = is_readable($fullDir . 'inf.txt') ? unserialize(FileSys::readFile($fullDir . 'inf.txt'), ['allowed_classes' => false]) : [];
 
         $dirs[$site][$subDir] = [
             'pack_time' => $execStat,

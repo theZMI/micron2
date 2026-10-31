@@ -2,7 +2,7 @@
 
 $type = Get('type');
 
-if (+Get('get_response')) {
+if (intval(Get('get_response'))) {
     if ($type === 'json') {
         header('Content-Type: application/json; charset=utf-8');
         die(json_encode([

@@ -74,9 +74,18 @@ if (Post('is_login')) {
         $errs[] = "Впишите пароль";
     }
 
+    $attempts   = new LoginAttemptModel();
+    $typedLogin = (string)Post('login_or_name');
+    if (!count($errs) && $attempts->isBlocked('admin', $typedLogin)) {
+        $errs[] = "Слишком много неудачных попыток входа. Попробуйте через 15 минут";
+    }
     if (!count($errs)) {
-        $isLogin = $g_admin->login($login, $pwd);
-        $isLogin ? UrlRedirect::go(SiteRoot('_admin/home')) : ($errs[] = "Неверный логин или пароль");
+        if ($g_admin->login($login, $pwd)) {
+            $attempts->clear('admin', $typedLogin);
+            UrlRedirect::go(SiteRoot('_admin/home'));
+        }
+        $attempts->registerFail('admin', $typedLogin);
+        $errs[] = "Неверный логин или пароль";
     }
 
     $msg = MsgErr(implode('<br>', $errs));

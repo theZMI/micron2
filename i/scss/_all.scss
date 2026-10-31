@@ -68,7 +68,7 @@ ol.site-ol-list {
 
 // Панель самого контента tab-а с рамкой и отступами
 .tab-bordered {
-  border: 1px solid #DDD;
+  border: 1px solid $border-color;
   margin-top: -1px;
   padding: 10px 10px 10px;
   border-radius: 0 0 7px 7px;

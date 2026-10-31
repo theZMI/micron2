@@ -23,12 +23,14 @@
                     */
 
                     //only stay in web app for links that are set to _self (or not set)
-                    if($(this).attr("target") == undefined || $(this).attr("target") == "" || $(this).attr("target") == "_self") {
+                    //links with class "open-not-in-app" are skipped: browser opens them as usual (e.g. files, payment pages)
+                    var target = $(this).attr("target");
+                    if((target == undefined || target == "" || target == "_self") && !$(this).hasClass("open-not-in-app")) {
                         //get the destination of the link clicked
                         var dest = $(this).attr("href");
 
-                        //if the destination is an absolute url, ignore it
-                        if(!dest.match(/^http(s?)/g)) {
+                        //if the destination is empty or an absolute url, ignore it
+                        if(dest && !dest.match(/^http(s?)/g)) {
                             //prevent default behavior (opening safari)
                             event.preventDefault();
                             //update location of the web app

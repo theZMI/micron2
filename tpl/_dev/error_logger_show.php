@@ -6,11 +6,11 @@
     <table class="table text-start">
         <tr>
             <th>Error:</th>
-            <td><?= nl2br($logger->errstr) ?> (<?= $logger->errno ?>)</td>
+            <td><?= nl2br(htmlspecialchars((string)$logger->errstr)) ?> (<?= intval($logger->errno) ?>)</td>
         </tr>
         <tr>
             <th>Place:</th>
-            <td><?= $logger->errfile ?> (<?= $logger->errline ?>)</td>
+            <td><?= htmlspecialchars((string)$logger->errfile) ?> (<?= intval($logger->errline) ?>)</td>
         </tr>
     </table>
     <br>

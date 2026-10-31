@@ -37,9 +37,9 @@
                             <tr>
                                 <td><?= $log->id ?></td>
                                 <td>
-                                    <strong><?= $log->errstr ?> (<?= $log->errno ?>)</strong>
+                                    <strong><?= htmlspecialchars((string)$log->errstr) ?> (<?= intval($log->errno) ?>)</strong>
                                     <br>
-                                    <?= $log->errfile ?> (<?= $log->errline ?>)
+                                    <?= htmlspecialchars((string)$log->errfile) ?> (<?= intval($log->errline) ?>)
                                 </td>
                                 <td>
                                     <button class="btn btn-outline-secondary btn-sm" type="button" onclick="$('#i-backtrace-<?= $log->id ?>').slideToggle()">Backtrace</button>
@@ -53,10 +53,10 @@
                                 </td>
                                 <td>
                                     <strong>
-                                        <nobr><?= $log->platform ?> (<?= $log->browser ?> <sup><?= $log->browser_version ?></sup>)</nobr>
+                                        <nobr><?= htmlspecialchars((string)$log->platform) ?> (<?= htmlspecialchars((string)$log->browser) ?> <sup><?= htmlspecialchars((string)$log->browser_version) ?></sup>)</nobr>
                                     </strong>
                                     <br>
-                                    IP: <?= $log->ip ?>
+                                    IP: <?= htmlspecialchars((string)$log->ip) ?>
                                 </td>
                                 <td><?= date("d-m-Y H:i:s", $log->create_time) ?></td>
                                 <td>

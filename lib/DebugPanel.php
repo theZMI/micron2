@@ -57,7 +57,7 @@ class DebugPanel
 
     public function db()
     {
-        return class_exists('MyDataBaseLog') ? MyDataBaseLog::render() : '';
+        return class_exists('MyDataBaseLog') ? RenderDbLog(MyDataBaseLog::$dbLog) : '';
     }
 
     public function memoryUsage()

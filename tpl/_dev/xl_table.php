@@ -19,9 +19,7 @@
                             searchers[<?= $j ?>] = $(selector).val();
                         }
                         <?php endfor ?>
-                        console.log('searchers = ', searchers);
                         window['g_searchers_<?= $divID ?>'] = searchers;
-                        console.log('set into g_searchers_<?= $divID ?>', searchers);
                     },
                     after: function (elem, contains, containsNot) {
                     }

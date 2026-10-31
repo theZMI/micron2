@@ -109,7 +109,7 @@ class CommonUserModel extends SiteModel
             case 'timezone':
                 return DEFAULT_TIME_ZONE;
             case 'full_name':
-                return implode(' ', [$this->surname, $this->first_name, $this->patronymic]);
+                return implode(' ', array_filter([$this->surname, $this->first_name, $this->patronymic], fn($v) => (string)$v !== '')); // Без лишних пробелов, если чего-то (например отчества) нет
             case 'avatar_url':
                 return Root(_StrReplaceFirst(BASEPATH, '', (string)Config(['uploader', $this->table, 'upload_path'])) . $this->avatar);
             default:
@@ -144,6 +144,13 @@ class CommonUserModel extends SiteModel
 
     public function findOne($params)
     {
+        // Пустое значение не ищем: иначе `email` = '' найдёт первого попавшегося пользователя без e-mail
+        foreach (['login', 'email', 'phone', 'telegram_login', 'telegram_chat_id'] as $k) {
+            if (array_key_exists($k, $params) && (string)$params[$k] === '') {
+                return null;
+            }
+        }
+
         $ids = $this->db->selectCol("SELECT `id` FROM ?#", $this->table);
         if (isset($params['login'])) {
             $found = [$this->getIdByLogin($params['login'])];

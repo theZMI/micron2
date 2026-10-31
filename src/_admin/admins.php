@@ -1,6 +1,6 @@
 <?php
 
-$model  = new AdminModel(+Get('id'));
+$model  = new AdminModel(intval(Get('id')));
 $action = Get('a');
 
 if ($action == 'delete') {

@@ -1,7 +1,7 @@
 <?php
 
 $action = Get('a', 'list');
-$id     = +Get('id');
+$id     = intval(Get('id'));
 $print  = function ($data) {
     try {
         echo __($data);
@@ -20,7 +20,7 @@ if ($action == 'clear') {
     (new ErrorLoggerModel())->clear();
     UrlRedirect::go(GetCurUrl('a=' . M_DELETE_PARAM));
 } elseif ($action == 'list') {
-    $page   = +Get('page', 1);
+    $page   = intval(Get('page', 1));
     $logger = new ErrorLoggerModel();
     $count  = $logger->count();
     $all    = $logger->getList($page);

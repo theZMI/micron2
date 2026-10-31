@@ -29,6 +29,11 @@ if ($isSet) {
         if ($isUpload) {
             $uploadedFile = $uploader->GetInf('full_path');
             $isImage      = @is_array(getimagesize($uploadedFile));
+
+            // Запоминаем, что файл загрузил этот посетитель: обрезать (_crop_image) он сможет только свои файлы
+            $myUploads   = SessionManager::get('micron_my_uploads') ?: [];
+            $myUploads[] = realpath($uploadedFile);
+            SessionManager::set('micron_my_uploads', array_slice($myUploads, -20));
             if ($isImage) {
                 try {
                     $iof = new ImageOrientationFixer($uploadedFile);

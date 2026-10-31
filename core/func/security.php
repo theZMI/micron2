@@ -41,3 +41,20 @@ function IsUnsafeHttpMethod(): bool
 {
     return !in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD', 'OPTIONS'], true);
 }
+
+
+/**
+ * Адрес для редиректа "обратно" (back_url и т.п.): только страницы своего сайта, иначе $default.
+ * Защита от open redirect: ссылки вида https://evil.ru, //evil.ru, /\evil.ru не пропускаем
+ */
+function SafeRedirectUrl($url, string $default): string
+{
+    $url = trim((string)$url);
+    if ($url === '' || preg_match('/[\x00-\x1F\\\\]/', $url)) {
+        return $default;
+    }
+    if ($url[0] === '/') {
+        return str_starts_with($url, '//') ? $default : $url;
+    }
+    return _UrlOrigin($url) === SiteOrigin() ? $url : $default;
+}

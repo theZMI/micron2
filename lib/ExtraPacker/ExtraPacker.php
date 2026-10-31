@@ -267,7 +267,7 @@ class ExtraPacker
 
         if ($this->isActiveJs) {
             if (file_exists($this->jsInfoFile)) {
-                $info = unserialize(file_get_contents($this->jsInfoFile));
+                $info = unserialize(file_get_contents($this->jsInfoFile), ['allowed_classes' => false]);
                 if ($this->isNeedRePack($info, $files)) {
                     if (self::ALWAYS_INDEPENDENT_PACK) {
                         $info = [];
@@ -347,7 +347,7 @@ class ExtraPacker
 
         if ($this->isActiveCss) {
             if (file_exists($this->cssInfoFile)) {
-                $info = unserialize(file_get_contents($this->cssInfoFile));
+                $info = unserialize(file_get_contents($this->cssInfoFile), ['allowed_classes' => false]);
                 if ($this->isNeedRePack($info, $files)) {
                     if (self::ALWAYS_INDEPENDENT_PACK) {
                         $info = [];

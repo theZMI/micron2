@@ -1,20 +1,6 @@
 <?php
 
-$captcha            = new SimpleCaptcha();
-$genNewCaptchaCode  = function() use ($captcha) {
-    $captcha->code();
-    $captcha->image();
-    $captcha->storeSession();
-};
-$checkCaptchaCode   = function(&$realCaptchaCode = '') use ($captcha) {
-    $realCode = $captcha->getSession();
-    $realCode = $realCaptchaCode = $realCode['code'] ?? '';
-    $userCode = Post('captcha_code');
-
-    $realCode = TranslateSimilarRuLettersToEn(mb_strtoupper($realCode));
-    $userCode = TranslateSimilarRuLettersToEn(mb_strtoupper($userCode));
-    return $realCode === $userCode;
-};
+$captcha = GetCaptchaInstance();
 
 // Обработка формы
 $msg = '';
@@ -22,10 +8,10 @@ $isFormSubmit = !!Post('is_set');
 
 if ($isFormSubmit) {
     $wasCaptchaCode = '';
-    $isCorrectCaptchaCode = @$checkCaptchaCode($wasCaptchaCode);
+    $isCorrectCaptchaCode = CheckCaptchaCode(Post('captcha_code'), $wasCaptchaCode);
 
+    @GenNewCaptchaCode(); // Старый код после проверки уже недействителен
     if (!$isCorrectCaptchaCode) {
-        @$genNewCaptchaCode();
         $msg = MsgErr("Неправильный проверочный код.<br>Правильный был: {$wasCaptchaCode}, а пришёл: " . mb_strtoupper(Post('captcha_code')));
     }
 
@@ -35,5 +21,5 @@ if ($isFormSubmit) {
 }
 
 if (!$isFormSubmit) {
-    @$genNewCaptchaCode();
+    @GenNewCaptchaCode();
 }

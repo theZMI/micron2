@@ -1,31 +1,23 @@
 <?php
 
-function GetClientIP()
+/**
+ * IP посетителя.
+ * Заголовки X-Forwarded-For и пр. может прислать кто угодно, поэтому верим им, только если запрос пришёл
+ * от нашего прокси (балансировщик, nginx перед apache) из списка TRUSTED_PROXIES в .env
+ */
+function GetClientIP(): string
 {
-    if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-    } else {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            if (isset($_SERVER['HTTP_X_FORWARDED'])) {
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-            } else {
-                if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-                    $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-                } else {
-                    if (isset($_SERVER['HTTP_FORWARDED'])) {
-                        $ipaddress = $_SERVER['HTTP_FORWARDED'];
-                    } else {
-                        if (isset($_SERVER['REMOTE_ADDR'])) {
-                            $ipaddress = $_SERVER['REMOTE_ADDR'];
-                        } else {
-                            $ipaddress = 0;
-                        }
-                    }
-                }
-            }
+    $remote = (string)($_SERVER['REMOTE_ADDR'] ?? '');
+    if (!in_array($remote, Config('trusted_proxies') ?: [], true)) {
+        return filter_var($remote, FILTER_VALIDATE_IP) ? $remote : '';
+    }
+
+    // Идём по цепочке прокси справа налево: первый адрес, который не наш прокси, - это клиент
+    $chain = array_map('trim', explode(',', (string)($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '')));
+    foreach (array_reverse($chain) as $ip) {
+        if (filter_var($ip, FILTER_VALIDATE_IP) && !in_array($ip, Config('trusted_proxies'), true)) {
+            return $ip;
         }
     }
-    return $ipaddress;
+    return $remote;
 }

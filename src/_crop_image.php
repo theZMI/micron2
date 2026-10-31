@@ -18,11 +18,13 @@ $sThumbs            = Get('thumbs');
 $thumbs             = [];
 $accessDirs         = [BASEPATH . 'upl/'];
 $isImageInAccessDir = false;
+$maxThumbs          = 10;   // Ограничения на превью из url-а, чтобы нельзя было заставить сервер делать огромные картинки
+$maxThumbSize       = 3000;
 
 if (strlen($sThumbs)) {
     foreach (explode('|', $sThumbs) as $w_and_h) {
         $t = array_map('intval', explode('x', $w_and_h));
-        if (count($t) === 2 && $t[0] > 0 && $t[1] > 0) {
+        if (count($t) === 2 && $t[0] > 0 && $t[1] > 0 && $t[0] <= $maxThumbSize && $t[1] <= $maxThumbSize && count($thumbs) < $maxThumbs) {
             $thumbs[] = $t;
         }
     }
@@ -33,6 +35,11 @@ foreach ($accessDirs as $dir) {
         $isImageInAccessDir = true;
         break;
     }
+}
+
+// Админ может обрезать любую картинку из upl/, а пользователь - только те, что сам загрузил (иначе можно испортить чужой аватар)
+if ($isImageInAccessDir && !IS_ADMIN_AUTH) {
+    $isImageInAccessDir = in_array($path, SessionManager::get('micron_my_uploads') ?: [], true);
 }
 
 if (!$isImageInAccessDir) {

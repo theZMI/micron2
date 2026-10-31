@@ -112,6 +112,12 @@ Micron в данном случае:
 - `GenNewCaptchaCode()` / `CheckCaptchaCode(Post('captcha_code'))` - картинка-капча; `CheckRecaptchaCode(Post('g-recaptcha-response'))` - Google reCAPTCHA (ключи `RECAPTCHA_SITE_KEY`/`RECAPTCHA_SECRET_KEY` в .env)
 - `GeneratePinCode($user)` / `CheckPinCode($user, GetCodeFromForm())` - одноразовые коды подтверждения
 
+### Мобильные приложения (apk)
+Скомпилированные версии кладутся в `apps/` с номером версии в имени: `apps/1.0.9.apk`, `apps/1.0.10.apk`. Если приложений несколько, то каждое в своей под-папке (`apps/courier/1.0.2.apk`) и дальше передаётся `app=courier`.
+- `/get_app` - скачать последнюю версию (файл назовётся `app_1.0.10.apk`). Папка `apps/` снаружи напрямую недоступна, поэтому, если в .env задан `APP_DOWNLOAD_KEY`, скачать можно только по ссылке `/get_app?key=...`
+- `api/v1.0/get_last_app_version` - номер последней версии, чтобы приложение само проверяло обновления
+- `GetLastAppVersion('courier')` - то же самое в коде (версии сравниваются через `version_compare`, поэтому 1.0.10 новее 1.0.9)
+
 ### Готовые компоненты (`tpl/_dev`)
 - `_dev/simple_captcha_code`, `_dev/simple_captcha_code_in_modal_wnd` - капча-картинка (`['captcha' => GetCaptchaInstance()]`); `_dev/simple_captcha_code_2`, `_dev/simple_captcha_code_2_in_modal_wnd` - Google reCAPTCHA
 - `_dev/pin_code_block` - поля ввода одноразового кода (автопереход, вставка из буфера, автосабмит, таймер повторной отправки); на странице нужно Vue-приложение с `mixins: [window.pinCodeForm]`
@@ -144,6 +150,11 @@ Micron в данном случае:
 - Коды из писем: 6 цифр, действуют 15 минут, 5 попыток, одноразовые (настройки в `core/config/user_model.php`)
 - CSRF: изменяющие запросы (POST и пр.) с чужих сайтов отклоняются (проверка `Sec-Fetch-Site`/`Origin`/`Referer`), а переходы в админку с чужих сайтов открывают главную админки, не выполняя действие из ссылки
 - CORS: кросс-доменные запросы разрешены только доменам из `CORS_ALLOWED_ORIGINS`
+- Подбор пароля: после 10 неудачных попыток на один логин или 30 с одного IP за 15 минут вход в админку и `api/v1.0/login` блокируется (таблица `login_attempts`, лимиты в `core/config/security.php`)
+- IP посетителя (`GetClientIP()`) берётся из `REMOTE_ADDR`. Если перед сайтом стоит прокси (nginx, балансировщик), впишите его IP в `TRUSTED_PROXIES`, тогда будет учитываться `X-Forwarded-For`
+- Редиректы "обратно" (`back_url`) - только на страницы своего сайта: `SafeRedirectUrl($url, $default)`
+- Смена e-mail, телефона или телеграма через API сбрасывает их подтверждение, а смена пароля требует текущий пароль (`old_password`)
+- Капча одноразовая: после проверки код больше не подходит
 - В лог ошибок не попадают пароли, токены и значения cookie. В продакшене warning/notice/deprecated только пишутся в лог-файл, а в `DEBUG_MODE` останавливают скрипт (настройка `stop_on_warnings`)
 
 ### Миграции БД

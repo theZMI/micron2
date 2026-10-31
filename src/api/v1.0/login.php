@@ -52,6 +52,13 @@ $tryGetLoginByManyWays = function() {
     return $login;
 };
 
+// Защита от подбора пароля
+$attempts   = new LoginAttemptModel();
+$typedLogin = (string)Post('login_or_name');
+if ($attempts->isBlocked('api', $typedLogin)) {
+    $apiResponse->error('Слишком много неудачных попыток входа. Попробуйте через 15 минут', 429);
+}
+
 // Пытаемся получить user_id для авторизации человека
 try {
     $user_id = (new UserModel())->getIdByLogin( $tryGetLoginByManyWays() );
@@ -61,9 +68,11 @@ try {
 
 $userModel = new UserModel($user_id);
 if ($user_id && $userModel->verifyPassword((string)Post('password'))) {
+    $attempts->clear('api', $typedLogin);
     $apiResponse->normal(
         array_merge($userModel->getPublicData(), ['token' => $userModel->issueApiToken()])
     );
     return;
 }
+$attempts->registerFail('api', $typedLogin);
 $apiResponse->error('Неверный логин или пароль', 401);

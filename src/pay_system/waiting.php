@@ -4,7 +4,7 @@ if (!class_exists('ShopOrderModel')) {
     throw new Exception('Создайте в проекте модель заказа ShopOrderModel (implements IShopOrderModel)');
 }
 
-$shop_order_id   = +Get('id');
+$shop_order_id   = intval(Get('id'));
 $shopOrderModel  = new ShopOrderModel($shop_order_id);
 $paymentModel    = new PaymentModel(PaymentModel::getIdByShopOrderId($shop_order_id));
 $isOrderExists   = $shopOrderModel->isExists();

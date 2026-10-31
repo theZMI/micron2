@@ -8,9 +8,9 @@ $preparer = function ($c) {
     ]);
 };
 
-$log        = new ErrorLoggerModel(+Get('id'));
+$log        = new ErrorLoggerModel(intval(Get('id')));
 $sqlQueries = json_decode($log->sql, true);
-$sqlTable   = MyDataBaseLog::render($sqlQueries);
+$sqlTable   = RenderDbLog($sqlQueries ?: []);
 
 echo '<div id="i-debug-panel">';
 echo $preparer($sqlTable);
