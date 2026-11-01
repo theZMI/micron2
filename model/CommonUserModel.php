@@ -144,9 +144,14 @@ class CommonUserModel extends SiteModel
 
     public function findOne($params)
     {
-        // Пустое значение не ищем: иначе `email` = '' найдёт первого попавшегося пользователя без e-mail
+        // Пустое значение не ищем: иначе `email` = '' найдёт первого попавшегося пользователя без e-mail.
+        // Телефон без цифр (например "+") тоже считаем пустым
         foreach (['login', 'email', 'phone', 'telegram_login', 'telegram_chat_id'] as $k) {
-            if (array_key_exists($k, $params) && (string)$params[$k] === '') {
+            if (!array_key_exists($k, $params)) {
+                continue;
+            }
+            $value = $k === 'phone' ? preg_replace('/\D/', '', (string)$params[$k]) : (string)$params[$k];
+            if ($value === '') {
                 return null;
             }
         }
