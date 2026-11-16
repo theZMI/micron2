@@ -1,10 +1,22 @@
 <?php
 
 /**
- * Заказ, который оплачивается через PaySystem. Модель заказа (например ShopOrderModel) делается в проекте и должна давать поля:
- *  - id, total_amount (сумма заказа), currency (RUB, USD...)
- *  - items - список позиций заказа, у каждой: name, amount, vendor_code
+ * Заказ, который оплачивается через PaySystem (готовая реализация - ShopOrderModel)
  */
 interface IShopOrderModel
 {
+    public function getId(): int;
+
+    public function getTotalAmount(): float;
+
+    public function getCurrency(): string; // RUB, USD...
+
+    // Позиции для чека: [['name' => ..., 'vendor_code' => ..., 'price' => ..., 'quantity' => ..., 'amount' => ...], ...]
+    public function getPayItems(): array;
+
+    // Покупатель: ['user_id' => ?int, 'name' => ..., 'email' => ..., 'phone' => ...]
+    public function getCustomer(): array;
+
+    // Куда банк вернёт покупателя после оплаты
+    public function getPayBackUrl(): string;
 }

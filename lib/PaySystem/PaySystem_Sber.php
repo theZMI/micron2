@@ -3,90 +3,106 @@
 namespace PaySystem;
 
 use IShopOrderModel;
+use PaymentModel;
 use Voronkovich\SberbankAcquiring\Client;
 use Voronkovich\SberbankAcquiring\Currency;
 use Voronkovich\SberbankAcquiring\OrderStatus;
 
-class PaySystem_Sber extends \PaySystem\PaySystem_Base
+class PaySystem_Sber extends PaySystem_Base
 {
-    private ?Client $driver;
+    private Client $driver;
+    private array $config;
+
+    private const CURRENCIES = [
+        'RUB' => Currency::RUB,
+        'UAH' => Currency::UAH,
+        'USD' => Currency::USD,
+        'EUR' => Currency::EUR,
+    ];
 
     public function __construct()
     {
-        $this->driver = new Client(Config(['pay_system', 'connect']));
+        $this->config = Config('pay_system');
+        $this->driver = new Client($this->config['connect']);
     }
 
-    protected function _amountToFormat(float $amount): string
+    // Сбер принимает суммы в копейках
+    protected function amountToBankFormat(float $amount): string
     {
-        return 100 * parent::_amountToFormat($amount);
+        return (string)\ShopOrderModel::toCents($amount);
     }
 
-    protected function sendPaymentToBank($customerModel, IShopOrderModel $shopOrderModel): array
+    private function makeOrderBundle(IShopOrderModel $order): array
     {
-        $makeOrderData                 = function () use (&$customerModel, &$shopOrderModel) {
-            $pos        = 1;
-            $orderItems = [];
-            foreach ($shopOrderModel->items as $item) {
-                $orderItems[] = [
-                    'positionId' => "$pos",
-                    'name'       => strip_tags($item->name),
-                    'quantity'   => [
-                        'value'   => 1,
-                        'measure' => 'шт.',
-                    ],
-                    'itemAmount' => $this->_amountToFormat((float)$item->amount),
-                    'itemCode'   => $item->vendor_code,
-                    'tax'        => [
-                        "taxType" => 0,
-                        "taxSum"  => 0
-                    ],
-                    'itemPrice'  => $this->_amountToFormat((float)$item->amount)
-                ];
-                $pos++;
-            }
-
-            return [
-                'cartItems' => [
-                    'items' => $orderItems,
+        $items = [];
+        foreach (array_values($order->getPayItems()) as $pos => $item) {
+            $items[] = [
+                'positionId' => (string)($pos + 1),
+                'name'       => $this->plainText($item['name'], 100),
+                'quantity'   => [
+                    'value'   => (int)$item['quantity'],
+                    'measure' => 'шт.',
                 ],
+                'itemAmount' => (int)$this->amountToBankFormat($item['amount']),
+                'itemCode'   => $this->plainText($item['vendor_code'] ?: "item-{$pos}", 100),
+                'tax'        => ['taxType' => $this->config['tax_type']],
+                'itemPrice'  => (int)$this->amountToBankFormat($item['price']),
             ];
-        };
-        $getBankCurrencyBySiteCurrency = function ($siteCurrencyName) {
-            $arr = [
-                "RUB" => Currency::RUB,
-                "UAH" => Currency::UAH,
-                "USD" => Currency::USD,
-                "EUR" => Currency::EUR,
-            ];
-            return $arr[$siteCurrencyName];
-        };
+        }
 
+        $bundle   = ['cartItems' => ['items' => $items]];
+        $customer = $order->getCustomer();
+        if ($customer['email']) {
+            $bundle['customerDetails']['email'] = $customer['email'];
+        }
+        if ($customer['phone'] && PhoneFilter($customer['phone'])) {
+            $bundle['customerDetails']['phone'] = PhoneFilter($customer['phone']);
+        }
+        return $bundle;
+    }
+
+    protected function sendPaymentToBank(IShopOrderModel $order): array
+    {
+        $currency = self::CURRENCIES[$order->getCurrency()] ?? null;
+        if ($currency === null) {
+            throw new \InvalidArgumentException("Sber: unsupported currency {$order->getCurrency()}");
+        }
+
+        // Номер заказа в Сбере должен быть уникальным для каждой попытки оплаты
         $bankResponse = $this->driver->registerOrder(
-            $shopOrderModel->id,
-            $this->_amountToFormat($shopOrderModel->total_amount),
-            $this->_getBackUrl($shopOrderModel),
+            $order->getId() . '-' . time(),
+            (int)$this->amountToBankFormat($order->getTotalAmount()),
+            $order->getPayBackUrl(),
             [
-                'currency'    => $getBankCurrencyBySiteCurrency($shopOrderModel->currency),
-                'description' => Config(['pay_system', 'payment_name']),
-                'failUrl'     => SiteRoot('pay_system/fail'),
-                'orderBundle' => $makeOrderData
+                'currency'    => $currency,
+                'description' => $this->plainText($this->config['payment_name'] . " (заказ №{$order->getId()})", 99),
+                'failUrl'     => $order->getPayBackUrl(), // Страница ожидания сама узнает в банке, что оплата не прошла
+                'orderBundle' => $this->makeOrderBundle($order),
             ]
         );
 
         return [
             'transfer_id' => $bankResponse['orderId'],
-            'pay_link'    => $bankResponse['formUrl']
+            'pay_link'    => $bankResponse['formUrl'],
         ];
     }
 
-    public function getPaymentStatus($transfer_id): string
+    public function getPaymentStatus(string $transfer_id): string
     {
         $result = $this->driver->getOrderStatus($transfer_id);
         if (OrderStatus::isDeposited($result['orderStatus'])) {
-            return 'paid';
-        } elseif (OrderStatus::isDeclined($result['orderStatus'])) {
-            return 'failed';
+            return PaymentModel::STATUS_PAID;
         }
-        return 'waiting';
+        if (OrderStatus::isDeclined($result['orderStatus']) || OrderStatus::isReversed($result['orderStatus']) || OrderStatus::isRefunded($result['orderStatus'])) {
+            return PaymentModel::STATUS_FAILED;
+        }
+        return PaymentModel::STATUS_WAITING;
+    }
+
+    // Callback-уведомление Сбера: GET ?mdOrder=...&orderNumber=...&operation=deposited&status=1
+    public function getTransferIdFromNotification(array $get, string $body): ?string
+    {
+        $id = $get['mdOrder'] ?? null;
+        return is_string($id) && preg_match('/^[\w-]{1,64}$/', $id) ? $id : null;
     }
 }

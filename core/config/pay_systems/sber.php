@@ -7,5 +7,6 @@ Config('pay_system_sber', [
         'apiUri'   => Voronkovich\SberbankAcquiring\Client::API_URI, // Voronkovich\SberbankAcquiring\Client::API_URI_TEST,
     ],
     'payment_name' => 'Покупка на сайте', // Название платежа для Сбер-а которым он подписывает письмо для юзера (указываем что-то логичное, например: Покупка билета на посещение национального парка)
-    'driver'       => 'PaySystem\PaySystem_Sber'
+    'tax_type'     => 0, // Ставка НДС для позиций чека (0 - без НДС)
+    'driver'       => 'PaySystem\PaySystem_Sber',
 ]);

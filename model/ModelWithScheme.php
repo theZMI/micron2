@@ -25,6 +25,20 @@ class ModelWithScheme extends \Models\ModelExtends
         }
     }
 
+    /**
+     * ModelOptimized::isExists() кеширует ответ в static-переменной по одному id, без учёта таблицы:
+     * если в users есть id=5, то и (new PaymentModel(5))->isExists() вернёт true. Поэтому проверяем по своей строке
+     * (она загружается тем же пакетным запросом, что и данные модели)
+     */
+    public function isExists()
+    {
+        if ($this->isDeleted()) {
+            return false;
+        }
+        $data = parent::getData();
+        return is_array($data) && !empty($data['id']);
+    }
+
     public function getData()
     {
         $ret = parent::getData();

@@ -1,21 +1,33 @@
 <?php
 
-if (Post('is_set')) {
-    // $shopOrderModel - модель текущего заказа пользователя
-    if (!isset($shopOrderModel)) {
-        throw new Exception('Не найден заказ');
-    }
-    if ($shopOrderModel->total_amount <= 0) {
-        throw new Exception('Ошибка в сумме заказа');
-    }
-    if (!IS_USER_AUTH) {
-        throw new Exception('Невозможно создать заказ для анонимного юзера');
-    }
+// Оплата заказа: pay_system/pay_form&id=ID&key=KEY (ссылку даёт ShopOrderModel::url('pay_system/pay_form'))
+$order = ShopOrderModel::findForCurrentVisitor();
+if (!$order) {
+    IncludeCom('404');
+    ExitCom();
+    return;
+}
+if (!$order->canPay()) {
+    UrlRedirect::go($order->url());
+}
 
-    $bankUrl = PaySystem::getInstance()->createPayment(
-        $g_user,
-        $shopOrderModel,
-        new PaymentModel()
-    );
-    UrlRedirect::go($bankUrl); // Отправляем человека на оплату заказа
+$msg = '';
+if (Post('is_set')) {
+    try {
+        // Если прошлый платёж ещё ждёт оплаты - отправляем на него же, а не создаём новый
+        $lastPayment = PaymentModel::getLastByShopOrderId($order->id);
+        $status      = $lastPayment->checkStatusInBank();
+        if ($status === PaymentModel::STATUS_PAID) {
+            UrlRedirect::go($order->url('pay_system/succeeded'));
+        }
+        if ($status === PaymentModel::STATUS_WAITING && $lastPayment->pay_link !== '') {
+            UrlRedirect::go($lastPayment->pay_link);
+        }
+
+        $bankUrl = PaySystem::getInstance()->createPayment($order, new PaymentModel());
+        UrlRedirect::go($bankUrl); // Отправляем покупателя на оплату
+    } catch (Throwable $e) {
+        ToLog("Shop order #{$order->id}: can't create payment: " . $e->getMessage());
+        $msg = MsgErr('Не удалось связаться с платёжной системой. Попробуйте ещё раз через несколько минут.');
+    }
 }

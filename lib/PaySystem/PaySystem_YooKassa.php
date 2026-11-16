@@ -3,79 +3,102 @@
 namespace PaySystem;
 
 use IShopOrderModel;
+use PaymentModel;
 use YooKassa\Client;
 
-class PaySystem_YooKassa extends \PaySystem\PaySystem_Base
+class PaySystem_YooKassa extends PaySystem_Base
 {
-    private ?Client $driver;
+    private Client $driver;
+    private array $config;
 
     public function __construct()
     {
+        $this->config = Config('pay_system');
         $this->driver = new Client();
-        $this->driver->setAuth(Config(['pay_system', 'connect', 'shop_id']), Config(['pay_system', 'connect', 'password']));
+        $this->driver->setAuth($this->config['connect']['shop_id'], $this->config['connect']['password']);
     }
 
-    protected function sendPaymentToBank($customerModel, IShopOrderModel $shopOrderModel): array
+    // Чек по 54-ФЗ. Нужен, если в ЮKassa подключена отправка чеков
+    private function makeReceipt(IShopOrderModel $order): array
     {
-        $makeOrderData = function () use (&$customerModel, &$shopOrderModel) {
-            $orderItems = [];
-            foreach ($shopOrderModel->items as $item) {
-                $orderItems[] = [
-                    "description"     => strip_tags($item->name),
-                    "quantity"        => "1.00", // Количество
-                    "amount"          => [
-                        "value"    => $this->_amountToFormat((float)$item->amount),
-                        "currency" => $shopOrderModel->currency
-                    ],
-                    "tax_system_code" => "2", // Налогообложение
-                    "vat_code"        => "1",
-                    "payment_mode"    => "full_prepayment", // Полный платеж
-                    "payment_subject" => "payment", // "commodity"
-                ];
-            }
+        $customer = $order->getCustomer();
+        $receipt  = ['customer' => [], 'items' => []];
+        if ($customer['email']) {
+            $receipt['customer']['email'] = $customer['email'];
+        }
+        if ($customer['phone'] && PhoneFilter($customer['phone'])) {
+            $receipt['customer']['phone'] = ltrim(PhoneFilter($customer['phone']), '+');
+        }
+        if ($customer['name']) {
+            $receipt['customer']['full_name'] = $this->plainText($customer['name'], 256);
+        }
+        if (!empty($this->config['receipt']['tax_system_code'])) {
+            $receipt['tax_system_code'] = $this->config['receipt']['tax_system_code'];
+        }
 
-            return [
-                "amount"              => [
-                    "value"    => $this->_amountToFormat((float)$shopOrderModel->total_amount), // Сумма платежа
-                    "currency" => $shopOrderModel->currency // Валюта платежа
+        foreach ($order->getPayItems() as $item) {
+            $receipt['items'][] = [
+                'description'     => $this->plainText($item['name']),
+                'quantity'        => (string)$item['quantity'],
+                'amount'          => [
+                    'value'    => $this->amountToBankFormat($item['price']), // Цена за единицу
+                    'currency' => $order->getCurrency(),
                 ],
-                'payment_method_data' => [
-                    'type' => 'bank_card',
-                ],
-                "confirmation"        => [
-                    "type"       => "redirect",
-                    "return_url" => $this->_getBackUrl($shopOrderModel) // Куда отправлять пользователя после оплаты
-                ],
-                "capture"             => true, // Платеж в один этап
-                "receipt"             => [
-                    "customer" => [
-                        "email" => $customerModel->email,
-                        "phone" => PhoneFilter($customerModel->phone)
-                    ],
-                    "items"    => $orderItems,
-                    "email"    => $customerModel->email,
-                    "phone"    => PhoneFilter($customerModel->phone)
-                ]
+                'vat_code'        => $this->config['receipt']['vat_code'],
+                'payment_mode'    => 'full_prepayment',
+                'payment_subject' => $this->config['receipt']['payment_subject'],
             ];
-        };
+        }
+        return $receipt;
+    }
 
-        $bankResponse = $this->driver->createPayment(
-            $makeOrderData(),
-            $shopOrderModel->id
-        );
+    protected function sendPaymentToBank(IShopOrderModel $order): array
+    {
+        $data = [
+            'amount'       => [
+                'value'    => $this->amountToBankFormat($order->getTotalAmount()),
+                'currency' => $order->getCurrency(),
+            ],
+            'confirmation' => [
+                'type'       => 'redirect',
+                'return_url' => $order->getPayBackUrl(), // Куда вернуть покупателя после оплаты
+            ],
+            'capture'      => true, // Платёж в одну стадию
+            'description'  => $this->plainText("Заказ №{$order->getId()}"),
+            'metadata'     => ['shop_order_id' => $order->getId()],
+        ];
+        if (!empty($this->config['payment_method'])) {
+            $data['payment_method_data'] = ['type' => $this->config['payment_method']]; // Иначе покупатель сам выберет способ (карта, СБП...)
+        }
+        if (!empty($this->config['receipt']['is_enabled'])) {
+            $data['receipt'] = $this->makeReceipt($order);
+        }
+
+        // Ключ идемпотентности уникален для каждой попытки, иначе повторная оплата заказа вернёт старый (отменённый) платёж
+        $idempotenceKey = "order-{$order->getId()}-" . bin2hex(random_bytes(8));
+        $bankResponse   = $this->driver->createPayment($data, $idempotenceKey);
+
         return [
-            'transfer_id' => $bankResponse->getid(),
-            'pay_link'    => $bankResponse->getConfirmation()->getConfirmationUrl()
+            'transfer_id' => $bankResponse->getId(),
+            'pay_link'    => $bankResponse->getConfirmation()->getConfirmationUrl(),
         ];
     }
 
-    public function getPaymentStatus($transfer_id): string
+    public function getPaymentStatus(string $transfer_id): string
     {
         $info = $this->driver->getPaymentInfo($transfer_id);
-        return match ($info->getstatus()) {
-            'waiting_for_capture', 'succeeded' => 'paid',
-            'canceled'                         => 'failed',
-            default                            => 'waiting'
+        return match ($info->getStatus()) {
+            'succeeded' => PaymentModel::STATUS_PAID,
+            'canceled'  => PaymentModel::STATUS_FAILED,
+            default     => PaymentModel::STATUS_WAITING, // pending, waiting_for_capture (при capture=true не бывает)
         };
+    }
+
+    // HTTP-уведомление ЮKassa: JSON {"type":"notification","event":"payment.succeeded","object":{"id":"..."}}
+    public function getTransferIdFromNotification(array $get, string $body): ?string
+    {
+        $json = json_decode($body, true);
+        $id   = $json['object']['id'] ?? null;
+        return is_string($id) && preg_match('/^[\w-]{1,64}$/', $id) ? $id : null;
     }
 }

@@ -1,17 +1,10 @@
-<h1>Платёжная форма</h1>
-<form action="<?= GetCurUrl() ?>" method="post">
-    <input type="hidden" name="is_set" value="1">
-    <div class="mb-3">
-        <label class="form-label">Название товара</label>
-        <input type="text" class="form-control" name="item_name" value="Наклейка №1001">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Артикул товара</label>
-        <input type="text" class="form-control" name="item_vendor_code" value="item-1001">
-    </div>
-    <div class="input-group mb-3">
-        <span class="input-group-text">₽</span>
-        <input type="text" class="form-control" name="item_price" value="2.50">
-    </div>
-    <button type="submit" class="btn btn-primary">Купить</button>
-</form>
+<div class="container my-4" style="max-width: 640px;">
+    <h1 class="mb-4">Оплата заказа №<?= $order->id ?></h1>
+    <?= $msg ?>
+    <?php IncludeCom('shop/_order_items', ['order' => $order]) ?>
+    <form action="<?= GetCurUrl() ?>" method="post" class="text-center mt-4">
+        <input type="hidden" name="is_set" value="1">
+        <a href="<?= $order->url() ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К заказу</a>
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill"><i class="bi bi-credit-card pe-2"></i>Перейти к оплате</button>
+    </form>
+</div>

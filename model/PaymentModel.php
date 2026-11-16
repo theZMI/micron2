@@ -2,8 +2,8 @@
 
 /**
  * Платёж, созданный через PaySystem.
- * Когда статус меняется на paid/failed, вызываются обработчики из Config(['pay_system', 'on_paid']) / Config(['pay_system', 'on_failed']),
- * в них приходит эта модель (например, чтобы отметить заказ оплаченным)
+ * Статус меняется только через applyStatus(): когда он становится paid/failed, вызываются обработчики из
+ * Config(['pay_system', 'on_paid']) / Config(['pay_system', 'on_failed']) с этой моделью (см. core/init/pay_system.php)
  */
 class PaymentModel extends SiteModel implements IPaymentModel
 {
@@ -47,6 +47,7 @@ class PaymentModel extends SiteModel implements IPaymentModel
                 `last_update_time` INT DEFAULT NULL,
                 KEY `shop_order_id` (`shop_order_id`),
                 KEY `status` (`status`),
+                KEY `transfer_id` (`transfer_id`),
                 PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
@@ -58,38 +59,91 @@ class PaymentModel extends SiteModel implements IPaymentModel
         parent::__construct('payments', $id);
     }
 
-    public static function getIdByShopOrderId($shop_order_id)
+    public static function getStatuses(): array
     {
-        return GetDefaultDb()->selectCell(
+        return [
+            self::STATUS_WAITING => 'Ожидает',
+            self::STATUS_PAID    => 'Оплачен',
+            self::STATUS_FAILED  => 'Не прошёл',
+        ];
+    }
+
+    // Последний платёж по заказу (или пустая модель)
+    public static function getLastByShopOrderId(int $shop_order_id): self
+    {
+        $id = GetDefaultDb()->selectCell(
             "SELECT `id` FROM `payments` WHERE `shop_order_id` = ?d ORDER BY `id` DESC LIMIT 1",
             $shop_order_id
         );
+        return new self($id ?: null);
     }
 
-    public function getWaitingList()
+    public static function findByTransferId(string $transfer_id): self
+    {
+        $id = $transfer_id === '' ? null : GetDefaultDb()->selectCell(
+            "SELECT `id` FROM `payments` WHERE `transfer_id` = ? LIMIT 1",
+            $transfer_id
+        );
+        return new self($id ?: null);
+    }
+
+    public function getListByShopOrderId(int $shop_order_id): array
+    {
+        $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `shop_order_id` = ?d ORDER BY `id` DESC", $this->table, $shop_order_id);
+        return array_map(fn($id) => new static($id), $ids);
+    }
+
+    public function getWaitingList(): array
     {
         $ids = $this->db->selectCol("SELECT `id` FROM ?# WHERE `status` = ? AND `is_done` = 0", $this->table, self::STATUS_WAITING);
         return array_map(fn($id) => new static($id), $ids);
     }
 
-    public function __set($key, $value)
+    /**
+     * Ставит статус из банка. Итоговый статус (paid/failed) ставится одним UPDATE ... WHERE is_done = 0, поэтому
+     * если крон, webhook и возврат покупателя придут одновременно, обработчик on_paid/on_failed выполнится ровно один раз.
+     * Возвращает true, если именно этот вызов перевёл платёж в итоговый статус
+     */
+    public function applyStatus(string $status): bool
     {
-        $isNewFinalStatus = $key === 'status'
-            && $this->isExists()
-            && !$this->is_done
-            && $value !== $this->status
-            && in_array($value, [self::STATUS_PAID, self::STATUS_FAILED], true);
-
-        $ret = parent::__set($key, $value);
-
-        if ($isNewFinalStatus) {
-            parent::__set('is_done', true);
-            $this->flush();
-            $handler = Config(['pay_system', $value === self::STATUS_PAID ? 'on_paid' : 'on_failed']);
-            if (is_callable($handler)) {
-                call_user_func($handler, $this);
-            }
+        if (!$this->isExists() || $this->is_done || $status === $this->status) {
+            return false;
         }
-        return $ret;
+        if (!in_array($status, [self::STATUS_PAID, self::STATUS_FAILED], true)) {
+            $this->status = $status;
+            $this->flush();
+            return false;
+        }
+
+        $affected = $this->db->query(
+            "UPDATE ?# SET `status` = ?, `is_done` = 1, `last_update_time` = ?d WHERE `id` = ?d AND `is_done` = 0",
+            $this->table,
+            $status,
+            time(),
+            $this->id
+        );
+        if ((int)$affected !== 1) {
+            $this->resetChanges(); // Другой процесс уже обработал этот платёж - ничего не перезаписываем
+            return false;
+        }
+        // Приводим модель к тому, что уже записано в БД (иначе __destruct сохранил бы старые значения)
+        $this->status  = $status;
+        $this->is_done = true;
+        $this->flush();
+
+        $handler = Config(['pay_system', $status === self::STATUS_PAID ? 'on_paid' : 'on_failed']);
+        if (is_callable($handler)) {
+            call_user_func($handler, $this);
+        }
+        return true;
+    }
+
+    // Спросить статус у банка и применить его
+    public function checkStatusInBank(): string
+    {
+        if ($this->isExists() && !$this->is_done && $this->transfer_id !== '') {
+            $this->applyStatus(PaySystem::getInstance()->getPaymentStatus($this->transfer_id));
+        }
+        return $this->status;
     }
 }

@@ -1735,12 +1735,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theZMI/components__dbSimpleModels.git",
-                "reference": "3b1ad7571e22da20291ff533b22eef3b98628050"
+                "reference": "4f5ec5712c42d14559e4d87cb0f1df582aea2b57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theZMI/components__dbSimpleModels/zipball/3b1ad7571e22da20291ff533b22eef3b98628050",
-                "reference": "3b1ad7571e22da20291ff533b22eef3b98628050",
+                "url": "https://api.github.com/repos/theZMI/components__dbSimpleModels/zipball/4f5ec5712c42d14559e4d87cb0f1df582aea2b57",
+                "reference": "4f5ec5712c42d14559e4d87cb0f1df582aea2b57",
                 "shasum": ""
             },
             "require": {
@@ -1771,7 +1771,8 @@
                 "issues": "https://github.com/theZMI/components__dbSimpleModels/issues",
                 "source": "https://github.com/theZMI/components__dbSimpleModels/tree/master"
             },
-            "time": "2026-05-27T14:56:52+00:00"
+            "time": "2026-11-16T11:29:19+00:00",
+            "published-time": "2026-11-16T11:36:33+00:00"
         },
         {
             "name": "thezmi/filelogger",
@@ -2257,5 +2258,5 @@
     "platform-overrides": {
         "php": "8.2.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.11.0"
 }

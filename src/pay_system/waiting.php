@@ -1,26 +1,30 @@
 <?php
 
-if (!class_exists('ShopOrderModel')) {
-    throw new Exception('Создайте в проекте модель заказа ShopOrderModel (implements IShopOrderModel)');
+// Сюда банк возвращает покупателя (и при успехе, и при отказе): узнаём статус и отправляем на нужную страницу
+$order = ShopOrderModel::findForCurrentVisitor();
+if (!$order) {
+    IncludeCom('404');
+    ExitCom();
+    return;
 }
 
-$shop_order_id   = intval(Get('id'));
-$shopOrderModel  = new ShopOrderModel($shop_order_id);
-$paymentModel    = new PaymentModel(PaymentModel::getIdByShopOrderId($shop_order_id));
-$isOrderExists   = $shopOrderModel->isExists();
-$isPaymentExists = $paymentModel->isExists();
-$isAlreadyDone   = $isPaymentExists ? $paymentModel->is_done : false;
-$status          = $isAlreadyDone ? $paymentModel->status : PaySystem::getInstance()->getPaymentStatus($paymentModel->transfer_id);
-
-if (!$isOrderExists || !$isPaymentExists) {
-    throw new Exception('Не найден подходящий платёж');
+$payment = PaymentModel::getLastByShopOrderId($order->id);
+if (!$payment->isExists()) {
+    UrlRedirect::go($order->url('pay_system/pay_form'));
 }
 
-$paymentModel->status = $status;
-
-if ($status === 'paid') {
-    UrlRedirect::go(SiteRoot("pay_system/succeeded&id={$shop_order_id}"));
+$msg = '';
+try {
+    $status = $payment->checkStatusInBank();
+} catch (Throwable $e) {
+    ToLog("Payment #{$payment->id}: can't get status: " . $e->getMessage());
+    $status = PaymentModel::STATUS_WAITING;
+    $msg    = MsgWarning('Не удалось узнать статус платежа в банке. Обновите страницу через минуту.');
 }
-if ($status === 'failed') {
-    UrlRedirect::go(SiteRoot("pay_system/failed&id={$shop_order_id}"));
+
+if ($status === PaymentModel::STATUS_PAID) {
+    UrlRedirect::go($order->url('pay_system/succeeded'));
+}
+if ($status === PaymentModel::STATUS_FAILED) {
+    UrlRedirect::go($order->url('pay_system/failed'));
 }

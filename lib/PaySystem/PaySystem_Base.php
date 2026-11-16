@@ -7,51 +7,51 @@ use IShopOrderModel;
 
 abstract class PaySystem_Base
 {
-    // Надо вернуть массив из двух полей: transfer_id (ID-платежка в эквайринге), pay_link (ссылка на которую нужно перебросить юзера для оплаты)
-    protected abstract function sendPaymentToBank($customerModel, IShopOrderModel $shopOrderModel): array;
+    // Регистрирует платёж в банке. Надо вернуть: transfer_id (ID платежа в эквайринге), pay_link (куда отправить покупателя для оплаты)
+    protected abstract function sendPaymentToBank(IShopOrderModel $order): array;
 
-    protected function savePaymentToLocalDB($customerModel, IShopOrderModel $shopOrderModel, IPaymentModel $paymentModel, $transfer_id, $pay_link): int|bool
-    {
-        $paymentModel->user_id       = $customerModel->id;
-        $paymentModel->shop_order_id = $shopOrderModel->id;
-        $paymentModel->amount        = $shopOrderModel->total_amount;
-        $paymentModel->currency      = $shopOrderModel->currency;
-        $paymentModel->transfer_id   = $transfer_id;
-        $paymentModel->status        = 'waiting';
-        $paymentModel->pay_time      = time();
-        $paymentModel->pay_link      = $pay_link;
-        return $paymentModel->flush();
-    }
+    // Статус платежа в банке, приведённый к PaymentModel::STATUS_* (waiting, paid, failed)
+    public abstract function getPaymentStatus(string $transfer_id): string;
 
-    protected function _amountToFormat(float $amount): string
+    /**
+     * ID платежа из уведомления банка (webhook на pay_system/notify) или null, если запрос не похож на уведомление.
+     * Самому уведомлению не верим: статус всё равно перепроверяется запросом к банку через getPaymentStatus()
+     */
+    public abstract function getTransferIdFromNotification(array $get, string $body): ?string;
+
+    // Сумма в формате банка
+    protected function amountToBankFormat(float $amount): string
     {
         return number_format($amount, 2, '.', '');
     }
 
-    protected function _getBackUrl(IShopOrderModel $shopOrderModel): string
+    // В БД строки хранятся с экранированным HTML (см. Input::clean), а банку нужен чистый текст
+    protected function plainText(string $text, int $maxLength = 128): string
     {
-        return SiteRoot("pay_system/waiting&id={$shopOrderModel->id}");
+        $text = trim(strip_tags(html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+        return mb_substr($text, 0, $maxLength);
     }
 
-    public function createPayment($customerModel, IShopOrderModel $shopOrderModel, IPaymentModel $paymentModel): string
+    public function createPayment(IShopOrderModel $order, IPaymentModel $payment): string
     {
-        $bankResponse = $this->sendPaymentToBank(
-            $customerModel,
-            $shopOrderModel
-        );
-        $isSaved      = $this->savePaymentToLocalDB(
-            $customerModel,
-            $shopOrderModel,
-            $paymentModel,
-            $bankResponse['transfer_id'],
-            $bankResponse['pay_link']
-        );
-        if (!$isSaved) {
-            throw new \Exception("Error to save payment into local DB");
+        if ($order->getTotalAmount() <= 0) {
+            throw new \InvalidArgumentException("Order #{$order->getId()}: wrong amount");
         }
 
-        return (string)$paymentModel->pay_link;
-    }
+        $bankResponse = $this->sendPaymentToBank($order);
 
-    public abstract function getPaymentStatus($transfer_id): string;
+        $payment->user_id       = $order->getCustomer()['user_id'] ?? null;
+        $payment->shop_order_id = $order->getId();
+        $payment->amount        = $order->getTotalAmount();
+        $payment->currency      = $order->getCurrency();
+        $payment->transfer_id   = $bankResponse['transfer_id'];
+        $payment->status        = \PaymentModel::STATUS_WAITING;
+        $payment->pay_time      = time();
+        $payment->pay_link      = $bankResponse['pay_link'];
+        if (!$payment->flush()) {
+            throw new \RuntimeException("Order #{$order->getId()}: can't save payment into local DB");
+        }
+
+        return (string)$bankResponse['pay_link'];
+    }
 }

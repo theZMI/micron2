@@ -154,13 +154,24 @@ $menu = [
         ],
     ],
     [
+        'link' => SiteRoot('shop'),
+        'name' => 'Магазин',
+    ],
+    [
         'link' => SiteRoot('contacts'),
         'name' => 'Связь',
     ],
 ];
 
 $countMessages = $g_user->countNotifies();
+$cartCount     = ShopCart::count();
 $rightMenu     = [
+    [
+        'link'    => SiteRoot('shop/cart'),
+        'name'    => '<i class="bi bi-cart3 d-none d-lg-inline"></i><span class="d-inline d-lg-none">Корзина</span>' .
+                     ($cartCount ? '<span class="position-absolute top-50 translate-middle p-1 badge rounded-pill bg-primary">' . $cartCount . '<span class="visually-hidden">товаров в корзине</span></span>' : ''),
+        'linkCss' => 'position-relative',
+    ],
     [
         'link'    => '#offcanvasUserMenu',
         'name'    => '<i class="bi bi-person-circle d-none d-lg-inline"></i><span class="d-inline d-lg-none">Личный кабинет</span>' .
@@ -179,6 +190,10 @@ if (IS_USER_AUTH) {
     $userMenu[] = [
         'link' => SiteRoot('user/dashboard'),
         'name' => 'Главная кабинета'
+    ];
+    $userMenu[] = [
+        'link' => SiteRoot('user/orders'),
+        'name' => 'Мои заказы'
     ];
     $userMenu[] = [
         'link' => SiteRoot('user/settings'),

@@ -1,9 +1,16 @@
 <?php
 
 Config('pay_system_yookassa', [
-    'connect' => [
+    'connect'        => [
         'shop_id'  => Env('PAY_SYSTEM_YOOKASSA_SHOP_ID'),
         'password' => Env('PAY_SYSTEM_YOOKASSA_PASSWORD'),
     ],
-    'driver'  => 'PaySystem\PaySystem_YooKassa'
+    'payment_method' => null, // null - покупатель сам выберет способ на странице ЮKassa (карта, СБП, SberPay...), 'bank_card' - только карта
+    'receipt'        => [ // Чек по 54-ФЗ (если в ЮKassa подключены чеки). Коды: https://yookassa.ru/developers/payment-acceptance/receipts/54fz/parameters-values
+        'is_enabled'      => true,
+        'tax_system_code' => null, // Система налогообложения (1 - ОСН, 2 - УСН доходы...). null - взять из настроек магазина в ЮKassa
+        'vat_code'        => 1, // Ставка НДС (1 - без НДС)
+        'payment_subject' => 'commodity', // Предмет расчёта: commodity - товар, service - услуга
+    ],
+    'driver'         => 'PaySystem\PaySystem_YooKassa',
 ]);

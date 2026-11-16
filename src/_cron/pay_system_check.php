@@ -1,14 +1,16 @@
 <?php
 
-$service         = PaySystem::getInstance();
-$waitingPayments = (new PaymentModel())->getWaitingList();
-foreach ($waitingPayments as $paymentModel) {
-    $curStatus = $paymentModel->status;
-    $newStatus = $service->getPaymentStatus($paymentModel->transfer_id);
-
-    if ($curStatus !== $newStatus) {
-        echo "Payment #{$paymentModel->id}: {$curStatus} -> {$newStatus}<br>";
-        $paymentModel->status = $newStatus; // Если статус изменится, то автоматически запустятся ф-ии onPaid/onFailed
+// Проверка ожидающих платежей (на случай, если уведомление банка не дошло). Статус paid/failed сам запустит обработчики on_paid/on_failed
+foreach ((new PaymentModel())->getWaitingList() as $payment) {
+    $oldStatus = $payment->status;
+    try {
+        $newStatus = $payment->checkStatusInBank();
+    } catch (Throwable $e) {
+        echo "Payment #{$payment->id}: error " . htmlspecialchars($e->getMessage()) . "<br>";
+        continue;
+    }
+    if ($oldStatus !== $newStatus) {
+        echo "Payment #{$payment->id}: {$oldStatus} -> {$newStatus}<br>";
     }
 }
 
