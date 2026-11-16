@@ -68,3 +68,11 @@
 <p>autosize inputs</p>
 <p>no_responsive</p>
 <p>pwd_shower</p>
+<h3 class="my-2">Проверка POST и языковых строк:</h3>
+<form action="<?= SiteRoot('home_test&a=123') ?>" method="post" class="mb-3">
+    <input type="hidden" name="par_1" value="123">
+    <input type="hidden" name="par_2" value="abc">
+    <input type="hidden" name="par_3" value="<b>bold text</b><script>alert(hi)</script>('">
+    <button class="btn btn-outline-dark btn-sm">Отправить POST на тестовый скрипт</button>
+</form>
+<p>Языкозависимый текст: <strong><?= L('Hello world') ?></strong></p>

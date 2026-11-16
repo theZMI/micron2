@@ -13,6 +13,7 @@ import "magicsuggest-alpine/magicsuggest";
 import "magicsuggest-alpine/magicsuggest.css";
 import "@scss/components/magicsuggest.scss";
 import "@webpack/src/MainMenuInit";
+import "@webpack/src/shop";
 import "@webpack/src/IMaskInit";
 import "@ts/helpers/pwdShower";
 import { trClick } from "@ts/helpers/trClick";

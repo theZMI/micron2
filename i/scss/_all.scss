@@ -10,8 +10,6 @@
 // Common site styles (html, body, overwrites and bonus classes)
 @import "@scss/components/common";
 
-// Special font to site
-@import url("@scss/components/ptsans_font");
 
 @import "@scss/components/main_menu";
 @import "@scss/components/footer";
@@ -31,6 +29,7 @@
 @import "@scss/user_cabinet";
 @import "@scss/manager_cabinet";
 @import "@scss/home_page";
+@import "@scss/shop";
 
 // Общий стиль для таблиц на сайте (применяется для таблиц с фильтрацией примерно как в XL)
 .site-table {

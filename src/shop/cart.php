@@ -23,6 +23,9 @@ if ($action !== '') {
             ShopCart::clear();
             break;
     }
+    if (IsAjaxRequest()) {
+        (new ApiResponse())->normal(ShopHeaderState());
+    }
     UrlRedirect::go(SiteRoot('shop/cart'));
 }
 

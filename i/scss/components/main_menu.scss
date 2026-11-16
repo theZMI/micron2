@@ -1,229 +1,195 @@
-#extra-header {
-  background: #FFF;
-  font-size: 13px;
-
-  span {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 1;
-  }
-
-  .btn-link {
-    color: #000;
-    font-size: 13px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  .geo-position-button {
-    &-flag {
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      height: 20px;
-      width: 30px;
-      display: inline-block;
-      border-radius: 3px;
-      box-shadow: 0 0 1px rgba(0, 0, 0, 0.33) inset;
-    }
-  }
-
-  .fast-contacts-info {
-    color: #CCC;
-  }
-}
-
+// Шапка: белая, с тонкой линией, прилипает к верху
 #navbarMainMenu {
-  transition: all 250ms linear;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid $site-border-color;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 
-  .site-logo {
-    margin-right: 0;
+  .navbar-brand {
+    margin-right: 2.5rem;
   }
 
-  &.bg-light {
-    background-color: $site-backstage-bg !important;
+  .navbar-toggler {
+    border: none;
+    padding: 0.25rem;
+    box-shadow: none;
+  }
 
-    .navbar-brand {
-      font-size: 1rem;
-      color: #FFF;
+  .navbar-nav {
+    gap: 0.25rem;
 
-      //@include media-breakpoint-down(md) {
-      //  display: none;
-      //}
+    @include media-breakpoint-up(lg) {
+      gap: 1.5rem;
+    }
+  }
+
+  .nav-link {
+    color: $body-color;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    &:hover {
+      color: $secondary;
     }
 
-    .navbar-toggler {
-      padding: 0.25rem;
-      margin: 0;
-      border-color: transparent;
-      background: transparent;
-
-      &-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
-      }
+    .bi-caret-down-fill {
+      font-size: 0.6rem;
+      opacity: 0.5;
     }
+  }
 
-    .navbar-nav {
-      padding-top: 15px;
+  .menu-left-part .nav-item.active .nav-link > span {
+    box-shadow: inset 0 -2px 0 $body-color;
+    padding-bottom: 0.25rem;
+  }
 
-      @include media-breakpoint-up(lg) {
-        padding-top: 0;
-      }
-
-      &-right {
-        padding-top: 0;
-      }
-    }
-
-    .nav-item {
-      &.active, &:hover, &:active, &:focus {
-        .nav-link {
-          > span {
-            color: $primary;
-            border-bottom: 1px solid;
-          }
-        }
-      }
+  // Иконки справа: поиск, избранное, корзина, кабинет
+  .menu-right-part {
+    @include media-breakpoint-up(lg) {
+      gap: 1.25rem;
+      align-items: center;
     }
 
     .nav-link {
-      color: #FFF;
-      word-spacing: 3px;
-      min-width: 30px;
-      text-align: left;
-      outline: none !important;
-      box-shadow: none;
+      font-size: 1.25rem;
 
-      > span:first-child {
-        border-top: 1px solid transparent;
-        border-bottom: 1px solid transparent;
-        padding-top: 7.5px;
-        padding-bottom: 7.5px;
-        transition: all 150ms linear;
+      > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
       }
+    }
 
-      .badge {
-        min-width: 22px;
-        font-size: 11px;
-        margin-left: 20px;
-        text-decoration: none !important;
-        border: 1px solid $danger !important;
+    .search-panel-button-toggle {
+      font-size: 1.15rem;
+      padding: 0.5rem 0;
 
-        &.bg-danger {
-          color: #FFF !important;
-        }
-      }
-
-      &.is-important {
-        color: $danger;
-      }
-
-      @include media-breakpoint-down(lg) {
-        margin-top: 5px;
-        margin-bottom: 5px;
-      }
-
-      @include media-breakpoint-up(lg) {
-        margin-right: 30px;
-
-        &.last {
-          margin-right: 0;
-          padding-right: 0;
-        }
-
-        .badge {
-          right: -20px !important;
-          top: 5px !important;
-          margin-left: 0;
-        }
+      i {
+        margin: 0 !important;
       }
     }
   }
 
-  &.menu-in-move,
-  &.menu-is-open {
+  .navbar-mobile-icons {
+    display: flex;
+    gap: 1.25rem;
+    margin-right: 1rem;
+    font-size: 1.3rem;
+
+    .nav-icon {
+      position: relative;
+      color: $body-color;
+    }
+  }
+
+  .nav-icon-label {
+    font-size: 1rem;
+
+    @include media-breakpoint-up(lg) {
+      display: none;
+    }
+  }
+
+  .nav-login-text {
+    font-size: 0.95rem;
+  }
+
+  .nav-badge {
+    position: absolute;
+    top: -0.35rem;
+    left: 0.85rem;
+    min-width: 1.1rem;
+    height: 1.1rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: $body-color;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.1rem;
+    text-align: center;
+  }
+
+  .nav-cart-total {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 0.15rem;
+    white-space: nowrap;
+  }
+
+  .dropdown-menu {
+    padding: 0.5rem;
+
+    .dropdown-item {
+      border-radius: 0.5rem;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.925rem;
+    }
   }
 }
 
+.site-logo-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: $body-color;
+}
 
+// Поиск, открывается вместо пунктов меню
 .search-panel {
   max-width: map_get($grid-breakpoints, "md");
   margin: 0 auto;
-  padding: 0.5rem;
+  padding: 0.25rem 0;
+  flex-grow: 1;
 
   .form-control {
-    margin-right: 1rem;
-    transition: all 150ms linear;
-    background: #FFF;
-    border-radius: 5px !important;
+    border-radius: 999px !important;
+    padding-left: 1.25rem;
+    margin-right: 0.75rem;
   }
 
   &-button-toggle {
-    height: 40px;
     border: none 0;
 
     &.input-group-text {
-      padding-left: 12px !important;
-      padding-right: 12px !important;
+      background: transparent;
+      cursor: pointer;
     }
   }
 }
 
-
 .offcanvas {
-  background: #FFF;
+  background: #fff;
   border-color: transparent;
 
   &-header {
-    padding: 1rem;
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid $site-border-color;
   }
 
-  &-title {
-  }
-
-  &-body {
-    position: relative;
-    padding: 0;
-  }
-
   &-menu-list {
+    display: flex;
+    flex-direction: column;
     padding: 1rem;
 
-    > ul {
-      > li {
-        padding-bottom: 15px;
+    a {
+      color: $body-color;
+      padding: 0.75rem 0.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
 
-        > a {
-          color: #000;
-          transition: all 150ms linear;
-          text-decoration: none;
-          display: block;
-          padding: 7.5px 0;
-
-          > span {
-            border-top: 1px solid transparent;
-            border-bottom: 1px solid transparent;
-
-            padding-top: 7.5px;
-            padding-bottom: 7.5px;
-            transition: all 150ms linear;
-          }
-
-          &.active, &:hover, &:active, &:focus {
-            > span {
-              border-bottom: 1px solid;
-            }
-          }
-        }
-
-        &:first-child {
-          > a {
-            padding-top: 7.5px;
-          }
-        }
+      &:hover {
+        background: $site-surface;
       }
     }
   }

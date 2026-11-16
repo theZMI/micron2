@@ -1,35 +1,38 @@
 #footer {
   min-height: $site-footer-height;
-  background: $site-backstage-bg;
-  color: #FFF;
+  background: $site-surface;
+  margin-top: 5rem;
+  padding: 3rem 0 1.5rem;
+  font-size: 0.925rem;
 
-  .footer-logo {
-    img {
-      height: 43px;
-      display: inline-block;
+  a {
+    color: $body-color;
+
+    &:hover {
+      color: $secondary;
     }
   }
 
-  a {
-    color: #FFF;
-    transition: all 150ms linear;
-    text-decoration: none;
-    display: inline-block;
-    margin-right: 15px;
+  .footer-grid {
+    display: grid;
+    gap: 2rem;
 
-    > span {
-      padding: 7.5px 0;
-      border-top: 1px solid transparent;
-      border-bottom: 1px solid transparent;
+    @include media-breakpoint-up(md) {
+      grid-template-columns: 2fr 1fr 1fr;
     }
+  }
 
-    &:hover, &:active, &:focus {
-      color: $primary;
-      text-decoration: none;
+  .footer-links, .footer-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 
-      > span {
-        border-bottom-color: $primary;
-      }
-    }
+  .footer-bottom {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e3e3df;
+    color: $secondary;
+    font-size: 0.85rem;
   }
 }

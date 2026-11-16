@@ -5,6 +5,7 @@ $menu      = $menu ?? [];
 $rightMenu = $rightMenu ?? [];
 $incSearch = $incSearch ?? false;
 $w100      = $w100 ?? false;
+$searchUrl = $searchUrl ?? SiteRoot('shop'); // Куда отправлять поиск из меню (GET-параметр q)
 
 if ($incSearch) {
     $rightMenu = array_merge(

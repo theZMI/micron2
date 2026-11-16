@@ -10,7 +10,7 @@ class ShopCart
     private static function read(): array
     {
         // Нет сессии - нет корзины. Не стартуем сессию зря: счётчик корзины выводится в меню на каждой странице
-        if (session_status() !== PHP_SESSION_ACTIVE && empty($_COOKIE[session_name()])) {
+        if (session_id() === '' && empty($_COOKIE[session_name()])) { // session_id() есть и после session_write_close() - сессию создали в этом запросе
             return [];
         }
         $cart = SessionManager::get(self::SESSION_KEY);
@@ -87,6 +87,16 @@ class ShopCart
             self::write(array_column(array_map(fn($i) => [$i['product']->id, $i['quantity']], $items), 1, 0));
         }
         return $items;
+    }
+
+    // Для индикатора в меню: количество товаров и сумма
+    public static function summary(): array
+    {
+        if (self::count() === 0) {
+            return ['count' => 0, 'total' => 0.0];
+        }
+        $items = self::getItems();
+        return ['count' => array_sum(array_column($items, 'quantity')), 'total' => self::total($items)];
     }
 
     public static function total(array $items): float

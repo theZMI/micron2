@@ -1,7 +1,7 @@
 <?php
 
 if (IS_USER_AUTH) {
-    UrlRedirect::go(SiteRoot('user/dashboard'));
+    UrlRedirect::go(AuthRedirectUrl());
 }
 
 $msg              = '';
@@ -62,7 +62,7 @@ if (Post('is_check_pwd_recover_code')) {
         $userModel->is_email_verified = true;
         $userModel->flush();
         $userModel->startSession();
-        UrlRedirect::go(SiteRoot('user/dashboard'));
+        UrlRedirect::go(AuthRedirectUrl()); // Обратно в магазин, если вход начался оттуда (см. RememberAuthBackUrl)
     }
     $msg              = MsgErr("Неверный или просроченный код");
     $isCheckCodeBlock = true;

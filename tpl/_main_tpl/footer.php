@@ -1,22 +1,21 @@
 <footer id="footer">
     <div class="container">
-        <div class="row mt-4 mb-3">
-            <div class="col">
-                <a href="<?= SiteRoot() ?>"><span>Главная</span></a>
+        <div class="footer-grid">
+            <div>
+                <a href="<?= SiteRoot() ?>" class="site-logo-text">Micron</a>
+                <p class="text-secondary small mt-2 mb-0">PHP-фреймворк с компонентной моделью (HMVC)</p>
+            </div>
+            <nav class="footer-links">
+                <a href="<?= SiteRoot('shop') ?>">Каталог</a>
+                <a href="<?= SiteRoot('shop/favorites') ?>">Избранное</a>
+                <a href="<?= SiteRoot('shop/cart') ?>">Корзина</a>
+                <a href="<?= SiteRoot('contacts') ?>">Связь</a>
+            </nav>
+            <div class="footer-contacts">
+                <a href="tel:<?= PhoneFilter(SUPPORT_PHONE) ?>"><?= SUPPORT_PHONE ?></a>
+                <a href="mailto:<?= SUPPORT_EMAIL ?>"><?= SUPPORT_EMAIL ?></a>
             </div>
         </div>
-        <div class="row mb-2">
-            <div class="col">
-                <span class="float-start mb-4">
-                    Micron - php framework<br>
-                    Все права защищены <?= date("Y") ?> ©
-                </span>
-                <span class="float-end">
-                    <a href="mailto:<?= SUPPORT_EMAIL ?>"><span><?= SUPPORT_EMAIL ?></span></a>
-                    &nbsp;
-                    <a href="tel:<?= PhoneFilter(SUPPORT_PHONE) ?>"><span><?= SUPPORT_PHONE ?></span></a>
-                </span>
-            </div>
-        </div>
+        <div class="footer-bottom">© <?= date('Y') ?> Micron</div>
     </div>
 </footer>

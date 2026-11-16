@@ -1,4 +1,4 @@
-// Стили страницы что бы меню было в самом верху, а футер внизу
+// Каркас страницы: меню вверху, футер внизу
 html {
   height: 100%;
   min-width: $site-min-width;
@@ -11,34 +11,33 @@ html {
     min-width: $site-min-width;
     overflow-y: scroll;
     background: $site-backstage-bg;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 #wrapper {
   position: relative;
   background: $site-wrapper-bg;
-
-  min-height: 100vh; // Если нужно чтобы футер был за пределами экрана при загрузке
+  min-height: 100vh;
 }
 
-
-// Overwrite дефолтных стилей
 body {
   font-family: $font-regular;
-  font-weight: 300;
   color: $body-color;
 
-  h1, h2, h3, .headers-font {
+  h1, h2, h3, h4, .headers-font {
     font-family: $font-condensed;
-    font-weight: 400;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   b, strong {
-    font-weight: bold;
+    font-weight: 600;
   }
 
   a, .btn-link {
-    text-decoration: none !important;
+    text-decoration: none;
   }
 
   .btn-min-width {
@@ -46,25 +45,47 @@ body {
   }
 
   .badge {
-    font-weight: normal;
-  }
-
-  .btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
-    color: #FFF;
+    font-weight: 500;
   }
 
   .text-muted {
-    color: rgba(0, 0, 0, 0.25) !important;
+    color: $secondary !important;
   }
 
-  input.form-control,
-  select.form-control,
-  textarea.form-control,
+  // Поля ввода - на светлом фоне, без лишних рамок
+  .form-control, .form-select,
   .form-control.ms-ctn, .form-control.ms-ctn .ms-sel-ctn input { // Поля MagicSuggest
-    background: #F5F5F5;
+    background-color: #fafaf8;
+  }
+  .form-control:focus, .form-select:focus {
+    background-color: #fff;
+  }
+  .form-control[readonly] {
+    background: #efefec;
   }
 
-  // На больших экранах сделать отступ больше для меню и футера
+  .btn-light {
+    --bs-btn-bg: #{$site-surface};
+    --bs-btn-border-color: #{$site-surface};
+    --bs-btn-hover-bg: #eaeae6;
+    --bs-btn-hover-border-color: #eaeae6;
+  }
+
+  .link-arrow {
+    color: $body-color;
+    font-weight: 500;
+    white-space: nowrap;
+
+    i {
+      transition: transform 150ms ease;
+      display: inline-block;
+    }
+
+    &:hover i {
+      transform: translateX(3px);
+    }
+  }
+
   @include media-breakpoint-up(lg) {
     .container-fluid {
       padding-left: 30px;
@@ -76,7 +97,7 @@ body {
   .site-table {
     .btn-sm {
       font-size: 13px;
-      padding: 1px 5px;
+      padding: 1px 8px;
     }
 
     .badge {
@@ -87,25 +108,50 @@ body {
     }
   }
 
-  .progress-bar {
-    text-shadow: 0 1px rgba(0,0,0, 0.25);
+  .modal-content {
+    box-shadow: $box-shadow-lg;
   }
 
-  .modal {
-    &-dialog {
-      .modal-header,
-      .modal-footer {
-      }
+  .toast {
+    box-shadow: $box-shadow-lg;
 
-      .modal-header {
-        h3 {
-          line-height: 1.25;
-        }
-      }
+    a {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
 
-      .modal-body {
-        box-shadow: 0 0 15px rgba(0,0,0,0.1) inset;
+    .btn-close {
+      filter: invert(1) grayscale(100%) brightness(200%);
+    }
+  }
+
+  // Хлебные крошки
+  .breadcrumb {
+    font-size: 0.875rem;
+    margin: 1.25rem 0 0;
+
+    a {
+      color: $secondary;
+
+      &:hover {
+        color: $body-color;
       }
     }
   }
+
+  .pagination {
+    gap: 0.25rem;
+
+    .page-link {
+      border: none;
+      min-width: 2.5rem;
+      text-align: center;
+    }
+  }
+}
+
+.page-title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin: 0;
 }

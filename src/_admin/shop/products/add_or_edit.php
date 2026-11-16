@@ -19,8 +19,40 @@ $paramsText = Post('params_text') !== false
     : implode("\n", array_map(fn($k, $v) => "{$k}: {$v}", array_keys($model->getParams()), $model->getParams()));
 
 $msg = '';
+
+// Картинки: сделать главной / удалить (отдельные формы на странице товара)
+if (in_array(Post('a'), ['image_main', 'image_delete'], true) && $model->isExists()) {
+    $image = (string)Post('image');
+    Post('a') === 'image_main' ? $model->setMainImage($image) : $model->removeImage($image);
+    $model->flush();
+    UrlRedirect::go(GetCurUrl());
+}
+
+// Загруженные файлы из <input type="file" name="images[]" multiple>, возвращает ошибки
+$saveUploadedImages = function (ShopProductModel $model): array {
+    $files = $_FILES['images'] ?? null;
+    $errs  = [];
+    foreach ((array)($files['tmp_name'] ?? []) as $i => $tmp) {
+        $error = $files['error'][$i] ?? UPLOAD_ERR_NO_FILE;
+        if ($error === UPLOAD_ERR_NO_FILE) {
+            continue;
+        }
+        $fileName = htmlspecialchars((string)$files['name'][$i]);
+        if ($error !== UPLOAD_ERR_OK || !is_uploaded_file($tmp)) {
+            $errs[] = "{$fileName}: файл не загрузился (код {$error})";
+            continue;
+        }
+        try {
+            $model->addImageFromFile($tmp);
+        } catch (Throwable $e) {
+            $errs[] = "{$fileName}: " . htmlspecialchars($e->getMessage());
+        }
+    }
+    return $errs;
+};
+
 if (Post('is_set')) {
-    $name  = trim((string)Post('name'));
+    $name     = trim((string)Post('name'));
     $price    = OutputFormats::fromAmount((string)Post('price', '0'));
     $priceOld = OutputFormats::fromAmount((string)Post('price_old', '0'));
     $errs     = [];
@@ -43,6 +75,12 @@ if (Post('is_set')) {
         $model->sort        = intval(Post('sort'));
         $model->setParams($paramsFromText((string)Post('params_text', '')));
         $id                 = $model->flush();
-        UrlRedirect::go(SiteRoot("_admin/shop/products&sel_id={$id}"));
+        $imageErrs          = $saveUploadedImages($model);
+        $model->flush();
+        if ($imageErrs) {
+            $msg = MsgWarning('Товар сохранён, но не все картинки загружены:<br>' . implode('<br>', $imageErrs));
+        } else {
+            UrlRedirect::go(SiteRoot("_admin/shop/products&sel_id={$id}"));
+        }
     }
 }

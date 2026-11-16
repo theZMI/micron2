@@ -1,7 +1,8 @@
 <?php
 
+RememberAuthBackUrl();
 if (IS_USER_AUTH) {
-    UrlRedirect::go(SiteRoot('user/dashboard'));
+    UrlRedirect::go(AuthRedirectUrl());
 }
 
 $msg = '';

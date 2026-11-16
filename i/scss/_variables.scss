@@ -1,18 +1,69 @@
+// Минималистичная монохромная тема: почти чёрный акцент, тёплый серый фон блоков, мягкие скругления
+
 // Overwrite of bootstrap:
-$danger: #F00;
-$success: #36C10B;
-$warning: #ff851b;
-$body-bg: #FFF;
-$body-color: #000;
-$offcanvas-border-color: tranparent;
-$input-placeholder-color: rgba(0, 0, 0, 0.25);
+$primary: #111111;
+$secondary: #6b6b6b;
+$danger: #d93025;
+$success: #1e8e3e;
+$warning: #f29900;
+$light: #f4f4f2;
+$dark: #111111;
+$body-bg: #ffffff;
+$body-color: #111111;
+$body-secondary-color: #6b6b6b;
+$link-color: #111111;
+$link-hover-color: #555555;
+$border-color: #e7e7e4;
+$offcanvas-border-color: transparent;
+$input-placeholder-color: #a3a3a3;
+
+$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-weight-base: 400;
+$headings-font-weight: 600;
+$headings-letter-spacing: -0.02em;
+$line-height-base: 1.55;
+
+$border-radius: 0.625rem;
+$border-radius-sm: 0.5rem;
+$border-radius-lg: 0.875rem;
+$border-radius-xl: 1.25rem;
+$btn-border-radius: 999px;
+$btn-border-radius-sm: 999px;
+$btn-border-radius-lg: 999px;
+$btn-padding-x: 1.25rem;
+$btn-padding-x-lg: 1.75rem;
+$btn-font-weight: 500;
+$input-border-color: #e1e1dd;
+$input-focus-border-color: #111111;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba(17, 17, 17, 0.08);
+$form-check-input-checked-bg-color: #111111;
+$form-check-input-checked-border-color: #111111;
+$focus-ring-color: rgba(17, 17, 17, 0.15);
+$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+$box-shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.12);
+$modal-content-border-width: 0;
+$modal-content-border-radius: 1.25rem;
+$toast-background-color: #111111;
+$toast-color: #ffffff;
+$toast-border-width: 0;
+$toast-border-radius: 0.75rem;
+$breadcrumb-divider-color: #b5b5b0;
+$breadcrumb-active-color: #6b6b6b;
+$pagination-border-radius: 999px;
+$pagination-color: #111111;
+$pagination-active-bg: #111111;
+$pagination-active-border-color: #111111;
+$dropdown-border-color: #ececea;
+$dropdown-border-radius: 0.75rem;
+$dropdown-box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
 
 // Site variables:
-$font-regular: "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-condensed: "PT Sans Narrow", "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$site-min-width: 400px;
+$font-regular: $font-family-sans-serif;
+$font-condensed: $font-family-sans-serif;
+$site-min-width: 360px;
 $site-menu-height: 0;
 $site-footer-height: auto;
-$site-backstage-bg: #000;
-$site-wrapper-bg: #FFF;
-$site-border-color: rgba(0, 0, 0, 0.1);
+$site-backstage-bg: #ffffff;
+$site-wrapper-bg: #ffffff;
+$site-border-color: #ececea;
+$site-surface: #f4f4f2; // Фон карточек, картинок, плашек

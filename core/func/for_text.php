@@ -169,3 +169,14 @@ function TextWithMaxLen($str, $n = 100)
 
     return $out;
 }
+
+// Склонение по числу: Plural(5, 'товар', 'товара', 'товаров') -> товаров
+function Plural(int $n, string $one, string $few, string $many): string
+{
+    $n10  = abs($n) % 10;
+    $n100 = abs($n) % 100;
+    if ($n10 === 1 && $n100 !== 11) {
+        return $one;
+    }
+    return $n10 >= 2 && $n10 <= 4 && ($n100 < 12 || $n100 > 14) ? $few : $many;
+}

@@ -1,5 +1,6 @@
 <?php
 
+RememberAuthBackUrl();
 if (IS_USER_AUTH) {
     $backUrl = str_replace('&amp;', '&', urldecode((string)Get('back_url')));
     UrlRedirect::go(SafeRedirectUrl($backUrl, SiteRoot('user/dashboard'))); // Только на страницы своего сайта

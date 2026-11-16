@@ -1,7 +1,7 @@
 <?php
 
 $logo = [
-    'logo'  => '<img src="' . Root('i/image/logo.png') . '" alt="" />',
+    'logo'  => '<span class="site-logo-text">Micron</span>',
     'link'  => SiteRoot(),
     'title' => 'Micron',
     'css'   => 'site-logo me-5'
@@ -9,8 +9,8 @@ $logo = [
 
 $menu = [
     [
-        'link' => SiteRoot(),
-        'name' => 'Что это?',
+        'link' => SiteRoot('shop'),
+        'name' => 'Каталог',
     ],
     [
         'link'  => 'javascript:void(0)',
@@ -154,8 +154,8 @@ $menu = [
         ],
     ],
     [
-        'link' => SiteRoot('shop'),
-        'name' => 'Магазин',
+        'link' => SiteRoot(),
+        'name' => 'О проекте',
     ],
     [
         'link' => SiteRoot('contacts'),
@@ -164,26 +164,42 @@ $menu = [
 ];
 
 $countMessages = $g_user->countNotifies();
-$cartCount     = ShopCart::count();
+$shopState     = ShopHeaderState();
+$badge         = fn($count, $attr) => '<span class="nav-badge' . ($count ? '' : ' d-none') . '" ' . $attr . '>' . $count . '</span>';
 $rightMenu     = [
     [
-        'link'    => SiteRoot('shop/cart'),
-        'name'    => '<i class="bi bi-cart3 d-none d-lg-inline"></i><span class="d-inline d-lg-none">Корзина</span>' .
-                     ($cartCount ? '<span class="position-absolute top-50 translate-middle p-1 badge rounded-pill bg-primary">' . $cartCount . '<span class="visually-hidden">товаров в корзине</span></span>' : ''),
-        'linkCss' => 'position-relative',
+        'link'    => SiteRoot('shop/favorites'),
+        'name'    => '<i class="bi bi-heart"></i><span class="nav-icon-label">Избранное</span>' . $badge($shopState['favorites_count'], 'data-favorites-count'),
+        'linkCss' => 'nav-icon',
+        'label'   => 'Избранное',
     ],
     [
-        'link'    => '#offcanvasUserMenu',
-        'name'    => '<i class="bi bi-person-circle d-none d-lg-inline"></i><span class="d-inline d-lg-none">Личный кабинет</span>' .
-                     (
-                         $countMessages
-                         ? '<span class="position-absolute top-50 translate-middle p-1 badge rounded-pill bg-danger">+' . $countMessages . '<span class="visually-hidden">Новых сообщений</span></span>'
-                         : ''
-                     ),
-        'html'    => 'data-bs-toggle="offcanvas" href="#offcanvasUserMenu" role="button" aria-controls="offcanvasUserMenu"',
-        'linkCss' => 'position-relative',
-    ]
+        'link'    => SiteRoot('shop/cart'),
+        'name'    => '<i class="bi bi-bag"></i>' . $badge($shopState['cart_count'], 'data-cart-count') .
+                     '<span class="nav-cart-total' . ($shopState['cart_count'] ? '' : ' d-none') . '" data-cart-total>' . $shopState['cart_total_text'] . '</span>' .
+                     '<span class="nav-icon-label">Корзина</span>',
+        'linkCss' => 'nav-icon nav-cart',
+        'label'   => 'Корзина',
+    ],
+    IS_USER_AUTH
+        ? [
+            'link'    => '#offcanvasUserMenu',
+            'name'    => '<i class="bi bi-person"></i><span class="nav-icon-label">Кабинет</span>' . $badge($countMessages, ''),
+            'html'    => 'data-bs-toggle="offcanvas" role="button" aria-controls="offcanvasUserMenu"',
+            'linkCss' => 'nav-icon',
+            'label'   => 'Личный кабинет',
+        ]
+        : [
+            'link'    => SiteRoot('user/login&back_url=' . urlencode(str_replace('&amp;', '&', GetCurUrl()))),
+            'name'    => '<i class="bi bi-person"></i><span class="nav-login-text">Войти</span>',
+            'linkCss' => 'nav-icon nav-login',
+            'label'   => 'Вход и регистрация',
+        ],
 ];
+
+// На телефоне корзина и избранное видны рядом с кнопкой меню, а не внутри него
+$mobileIcons = '<a href="' . SiteRoot('shop/favorites') . '" class="nav-icon" aria-label="Избранное"><i class="bi bi-heart"></i>' . $badge($shopState['favorites_count'], 'data-favorites-count') . '</a>'
+             . '<a href="' . SiteRoot('shop/cart') . '" class="nav-icon" aria-label="Корзина"><i class="bi bi-bag"></i>' . $badge($shopState['cart_count'], 'data-cart-count') . '</a>';
 
 $userMenu = [];
 if (IS_USER_AUTH) {
@@ -194,6 +210,10 @@ if (IS_USER_AUTH) {
     $userMenu[] = [
         'link' => SiteRoot('user/orders'),
         'name' => 'Мои заказы'
+    ];
+    $userMenu[] = [
+        'link' => SiteRoot('shop/favorites'),
+        'name' => 'Избранное'
     ];
     $userMenu[] = [
         'link' => SiteRoot('user/settings'),
