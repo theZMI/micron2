@@ -1,10 +1,12 @@
 <?php
 
 /**
- * Товар магазина
+ * Товар магазина. Характеристики (Состав, Размер, Цвет...) хранятся в JSON-поле params: getParams()/setParams()
  */
 class ShopProductModel extends SiteModel
 {
+    use JsonFieldTrait;
+
     public function scheme()
     {
         return [
@@ -12,7 +14,9 @@ class ShopProductModel extends SiteModel
             'name'             => 'string',
             'vendor_code'      => 'string',
             'price'            => 'float',
+            'price_old'        => 'float', // Цена до скидки (0 - нет скидки)
             'description'      => 'string',
+            'params'           => 'string',
             'is_active'        => 'bool',
             'sort'             => 'int',
             'create_time'      => 'int',
@@ -28,12 +32,15 @@ class ShopProductModel extends SiteModel
                 `name` VARCHAR(255) NOT NULL DEFAULT '',
                 `vendor_code` VARCHAR(100) NOT NULL DEFAULT '',
                 `price` DECIMAL(12, 2) NOT NULL DEFAULT 0,
+                `price_old` DECIMAL(12, 2) NOT NULL DEFAULT 0,
                 `description` TEXT DEFAULT NULL,
+                `params` TEXT DEFAULT NULL,
                 `is_active` TINYINT(1) NOT NULL DEFAULT 1,
                 `sort` INT NOT NULL DEFAULT 0,
                 `create_time` INT DEFAULT NULL,
                 `last_update_time` INT DEFAULT NULL,
                 KEY `is_active` (`is_active`, `sort`),
+                KEY `vendor_code` (`vendor_code`),
                 PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
@@ -43,6 +50,33 @@ class ShopProductModel extends SiteModel
     public function __construct($id = null)
     {
         parent::__construct('shop_products', $id);
+    }
+
+    public function jsonFieldName(): string
+    {
+        return 'params';
+    }
+
+    // Характеристики: ['Состав' => '100% хлопок', ...]
+    public function getParams(): array
+    {
+        return array_filter($this->getJsonData(), fn($v) => $v !== '' && $v !== null);
+    }
+
+    public function setParams(array $params): void
+    {
+        $this->setJsonData(array_filter($params, fn($v) => $v !== '' && $v !== null));
+    }
+
+    public function hasDiscount(): bool
+    {
+        return $this->price_old > $this->price;
+    }
+
+    public static function findByVendorCode(string $vendor_code): self
+    {
+        $id = $vendor_code === '' ? null : GetDefaultDb()->selectCell("SELECT `id` FROM `shop_products` WHERE `vendor_code` = ? LIMIT 1", $vendor_code);
+        return new self($id ?: null);
     }
 
     // Активные товары для витрины ($page = 0 - все)

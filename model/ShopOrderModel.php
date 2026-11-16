@@ -88,48 +88,48 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
             throw new InvalidArgumentException('Корзина пуста');
         }
 
-        $db = GetDefaultDb();
-        $db->transaction();
+        $order = null;
+        $item  = null;
         try {
-            $order                 = new self();
-            $order->user_id        = (int)($customer['user_id'] ?? 0);
-            $order->access_key     = bin2hex(random_bytes(16));
-            $order->status         = self::STATUS_NEW;
-            $order->currency       = Config('shop')['currency'];
-            $order->customer_name  = (string)($customer['name'] ?? '');
-            $order->customer_email = (string)($customer['email'] ?? '');
-            $order->customer_phone = (string)($customer['phone'] ?? '');
-            $order->comment        = (string)($customer['comment'] ?? '');
-            $order->total_amount   = 0;
-            $order_id              = (int)$order->flush();
+            DbTransaction(function () use ($cartItems, $customer, &$order, &$item) {
+                $order                 = new self();
+                $order->user_id        = (int)($customer['user_id'] ?? 0);
+                $order->access_key     = bin2hex(random_bytes(16));
+                $order->status         = self::STATUS_NEW;
+                $order->currency       = Config('shop')['currency'];
+                $order->customer_name  = (string)($customer['name'] ?? '');
+                $order->customer_email = (string)($customer['email'] ?? '');
+                $order->customer_phone = (string)($customer['phone'] ?? '');
+                $order->comment        = (string)($customer['comment'] ?? '');
+                $order->total_amount   = 0;
+                $order_id              = (int)$order->flush();
 
-            $totalCents = 0;
-            foreach ($cartItems as $cartItem) {
-                $product    = $cartItem['product'];
-                $quantity   = (int)$cartItem['quantity'];
-                $priceCents = self::toCents($product->price);
+                $totalCents = 0;
+                foreach ($cartItems as $cartItem) {
+                    $product    = $cartItem['product'];
+                    $quantity   = (int)$cartItem['quantity'];
+                    $priceCents = self::toCents($product->price);
 
-                $item                = new ShopOrderItemModel();
-                $item->shop_order_id = $order_id;
-                $item->product_id    = $product->id;
-                $item->name          = $product->name;
-                $item->vendor_code   = $product->vendor_code;
-                $item->price         = $priceCents / 100;
-                $item->quantity      = $quantity;
-                $item->amount        = $priceCents * $quantity / 100;
-                $item->flush();
+                    $item                = new ShopOrderItemModel();
+                    $item->shop_order_id = $order_id;
+                    $item->product_id    = $product->id;
+                    $item->name          = $product->name;
+                    $item->vendor_code   = $product->vendor_code;
+                    $item->price         = $priceCents / 100;
+                    $item->quantity      = $quantity;
+                    $item->amount        = $priceCents * $quantity / 100;
+                    $item->flush();
 
-                $totalCents += $priceCents * $quantity;
-            }
+                    $totalCents += $priceCents * $quantity;
+                }
 
-            $order->total_amount = $totalCents / 100;
-            $order->flush();
-            $db->commit();
+                $order->total_amount = $totalCents / 100;
+                $order->flush();
+            });
         } catch (Throwable $e) {
-            $db->rollback();
             // Модели сохраняются сами в __destruct - сбрасываем несохранённое, чтобы оно не записалось после отката
-            isset($item) && $item->resetChanges();
-            $order->resetChanges();
+            $item && $item->resetChanges();
+            $order && $order->resetChanges();
             throw $e;
         }
 

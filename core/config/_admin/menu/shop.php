@@ -14,5 +14,9 @@ Config(['admin_menu', 'PUSH'], [
             'link' => SiteRoot('_admin/shop/products'),
             'name' => 'Товары',
         ],
+        [
+            'link' => SiteRoot('_admin/shop/import'),
+            'name' => 'Импорт товаров',
+        ],
     ],
 ]);

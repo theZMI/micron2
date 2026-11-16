@@ -1690,12 +1690,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theZMI/components__dbSimple.git",
-                "reference": "dec4f0310ba89bcbb71ba2814044e1556af1ce48"
+                "reference": "6a751ba97c1c492d89070a62d53998d8db347aaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theZMI/components__dbSimple/zipball/dec4f0310ba89bcbb71ba2814044e1556af1ce48",
-                "reference": "dec4f0310ba89bcbb71ba2814044e1556af1ce48",
+                "url": "https://api.github.com/repos/theZMI/components__dbSimple/zipball/6a751ba97c1c492d89070a62d53998d8db347aaf",
+                "reference": "6a751ba97c1c492d89070a62d53998d8db347aaf",
                 "shasum": ""
             },
             "require": {
@@ -1727,7 +1727,8 @@
                 "issues": "https://github.com/theZMI/components__dbSimple/issues",
                 "source": "https://github.com/theZMI/components__dbSimple/tree/master"
             },
-            "time": "2025-03-12T21:54:15+00:00"
+            "time": "2026-11-16T11:49:26+00:00",
+            "published-time": "2026-11-16T11:49:31+00:00"
         },
         {
             "name": "thezmi/dbsimple-models",

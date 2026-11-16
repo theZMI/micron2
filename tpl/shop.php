@@ -17,7 +17,7 @@
                         <?php if ($product->vendor_code): ?>
                             <div class="small text-muted mb-2">Артикул: <?= $product->vendor_code ?></div>
                         <?php endif ?>
-                        <div class="fs-5 fw-bold mt-auto mb-3"><?= OutputFormats::amount($product->price, 2, Config('shop')['currency_sign']) ?></div>
+                        <div class="mt-auto mb-3"><?php IncludeCom('shop/_price', ['product' => $product]) ?></div>
                         <?php IncludeCom('shop/_add_to_cart_form', ['product' => $product]) ?>
                     </div>
                 </div>

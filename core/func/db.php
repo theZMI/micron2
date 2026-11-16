@@ -35,3 +35,21 @@ function RenderDbLog(array $log): string
     unset($row);
     return $log ? MyDataBaseLog::render($log) : ''; // Пустой массив не передаём: render() тогда возьмёт текущий (неэкранированный) лог
 }
+
+
+/**
+ * Выполняет $fn($db) в транзакции: commit, а при исключении - rollback и исключение дальше
+ */
+function DbTransaction(callable $fn)
+{
+    $db = GetDefaultDb();
+    $db->transaction();
+    try {
+        $ret = $fn($db);
+        $db->commit();
+        return $ret;
+    } catch (Throwable $e) {
+        $db->rollback();
+        throw $e;
+    }
+}
