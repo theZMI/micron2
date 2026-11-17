@@ -13,11 +13,15 @@ class ShopProductModel extends SiteModel
             'id'               => 'int',
             'name'             => 'string',
             'vendor_code'      => 'string',
+            'variant_group'    => 'string', // Код группы вариантов: товары с одним кодом - это один товар в разных цветах/размерах
             'price'            => 'float',
             'price_old'        => 'float', // Цена до скидки (0 - нет скидки)
             'description'      => 'string',
             'params'           => 'string',
             'images'           => 'string', // JSON: имена картинок (ShopImage), первая - главная
+            'related'          => 'string', // «Покупают вместе» вручную: артикулы через запятую
+            'track_stock'      => 'bool', // Учитывать остаток
+            'stock'            => 'int',
             'is_active'        => 'bool',
             'sort'             => 'int',
             'create_time'      => 'int',
@@ -32,17 +36,22 @@ class ShopProductModel extends SiteModel
                 `id` INT NOT NULL AUTO_INCREMENT,
                 `name` VARCHAR(255) NOT NULL DEFAULT '',
                 `vendor_code` VARCHAR(100) NOT NULL DEFAULT '',
+                `variant_group` VARCHAR(100) NOT NULL DEFAULT '',
                 `price` DECIMAL(12, 2) NOT NULL DEFAULT 0,
                 `price_old` DECIMAL(12, 2) NOT NULL DEFAULT 0,
                 `description` TEXT DEFAULT NULL,
                 `params` TEXT DEFAULT NULL,
                 `images` TEXT DEFAULT NULL,
+                `related` TEXT DEFAULT NULL,
+                `track_stock` TINYINT(1) NOT NULL DEFAULT 0,
+                `stock` INT NOT NULL DEFAULT 0,
                 `is_active` TINYINT(1) NOT NULL DEFAULT 1,
                 `sort` INT NOT NULL DEFAULT 0,
                 `create_time` INT DEFAULT NULL,
                 `last_update_time` INT DEFAULT NULL,
                 KEY `is_active` (`is_active`, `sort`),
                 KEY `vendor_code` (`vendor_code`),
+                KEY `variant_group` (`variant_group`),
                 PRIMARY KEY (`id`)
             ) ENGINE = InnoDB",
             $this->table
@@ -130,6 +139,188 @@ class ShopProductModel extends SiteModel
         return $ret;
     }
 
+    // ---- Наличие ----
+
+    public function isAvailable(): bool
+    {
+        return !$this->track_stock || $this->stock > 0;
+    }
+
+    // Сколько можно положить в корзину
+    public function maxQuantity(): int
+    {
+        $max = (int)Config('shop')['max_quantity'];
+        return $this->track_stock ? max(0, min($max, $this->stock)) : $max;
+    }
+
+    // Подпись о наличии (только если остаток учитывается): ['text' => ..., 'css' => 'in|low|out']
+    public function availability(): ?array
+    {
+        if (!$this->track_stock) {
+            return null;
+        }
+        if ($this->stock <= 0) {
+            return ['text' => 'Нет в наличии', 'css' => 'out'];
+        }
+        return $this->stock <= (int)Config('shop')['low_stock']
+            ? ['text' => 'Осталось ' . $this->stock . ' шт.', 'css' => 'low']
+            : ['text' => 'В наличии', 'css' => 'in'];
+    }
+
+    // ---- Варианты (один товар в разных цветах/размерах) ----
+
+    // Активные товары той же группы, включая этот. Пусто, если группы нет или в ней один товар
+    public function getVariants(): array
+    {
+        if ($this->variant_group === '') {
+            return [];
+        }
+        $ids = $this->db->selectCol(
+            "SELECT `id` FROM ?# WHERE `variant_group` = ? AND (`is_active` = 1 OR `id` = ?d) ORDER BY `sort` ASC, `id` ASC",
+            $this->table,
+            $this->variant_group,
+            $this->id
+        );
+        return count($ids) > 1 ? array_map(fn($id) => new static($id), $ids) : [];
+    }
+
+    /**
+     * Переключатель вариантов: по каждой характеристике, которая у вариантов различается -
+     * ['Цвет' => ['is_image' => true, 'options' => [['value' => 'Синий', 'product' => модель, 'is_current' => bool], ...]], ...].
+     * При выборе значения ищем вариант, у которого остальные различающиеся характеристики как у текущего
+     * (сменили цвет - размер остался). Если характеристики одинаковые - один ряд с названиями товаров
+     */
+    public function variantOptions(): array
+    {
+        $variants = $this->getVariants();
+        if (!$variants) {
+            return [];
+        }
+        // Сравниваем без учёта регистра и пробелов: «Хлопок» и «хлопок» - одно и то же значение
+        $norm   = fn($value) => mb_strtolower(trim(html_entity_decode((string)$value)));
+        $params = array_map(fn(self $v) => array_map($norm, $v->getParams()), $variants);
+        $labels = array_map(fn(self $v) => $v->getParams(), $variants); // Как показывать значение
+
+        $differing = [];
+        foreach (array_unique(array_merge(...array_map('array_keys', $params))) as $name) {
+            $values = array_unique(array_filter(array_map(fn($p) => $p[$name] ?? '', $params), 'strlen'));
+            if (count($values) > 1) {
+                $differing[] = $name;
+            }
+        }
+        $current = array_map($norm, $this->getParams());
+
+        if (!$differing) {
+            return ['Вариант' => [
+                'is_image' => true,
+                'options'  => array_map(fn(self $v) => ['value' => $v->name, 'product' => $v, 'is_current' => $v->id === $this->id], $variants),
+            ]];
+        }
+
+        $imageParams = array_map('mb_strtolower', (array)Config('shop')['variant_image_params']);
+        $ret         = [];
+        foreach ($differing as $name) {
+            $options = [];
+            foreach ($variants as $i => $variant) {
+                $value = $params[$i][$name] ?? '';
+                if ($value === '') {
+                    continue;
+                }
+                // Насколько вариант совпадает с текущим по остальным различающимся характеристикам
+                $score = 0;
+                foreach ($differing as $other) {
+                    if ($other !== $name && ($params[$i][$other] ?? '') === ($current[$other] ?? '')) {
+                        $score++;
+                    }
+                }
+                if (!isset($options[$value]) || $score > $options[$value]['score'] || $variant->id === $this->id) {
+                    $options[$value] = ['value' => (string)$labels[$i][$name], 'product' => $variant, 'is_current' => ($current[$name] ?? '') === $value, 'score' => $variant->id === $this->id ? PHP_INT_MAX : $score];
+                }
+            }
+            $ret[$name] = [
+                'is_image' => in_array(mb_strtolower($name), $imageParams, true),
+                'options'  => array_values($options),
+            ];
+        }
+        return $ret;
+    }
+
+    // Сколько вариантов у каждой группы (для подписи «4 варианта» в каталоге)
+    public static function variantCounts(): array
+    {
+        static $counts = null;
+        if ($counts === null) {
+            $counts = array_map('intval', GetDefaultDb()->selectCol(
+                "SELECT `variant_group` AS ARRAY_KEY, COUNT(*) FROM `shop_products` WHERE `is_active` = 1 AND `variant_group` <> '' GROUP BY `variant_group`"
+            ));
+        }
+        return $counts;
+    }
+
+    // ---- «Покупают вместе» ----
+
+    /**
+     * Сначала товары, указанные вручную (related), потом те, что чаще всего покупали вместе с этим в оплаченных заказах.
+     * Варианты этого же товара не показываем
+     */
+    public function getBoughtTogether(int $limit = 4): array
+    {
+        return self::boughtTogether([$this->id], $limit);
+    }
+
+    // То же для нескольких товаров сразу (блок «Добавьте к заказу» в корзине)
+    public static function boughtTogether(array $productIds, int $limit = 4): array
+    {
+        $productIds = array_values(array_filter(array_map('intval', $productIds)));
+        if (!$productIds || $limit <= 0) {
+            return [];
+        }
+        $db       = GetDefaultDb();
+        $exclude  = array_flip($productIds);
+        $groups   = array_filter($db->selectCol("SELECT DISTINCT `variant_group` FROM `shop_products` WHERE `id` IN (?a)", $productIds), 'strlen');
+        $candidates = [];
+
+        // Вручную: артикулы из поля related
+        foreach ($db->selectCol("SELECT `related` FROM `shop_products` WHERE `id` IN (?a)", $productIds) as $related) {
+            $codes = array_filter(array_map('trim', explode(',', (string)$related)), 'strlen');
+            if ($codes) {
+                $candidates = array_merge($candidates, array_map('intval', $db->selectCol(
+                    "SELECT `id` FROM `shop_products` WHERE `vendor_code` IN (?a) ORDER BY FIELD(`vendor_code`, ?a)", $codes, $codes
+                )));
+            }
+        }
+        // По заказам: что покупали вместе (оплаченные и выполненные заказы)
+        $candidates = array_merge($candidates, array_map('intval', $db->selectCol(
+            "SELECT i2.`product_id`
+               FROM `shop_order_items` i1
+               JOIN `shop_orders` o ON o.`id` = i1.`shop_order_id` AND o.`status` IN (?a)
+               JOIN `shop_order_items` i2 ON i2.`shop_order_id` = i1.`shop_order_id` AND i2.`product_id` NOT IN (?a)
+              WHERE i1.`product_id` IN (?a)
+              GROUP BY i2.`product_id`
+              ORDER BY COUNT(DISTINCT i1.`shop_order_id`) DESC, i2.`product_id` DESC
+              LIMIT 50",
+            [ShopOrderModel::STATUS_PAID, ShopOrderModel::STATUS_DONE],
+            $productIds,
+            $productIds
+        )));
+
+        $ret = [];
+        foreach (array_unique($candidates) as $id) {
+            if (isset($exclude[$id])) {
+                continue;
+            }
+            $product = new static($id);
+            if (!$product->isExists() || !$product->is_active || ($product->variant_group !== '' && in_array($product->variant_group, $groups, true))) {
+                continue;
+            }
+            $ret[] = $product;
+            if (count($ret) >= $limit) {
+                break;
+            }
+        }
+        return $ret;
+    }
+
     public function hasDiscount(): bool
     {
         return $this->price_old > $this->price;
@@ -150,7 +341,7 @@ class ShopProductModel extends SiteModel
 
     /**
      * Витрина: поиск, фильтры и сортировка.
-     * $f: q (строка поиска), price_min, price_max, params ([facetKey('Цвет') => ['синий', ...]]), sort, page, per_page
+     * $f: q (строка поиска), price_min, price_max, in_stock (только в наличии), params ([facetKey('Цвет') => ['синий', ...]]), sort, page, per_page
      * Возвращает: items (модели текущей страницы), total, facets (['Цвет' => ['синий' => кол-во]]), price_range ([min, max])
      * Характеристики фильтруются в PHP - для каталогов до нескольких тысяч товаров этого достаточно
      */
@@ -159,7 +350,7 @@ class ShopProductModel extends SiteModel
         $q    = trim((string)($f['q'] ?? ''));
         $like = '%' . addcslashes($q, '%_\\') . '%';
         $rows = $this->db->select(
-            "SELECT `id`, `price`, `params`, `sort`, `create_time` FROM ?# WHERE `is_active` = 1 { AND (`name` LIKE ? OR `vendor_code` LIKE ? OR `description` LIKE ?) }",
+            "SELECT `id`, `price`, `params`, `sort`, `create_time`, (`track_stock` = 0 OR `stock` > 0) AS `is_available` FROM ?# WHERE `is_active` = 1 { AND (`name` LIKE ? OR `vendor_code` LIKE ? OR `description` LIKE ?) }",
             $this->table,
             $q === '' ? DBSIMPLE_SKIP : $like,
             $like,
@@ -167,7 +358,8 @@ class ShopProductModel extends SiteModel
         );
         foreach ($rows as &$row) {
             $row['params'] = json_decode((string)$row['params'], true) ?: [];
-            $row['price']  = (float)$row['price'];
+            $row['price']        = (float)$row['price'];
+            $row['is_available'] = (int)$row['is_available'];
         }
         unset($row);
 
@@ -184,7 +376,11 @@ class ShopProductModel extends SiteModel
                 $params[$name] = $wanted;
             }
         }
-        $rows   = array_filter($rows, function ($row) use ($min, $max, $params) {
+        $inStock = !empty($f['in_stock']);
+        $rows    = array_filter($rows, function ($row) use ($min, $max, $params, $inStock) {
+            if ($inStock && !$row['is_available']) {
+                return false;
+            }
             if (($min !== null && $row['price'] < $min) || ($max !== null && $row['price'] > $max)) {
                 return false;
             }
@@ -196,12 +392,13 @@ class ShopProductModel extends SiteModel
             return true;
         });
 
+        // Товары, которых нет в наличии, - всегда в конце
         $sort = $f['sort'] ?? 'default';
         usort($rows, match ($sort) {
-            'price_asc'  => fn($a, $b) => [$a['price'], -$a['id']] <=> [$b['price'], -$b['id']],
-            'price_desc' => fn($a, $b) => [$b['price'], -$a['id']] <=> [$a['price'], -$b['id']],
-            'new'        => fn($a, $b) => [$b['create_time'], $b['id']] <=> [$a['create_time'], $a['id']],
-            default      => fn($a, $b) => [$a['sort'], -$a['id']] <=> [$b['sort'], -$b['id']],
+            'price_asc'  => fn($a, $b) => [-$a['is_available'], $a['price'], -$a['id']] <=> [-$b['is_available'], $b['price'], -$b['id']],
+            'price_desc' => fn($a, $b) => [-$a['is_available'], $b['price'], -$a['id']] <=> [-$b['is_available'], $a['price'], -$b['id']],
+            'new'        => fn($a, $b) => [-$a['is_available'], $b['create_time'], $b['id']] <=> [-$b['is_available'], $a['create_time'], $a['id']],
+            default      => fn($a, $b) => [-$a['is_available'], $a['sort'], -$a['id']] <=> [-$b['is_available'], $b['sort'], -$b['id']],
         });
 
         $perPage = max(1, (int)($f['per_page'] ?? 24));

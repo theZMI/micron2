@@ -1,51 +1,16 @@
 <?php
 
 /**
- * Авторизация для моделей (AdminModel, UserModel)
- *
- * Пароли храним через password_hash(), а клиенту отдаём случайный токен сессии (см. AuthTokenModel).
+ * Сессии для моделей (AdminModel, UserModel): после входа клиент получает случайный токен (см. AuthTokenModel).
  * Токен лежит в HttpOnly-cookie (для сайта) или передаётся в заголовке API-User-Auth-Token (для API).
+ * Как человек доказывает, что он - это он, решает модель: пользователи - одноразовым кодом из письма (UserAuthCodeModel),
+ * админы - паролем (PasswordAuthTrait)
  */
 trait AuthTrait
 {
     private static array $curIdCache = [];
 
     abstract public static function getConfig(): array;
-
-    public static function hashPassword(string $password): string
-    {
-        return password_hash($password, PASSWORD_DEFAULT);
-    }
-
-    // Старые хеши были вида md5(пароль + соль), такие ещё поддерживаем, но при входе пересохраняем через password_hash()
-    private static function isLegacyHash(string $hash): bool
-    {
-        return (bool)preg_match('/^[a-f0-9]{32}$/', $hash);
-    }
-
-    public function verifyPassword(string $password): bool
-    {
-        $hash = (string)$this->pwd_hash;
-        if ($password === '' || $hash === '') {
-            return false;
-        }
-
-        if (self::isLegacyHash($hash)) {
-            $isValid = hash_equals($hash, md5($password . (static::getConfig()['salt'] ?? '')));
-            if ($isValid) {
-                $this->pwd_hash = static::hashPassword($password);
-                $this->flush();
-            }
-            return $isValid;
-        }
-
-        $isValid = password_verify($password, $hash);
-        if ($isValid && password_needs_rehash($hash, PASSWORD_DEFAULT)) {
-            $this->pwd_hash = static::hashPassword($password);
-            $this->flush();
-        }
-        return $isValid;
-    }
 
     public function getIdByLogin($login)
     {
@@ -99,23 +64,7 @@ trait AuthTrait
         return static::curId() !== false;
     }
 
-    // Проверяет логин/пароль и, если всё верно, авторизует (ставит cookie)
-    public function login($login, $password)
-    {
-        if (empty($login) || empty($password)) {
-            return false;
-        }
-
-        $model = new static($this->getIdByLogin($login));
-        if (!$model->isExists() || !$model->verifyPassword((string)$password)) {
-            return false;
-        }
-
-        $model->startSession();
-        return true;
-    }
-
-    // Авторизует текущую модель без проверки пароля (например, после подтверждения кода из письма)
+    // Авторизует текущую модель (вызывается после проверки кода из письма или пароля админа)
     public function startSession(): void
     {
         $token = (new AuthTokenModel())->issue(static::class, (int)$this->id, static::REMEMBER_PERIOD);
@@ -134,7 +83,7 @@ trait AuthTrait
         (new AuthTokenModel())->revoke($token);
     }
 
-    // Завершает все сессии модели (нужно после смены пароля)
+    // Завершает все сессии модели (на всех устройствах)
     public function revokeAllSessions(): void
     {
         (new AuthTokenModel())->revokeAll(static::class, (int)$this->id);

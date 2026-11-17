@@ -31,6 +31,10 @@ Config(['admin_menu_right', 'PUSH'], [
             'name' => 'Проверить waiting-платежи',
         ],
         [
+            'link' => SiteRoot('_cron/shop_cancel_unpaid'),
+            'name' => 'Отменить брошенные неоплаченные заказы',
+        ],
+        [
             'link' => SiteRoot('_admin/extrapacker_info'),
             'name' => 'Информация по склеенным extraPacker-ом файлам',
         ],

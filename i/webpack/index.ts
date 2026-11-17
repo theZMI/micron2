@@ -15,6 +15,7 @@ import "@scss/components/magicsuggest.scss";
 import "@webpack/src/MainMenuInit";
 import "@webpack/src/shop";
 import "@webpack/src/IMaskInit";
+import "@webpack/src/CodeHighlightInit"; // Подсветка блоков кода (highlight.js грузится отдельно, только где есть код)
 import "@ts/helpers/pwdShower";
 import { trClick } from "@ts/helpers/trClick";
 import { createApp } from "vue/dist/vue.esm-bundler";

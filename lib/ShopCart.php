@@ -7,6 +7,9 @@ class ShopCart
 {
     private const SESSION_KEY = 'shop_cart';
 
+    // Пришлось уменьшить количество или убрать товары, потому что их не хватает на складе (для сообщения в корзине)
+    public static bool $isAdjusted = false;
+
     private static function read(): array
     {
         // Нет сессии - нет корзины. Не стартуем сессию зря: счётчик корзины выводится в меню на каждой странице
@@ -70,12 +73,22 @@ class ShopCart
         $cart     = self::read();
         $products = (new ShopProductModel())->getActiveByIds(array_keys($cart));
 
-        $items = [];
+        $items   = [];
+        $changed = false;
         foreach ($cart as $product_id => $quantity) {
             if (!isset($products[$product_id])) {
+                $changed = true;
                 continue;
             }
-            $product = $products[$product_id];
+            $product  = $products[$product_id];
+            $quantity = min((int)$quantity, $product->maxQuantity()); // Не больше, чем есть на складе
+            if ($quantity !== (int)$cart[$product_id]) {
+                $changed           = true;
+                self::$isAdjusted  = true;
+            }
+            if ($quantity <= 0) {
+                continue;
+            }
             $items[] = [
                 'product'  => $product,
                 'quantity' => (int)$quantity,
@@ -83,7 +96,7 @@ class ShopCart
             ];
         }
 
-        if (count($items) !== count($cart)) {
+        if ($changed) {
             self::write(array_column(array_map(fn($i) => [$i['product']->id, $i['quantity']], $items), 1, 0));
         }
         return $items;

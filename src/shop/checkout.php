@@ -30,12 +30,22 @@ if (Post('is_set')) {
     if ($errs) {
         $msg = MsgErr(implode('<br>', $errs));
     } else {
-        $order = ShopOrderModel::createFromCart($items, array_merge($form, [
-            'phone'   => $form['phone'] !== '' ? PhoneFilter($form['phone']) : '',
-            'user_id' => IS_USER_AUTH ? (int)$g_user->id : null,
-        ]));
-        ShopCart::clear();
-        UrlRedirect::go($order->url('pay_system/pay_form'));
+        try {
+            $order = ShopOrderModel::createFromCart($items, array_merge($form, [
+                'phone'   => $form['phone'] !== '' ? PhoneFilter($form['phone']) : '',
+                'user_id' => IS_USER_AUTH ? (int)$g_user->id : null,
+            ]));
+            ShopCart::clear();
+            UrlRedirect::go($order->url('pay_system/pay_form'));
+        } catch (ShopOutOfStockException $e) {
+            // Пока покупатель оформлял, товар купили другие - показываем, что осталось
+            $msg   = MsgErr(htmlspecialchars($e->getMessage()) . '. Проверьте <a href="' . SiteRoot('shop/cart') . '">корзину</a>.');
+            $items = ShopCart::getItems();
+            $total = ShopCart::total($items);
+            if (empty($items)) {
+                UrlRedirect::go(SiteRoot('shop/cart'));
+            }
+        }
     }
 }
 

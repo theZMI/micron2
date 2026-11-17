@@ -12,9 +12,9 @@ if ($incSearch) {
         [
             [
                 'link'    => 'javascript:void(0)',
-                'name'    => '<span class="d-inline d-lg-none">Поиск</span><i class="bi bi-search me-2 d-none d-lg-inline"></i>',
-                'linkCss' => 'btn btn-link nav-link position-relative search-panel-button-toggle',
-                'css'     => 'd-grid'
+                'name'    => '<i class="bi bi-search"></i><span class="nav-icon-label">Поиск</span>', // Как у остальных иконок: подпись только в раскрытом меню на телефоне
+                'linkCss' => 'btn btn-link nav-link nav-icon position-relative search-panel-button-toggle',
+                'label'   => 'Поиск',
             ],
         ],
         $rightMenu

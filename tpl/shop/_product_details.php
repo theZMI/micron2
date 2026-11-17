@@ -24,16 +24,43 @@
         <?php endif ?>
         <h1 class="product-title"><?= $product->name ?></h1>
         <div class="product-price"><?php IncludeCom('shop/_price', ['product' => $product]) ?></div>
+        <?php if ($availability = $product->availability()): ?>
+            <div class="stock-label stock-<?= $availability['css'] ?>"><?= $availability['text'] ?></div>
+        <?php endif ?>
+
+        <?php foreach ($product->variantOptions() as $paramName => $variantParam): ?>
+            <div class="variant-group">
+                <div class="variant-title"><?= $paramName ?><?php foreach ($variantParam['options'] as $option) { if ($option['is_current']) { echo ': <span>' . $option['value'] . '</span>'; break; } } ?></div>
+                <div class="variant-options<?= $variantParam['is_image'] ? ' variant-options-images' : '' ?>">
+                    <?php foreach ($variantParam['options'] as $option): $variant = $option['product'] ?>
+                        <a href="<?= SiteRoot("shop/product&id={$variant->id}") ?>"
+                           class="variant-option<?= $option['is_current'] ? ' is-current' : '' ?><?= $variant->isAvailable() ? '' : ' is-unavailable' ?>"
+                           title="<?= $option['value'] ?><?= $variant->isAvailable() ? '' : ' — нет в наличии' ?>"
+                           <?= empty($full) ? 'data-quick-view="' . $variant->id . '"' : '' ?>>
+                            <?php if ($variantParam['is_image'] && ($thumb = $variant->mainImage())): ?>
+                                <img src="<?= $thumb ?>" alt="<?= $option['value'] ?>" loading="lazy">
+                            <?php else: ?>
+                                <?= $option['value'] ?>
+                            <?php endif ?>
+                        </a>
+                    <?php endforeach ?>
+                </div>
+            </div>
+        <?php endforeach ?>
 
         <form action="<?= SiteRoot('shop/cart') ?>" method="post" class="product-buy" data-cart-form>
             <input type="hidden" name="a" value="add">
             <input type="hidden" name="product_id" value="<?= $product->id ?>">
-            <div class="qty-input">
-                <button type="button" data-qty="-1" aria-label="Меньше"><i class="bi bi-dash"></i></button>
-                <input type="number" name="quantity" value="1" min="1" max="<?= Config('shop')['max_quantity'] ?>" aria-label="Количество">
-                <button type="button" data-qty="1" aria-label="Больше"><i class="bi bi-plus"></i></button>
-            </div>
-            <button type="submit" class="btn btn-dark btn-lg flex-grow-1">В корзину</button>
+            <?php if ($product->isAvailable()): ?>
+                <div class="qty-input">
+                    <button type="button" data-qty="-1" aria-label="Меньше"><i class="bi bi-dash"></i></button>
+                    <input type="number" name="quantity" value="1" min="1" max="<?= $product->maxQuantity() ?>" aria-label="Количество">
+                    <button type="button" data-qty="1" aria-label="Больше"><i class="bi bi-plus"></i></button>
+                </div>
+                <button type="submit" class="btn btn-dark btn-lg flex-grow-1">В корзину</button>
+            <?php else: ?>
+                <button type="button" class="btn btn-light btn-lg flex-grow-1" disabled>Нет в наличии</button>
+            <?php endif ?>
             <button type="button" class="btn btn-outline-dark btn-lg btn-favorite-lg<?= $isFav ? ' is-active' : '' ?>" data-favorite="<?= $product->id ?>" aria-label="В избранное" title="В избранное">
                 <i class="bi bi-heart"></i><i class="bi bi-heart-fill"></i>
             </button>

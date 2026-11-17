@@ -24,24 +24,29 @@ html {
 
 body {
   font-family: $font-regular;
-  color: $body-color;
+  color: var(--bs-body-color);
 
   h1, h2, h3, h4, .headers-font {
     font-family: $font-condensed;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 
   b, strong {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   a, .btn-link {
     text-decoration: none;
   }
 
+  // Минимальная ширина кнопки: кнопки в ряд одинаковые, а стрелка при наведении не меняет размер (см. ниже)
   .btn-min-width {
-    min-width: 185px;
+    min-width: 11.5rem;
+  }
+
+  .btn-min-width-lg {
+    min-width: 15rem;
   }
 
   .badge {
@@ -49,30 +54,24 @@ body {
   }
 
   .text-muted {
-    color: $secondary !important;
+    color: var(--bs-secondary-color) !important;
   }
 
-  // Поля ввода - на светлом фоне, без лишних рамок
+  // Поля ввода - полупрозрачные поверх неба/стекла
   .form-control, .form-select,
   .form-control.ms-ctn, .form-control.ms-ctn .ms-sel-ctn input { // Поля MagicSuggest
-    background-color: #fafaf8;
+    background-color: var(--site-panel);
+    border-color: var(--site-line);
   }
   .form-control:focus, .form-select:focus {
-    background-color: #fff;
+    background-color: var(--site-panel-solid);
   }
   .form-control[readonly] {
-    background: #efefec;
-  }
-
-  .btn-light {
-    --bs-btn-bg: #{$site-surface};
-    --bs-btn-border-color: #{$site-surface};
-    --bs-btn-hover-bg: #eaeae6;
-    --bs-btn-hover-border-color: #eaeae6;
+    background: var(--site-fill);
   }
 
   .link-arrow {
-    color: $body-color;
+    color: var(--bs-emphasis-color);
     font-weight: 500;
     white-space: nowrap;
 
@@ -96,12 +95,12 @@ body {
   .table-extra-condensed,
   .site-table {
     .btn-sm {
-      font-size: 13px;
+      font-size: $site-font-sm;
       padding: 1px 8px;
     }
 
     .badge {
-      font-size: 11px;
+      font-size: $site-font-xs;
       border-radius: 10px;
       border: none 0;
       padding: 3px 9px;
@@ -110,13 +109,26 @@ body {
 
   .modal-content {
     box-shadow: $box-shadow-lg;
+    background: var(--site-panel-solid);
   }
 
+  .modal-backdrop.show {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .dropdown-menu, .offcanvas {
+    background: var(--site-panel-solid);
+  }
+
+  // Уведомления - «инверсия» темы: тёмные в светлой, светлые в тёмной
   .toast {
+    --bs-toast-bg: var(--bs-emphasis-color);
+    --bs-toast-color: var(--bs-body-bg);
     box-shadow: $box-shadow-lg;
 
     a {
-      color: #fff;
+      color: inherit;
       text-decoration: underline;
       text-underline-offset: 3px;
     }
@@ -126,16 +138,20 @@ body {
     }
   }
 
+  [data-bs-theme="dark"] & .toast .btn-close {
+    filter: none;
+  }
+
   // Хлебные крошки
   .breadcrumb {
-    font-size: 0.875rem;
+    font-size: $site-font-sm;
     margin: 1.25rem 0 0;
 
     a {
-      color: $secondary;
+      color: var(--bs-secondary-color);
 
       &:hover {
-        color: $body-color;
+        color: var(--bs-emphasis-color);
       }
     }
   }
@@ -152,6 +168,8 @@ body {
 }
 
 .page-title {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-family: $font-condensed;
+  font-size: $site-page-title;
+  line-height: 1.05;
   margin: 0;
 }

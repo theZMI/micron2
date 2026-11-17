@@ -7,7 +7,7 @@ const ajaxPost = (url, data) => fetch(url, {
     body: data,
     headers: {'X-Requested-With': 'XMLHttpRequest'},
     credentials: 'same-origin',
-}).then(r => r.ok ? r.json() : Promise.reject(r)).then(json => json.is_success ? json.data : Promise.reject(json));
+}).then(r => r.json().catch(() => Promise.reject(r))).then(json => json.is_success ? json.data : Promise.reject(json));
 
 const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 
@@ -53,7 +53,14 @@ $(document).on('submit', 'form[data-cart-form]', function (e) {
             const cartUrl = document.querySelector('[data-toasts]')?.dataset.cartUrl || form.action;
             toast(`<i class="bi bi-bag-check me-2"></i>Добавлено в корзину · ${escapeHtml(state.cart_total_text)} <a href="${cartUrl}" class="ms-2 fw-semibold">Оформить</a>`);
         })
-        .catch(() => form.submit()) // Не получилось - отправляем обычной формой
+        .catch(err => {
+            if (err && err.is_error && err.data && err.data.message) { // Сервер отказал (например, товар закончился)
+                updateHeader(err.data);
+                toast(`<i class="bi bi-exclamation-circle me-2"></i>${escapeHtml(err.data.message)}`);
+            } else {
+                form.submit(); // Не получилось связаться - отправляем обычной формой
+            }
+        })
         .finally(() => button && (button.disabled = false));
 });
 

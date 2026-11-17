@@ -7,8 +7,14 @@
 // Bootstrap 5 icons
 @import "@webpack/node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
+// Тема (светлая/тёмная, небо, стекло, кнопки)
+@import "@scss/components/theme";
+
 // Common site styles (html, body, overwrites and bonus classes)
 @import "@scss/components/common";
+
+// Шрифты PT Sans и PT Sans Narrow (локальные файлы i/fonts/ptsans)
+@import url("@scss/components/ptsans_font");
 
 
 @import "@scss/components/main_menu";
@@ -22,14 +28,17 @@
 @import "@scss/components/network_status";
 @import "@scss/components/simple_captcha_code";
 @import "@scss/components/pin_code_block";
+@import "@scss/components/code_block";
 @import "@scss/status_page";
 @import "@scss/login_form";
 @import "@scss/registration_form";
-@import "@scss/password_forgot_form";
+@import "@scss/email_code_form";
 @import "@scss/user_cabinet";
 @import "@scss/manager_cabinet";
 @import "@scss/home_page";
 @import "@scss/shop";
+@import "@scss/manual";
+@import "@scss/examples";
 
 // Общий стиль для таблиц на сайте (применяется для таблиц с фильтрацией примерно как в XL)
 .site-table {
@@ -53,7 +62,7 @@ ol.site-ol-list {
       margin-right: 5px;
       text-align: center;
       width: 22px;
-      font-size: 11px;
+      font-size: $site-font-xs;
       padding: 2px;
       line-height: 1;
     }

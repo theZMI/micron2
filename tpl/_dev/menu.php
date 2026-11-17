@@ -24,6 +24,9 @@
                 </form>
             <?php endif ?>
             <?php IncludeCom('_dev/menu/sub_menu', ['menu' => $rightMenu, 'css' => 'navbar-nav-right mr-auto menu-right-part']) ?>
+            <?php if (!empty($afterRight)): ?>
+                <div class="navbar-after-right d-none d-lg-flex align-items-center ms-5"><?= $afterRight ?></div>
+            <?php endif ?>
         </div>
     </div>
 </nav>

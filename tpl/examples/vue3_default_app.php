@@ -1,13 +1,13 @@
 <h1 class="my-4">Default template to vue3 application</h1>
 <p>In this template we add special loader which shown while vue application don't applied to #page-app</p>
 <?php ob_start() ?>
-    <div style="padding: 30px; border-radius: 10px; background: #EEE;">
+    <div style="padding: 30px; border-radius: 10px; background: #EEE; color: #000;">
         {{ content }}
     </div>
 <?php IncludeCom('_dev/page_vue3_app_template', ['content' => ob_get_clean()]) ?>
 
 <script type="module">
-    import { formatTimer } from "/i/js/_dev/datetime.js";
+    import { formatTimer, formatDateTime, getNow } from "/i/ts/helpers/datetime.js"; // Хелперы дат (i/ts/helpers)
 
     const loadingStopper = () => {
         let sum = 0;
@@ -26,7 +26,7 @@
         },
         async mounted() {
             await this.emulateAjax();
-            this.content = this.helloString + formatTimer(+Date.now());
+            this.content = `${this.helloString} ${formatDateTime(getNow())}`; // getNow() - секунды, а не миллисекунды
         },
         methods: {
             formatTimer(seconds) {

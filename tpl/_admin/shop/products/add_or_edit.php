@@ -29,6 +29,27 @@
                         <div class="form-text">Меньше - выше в каталоге</div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Остаток, шт.</label>
+                        <input type="number" name="stock" min="0" class="form-control" value="<?= $model->isExists() ? ($model->track_stock ? $model->stock : '') : Post('stock', '') ?>">
+                        <div class="form-text">Пусто - не учитывать</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Группа вариантов</label>
+                        <input type="text" name="variant_group" class="form-control" value="<?= $modelParam('variant_group') ?>" placeholder="WATCH-01">
+                        <div class="form-text">Один код у одного товара в разных цветах/размерах</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Покупают вместе</label>
+                        <input type="text" name="related" class="form-control" value="<?= $modelParam('related') ?>" placeholder="Артикулы через запятую">
+                        <div class="form-text">Покажем первыми, дальше - что покупали вместе в заказах</div>
+                    </div>
+                </div>
+                <?php if ($model->isExists() && ($variants = $model->getVariants())): ?>
+                    <p class="small text-secondary">Варианты в группе: <?= implode(', ', array_map(fn($v) => '<a href="' . SiteRoot("_admin/shop/products/add_or_edit&id={$v->id}") . '">' . ($v->vendor_code ?: '#' . $v->id) . '</a>', $variants)) ?>.
+                        Переключатель строится по характеристикам, которые у них различаются (например, «Цвет» или «Размер»).</p>
+                <?php endif ?>
                 <div class="mb-3">
                     <label class="form-label">Описание</label>
                     <textarea name="description" class="form-control" rows="6"><?= $modelParam('description') ?></textarea>

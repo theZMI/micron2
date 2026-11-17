@@ -20,7 +20,7 @@ function GenNewCaptchaCode(): void
 function CheckCaptchaCode($userCode, &$outputWasCode = ''): bool
 {
     // Код, уже принятый в этом запросе, принимаем повторно: компоненты бывают вложены друг в друга
-    // (например user/login подключает user/password_forgot) и проверяют капчу каждый сам
+    // (например user/registration подключает user/_email_code) и проверяют капчу каждый сам
     static $passedCode = null;
     $userCode = TranslateSimilarRuLettersToEn(mb_strtoupper(trim((string)$userCode)));
     if (!is_null($passedCode) && $passedCode === $userCode) {

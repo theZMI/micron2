@@ -20,6 +20,14 @@
                         <input type="number" name="price_max" class="form-control form-control-sm" placeholder="до <?= (int)$result['price_range'][1] ?>" value="<?= $filter['price_max'] ?>" min="0">
                     </div>
                 </div>
+                <?php if ($hasStock): ?>
+                    <div class="filter-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="in_stock" value="1" id="f-in-stock" <?= $filter['in_stock'] ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="f-in-stock">Только в наличии</label>
+                        </div>
+                    </div>
+                <?php endif ?>
                 <?php foreach ($facets as $name => $values): $key = ShopProductModel::facetKey($name); $checked = (array)($filter['params'][$key] ?? []) ?>
                     <div class="filter-group">
                         <div class="filter-title"><?= $name ?></div>

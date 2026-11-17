@@ -10,7 +10,6 @@ if (isset($id) && (int)$id !== (int)$g_user->id) {
 }
 
 $model         = $g_user;
-$newPassword   = (string)Post('new_password');
 $canEditFields = [
     'email',
     'phone',
@@ -35,11 +34,6 @@ $verifyFlags = [
 ];
 
 if (Post('is_set')) {
-    // Сменить пароль можно, только зная текущий (иначе украденный токен даёт навсегда захватить аккаунт)
-    if ($newPassword !== '' && !$model->verifyPassword((string)Post('old_password'))) {
-        $apiResponse->error('Неверный текущий пароль', 403);
-    }
-
     foreach ($canEditFields as $k) {
         if (!isset($_POST[$k]) || !is_scalar($_POST[$k])) {
             continue;
@@ -52,6 +46,9 @@ if (Post('is_set')) {
             continue;
         }
         $value     = (string)Post($k);
+        if ($k === 'email' && !IsValidEmail(trim($value))) { // Без e-mail человек не сможет войти: код для входа приходит на почту
+            $apiResponse->error('Укажите правильный e-mail: на него приходит код для входа');
+        }
         $isChanged = isset($verifyFlags[$k]) && ($k === 'phone' ? PhoneFilter($value) : $value) !== (string)$model->$k;
         if ($isChanged && $value !== '') {
             $isBusy = match ($k) {
@@ -71,12 +68,6 @@ if (Post('is_set')) {
                 $model->notification_by_telegram = 0;
             }
         }
-    }
-    if ($newPassword !== '') {
-        $model->pwd_hash = UserModel::hashPassword($newPassword);
-        $model->flush();
-        $model->revokeAllSessions(); // Старые токены больше не действуют, выдаём новый
-        $apiResponse->normal(array_merge($model->getPublicData(), ['token' => $model->issueApiToken()]));
     }
     $model->flush();
 }

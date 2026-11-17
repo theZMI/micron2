@@ -5,3 +5,25 @@
     }
   }
 }
+// Настройки кабинета (user/settings)
+.user-settings {
+  max-width: 640px;
+  padding: 1.5rem 0 2rem;
+
+  .page-title {
+    font-family: $font-condensed;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.user-settings-card {
+  @include site-glass;
+  border-radius: $border-radius-lg;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    font-size: $site-h4;
+    margin-bottom: 0.75rem;
+  }
+}

@@ -16,7 +16,8 @@
         </div>
     </div>
 <?php endif ?>
-<?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => $menu, 'rightMenu' => $rightMenu, 'incSearch' => true, 'mobileIcons' => $mobileIcons]) ?>
+<?php ob_start(); IncludeCom('_main_tpl/theme_switch'); $themeSwitch = ob_get_clean() ?>
+<?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => $menu, 'rightMenu' => $rightMenu, 'incSearch' => true, 'mobileIcons' => $mobileIcons, 'afterRight' => $themeSwitch]) ?>
 
 <!-- Быстрый просмотр товара (заполняется из JS, см. i/webpack/src/shop.js) -->
 <div class="modal fade" id="quickViewModal" data-url="<?= SiteRoot('shop/quick_view') ?>" tabindex="-1" aria-label="Быстрый просмотр" aria-hidden="true">

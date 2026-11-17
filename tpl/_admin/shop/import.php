@@ -37,6 +37,13 @@
                 </div>
             </div>
 
+            <div class="card card-body mt-4">
+                <h5>Выгрузить каталог</h5>
+                <p class="small text-secondary mb-3">Все товары в том же формате (с характеристиками, остатками, вариантами). Удобно, чтобы начать вести каталог в Google-таблице:
+                    выгрузите файл, в Google-таблице выберите «Файл → Импорт → Загрузить», дальше правьте там и импортируйте сюда.</p>
+                <a href="<?= SiteRoot('_admin/shop/export') ?>" class="btn btn-outline-dark rounded-pill align-self-start"><i class="bi bi-download pe-2"></i>Выгрузить каталог (CSV)</a>
+            </div>
+
             <h2 class="h5 mt-5">Формат таблицы</h2>
             <p>Первая строка - заголовки, дальше по товару в строке. Товар ищется по артикулу: есть - обновляется, нет - создаётся.
                 <?= Config('shop')['import']['hide_missing'] ? 'Товары, которых нет в таблице, снимаются с продажи (не удаляются).' : '' ?>
@@ -51,6 +58,9 @@
                 <tr><td><code>description</code></td><td>Описание</td><td></td></tr>
                 <tr><td><code>sort</code></td><td>Порядок</td><td>меньше - выше в каталоге</td></tr>
                 <tr><td><code>is_active</code></td><td>В продаже</td><td>да / нет (нет колонки - в продаже)</td></tr>
+                <tr><td><code>variant_group</code></td><td>Группа вариантов</td><td>один код у одного товара в разных цветах/размерах</td></tr>
+                <tr><td><code>related</code></td><td>Покупают вместе</td><td>артикулы через запятую</td></tr>
+                <tr><td><code>stock</code></td><td>Остаток</td><td>число; пусто - не учитывать</td></tr>
                 <tr><td><code>P: Название</code></td><td></td><td>характеристика: «P: Состав», «P: Цвет», «P: Размер»...</td></tr>
                 </tbody>
             </table>

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Пользовательская модель
+ * Пользовательская модель. Паролей нет: вход на сайт и в приложение - по логину и одноразовому коду из письма (UserAuthCodeModel).
+ * Логин по умолчанию равен e-mail и меняется вместе с ним (см. __set)
  */
 class CommonUserModel extends SiteModel
 {
@@ -23,7 +24,6 @@ class CommonUserModel extends SiteModel
         return [
             'id'                       => 'int',
             'login'                    => 'string',
-            'pwd_hash'                 => 'string',
             'status'                   => 'int',
 
             'avatar'                   => 'string',
@@ -59,7 +59,6 @@ class CommonUserModel extends SiteModel
             "CREATE TABLE IF NOT EXISTS ?# (
               `id` INT NOT NULL AUTO_INCREMENT,
               `login` VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-              `pwd_hash` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
               `status` INT DEFAULT NULL,
 
               `avatar` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -124,12 +123,38 @@ class CommonUserModel extends SiteModel
             $value = PhoneFilter($value);
             return parent::__set($key, $value);
         }
+        if ($key === 'email') {
+            // Логин по умолчанию равен e-mail: если он ещё не задан или совпадает со старым e-mail, меняем его вместе с e-mail
+            // (если только новый e-mail не занят как логин у другого пользователя). Особый логин, заданный в админке, не трогаем
+            $value    = trim((string)$value);
+            $oldEmail = $this->isExists() ? (string)$this->email : '';
+            $login    = (string)$this->login;
+            if ($value !== '' && ($login === '' || $login === $oldEmail) && !$this->isLoginBusyByOther($value)) {
+                parent::__set('login', $value);
+            }
+        }
         return parent::__set($key, $value);
     }
 
-    public static function genPassword()
+    private function isLoginBusyByOther(string $login): bool
     {
-        return bin2hex(random_bytes(8));
+        $id = (int)$this->getIdByLogin($login);
+        return $id && (!$this->isExists() || $id !== (int)$this->id);
+    }
+
+    // Активный (не удалённый) пользователь по логину - для входа на сайт и в приложение
+    public static function findActiveByLogin(string $login): ?static
+    {
+        $login = trim($login);
+        $user  = $login !== '' ? (new static())->findOne(['login' => $login]) : null;
+        return $user && $user->status !== static::STATUS_DELETE ? $user : null;
+    }
+
+    // Почта, куда ушёл код, в виде i***@example.com: показываем человеку, не раскрывая адрес целиком тому, кто знает только логин
+    public function maskedEmail(): string
+    {
+        [$name, $domain] = array_pad(explode('@', (string)$this->email, 2), 2, '');
+        return mb_substr($name, 0, 1) . '***' . ($domain !== '' ? "@{$domain}" : '');
     }
 
     public function isEmailBusy($email)
@@ -215,12 +240,10 @@ class CommonUserModel extends SiteModel
         );
     }
 
-    // Данные для отдачи наружу (API): без хеша пароля
+    // Данные для отдачи наружу (API)
     public function getPublicData()
     {
-        $data = $this->getData();
-        unset($data['pwd_hash']);
-        return $data;
+        return $this->getData();
     }
 
     public function countNotifies() {

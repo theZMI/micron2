@@ -1,5 +1,8 @@
 <div class="shop-page cart-page">
     <h1 class="page-title">Корзина</h1>
+    <?php if ($isAdjusted): ?>
+        <?= MsgWarning('Некоторых товаров не хватает на складе - мы уменьшили количество или убрали их из корзины') ?>
+    <?php endif ?>
     <?php if (empty($items)): ?>
         <div class="empty-state">
             <i class="bi bi-bag"></i>
@@ -21,7 +24,7 @@
                         </div>
                         <div class="qty-input qty-input-sm">
                             <button type="button" data-qty="-1" aria-label="Меньше"><i class="bi bi-dash"></i></button>
-                            <input type="number" name="quantity[<?= $product->id ?>]" value="<?= $item['quantity'] ?>" min="0" max="<?= Config('shop')['max_quantity'] ?>" aria-label="Количество" data-autosubmit>
+                            <input type="number" name="quantity[<?= $product->id ?>]" value="<?= $item['quantity'] ?>" min="0" max="<?= $product->maxQuantity() ?>" aria-label="Количество" data-autosubmit>
                             <button type="button" data-qty="1" aria-label="Больше"><i class="bi bi-plus"></i></button>
                         </div>
                         <div class="cart-item-sum"><?= ShopPrice($item['amount']) ?></div>
@@ -37,6 +40,16 @@
                 <a href="<?= SiteRoot('shop') ?>" class="btn btn-link link-secondary w-100 mt-2">Продолжить покупки</a>
             </aside>
         </div>
+        <?php if ($suggested): ?>
+            <section class="home-section">
+                <div class="section-head"><h2 class="section-title">Добавьте к заказу</h2></div>
+                <div class="product-grid product-grid-wide">
+                    <?php foreach ($suggested as $product): ?>
+                        <?php IncludeCom('shop/_product_card', ['product' => $product]) ?>
+                    <?php endforeach ?>
+                </div>
+            </section>
+        <?php endif ?>
         <?php foreach ($items as $item): ?>
             <form action="<?= SiteRoot('shop/cart') ?>" method="post" id="cart-remove-<?= $item['product']->id ?>" class="d-none">
                 <input type="hidden" name="a" value="remove">

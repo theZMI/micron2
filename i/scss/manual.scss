@@ -1,0 +1,279 @@
+// Документация движка (/manual)
+.manual-page {
+  display: grid;
+  gap: 2rem;
+  padding: 1rem 0 2rem;
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 3rem;
+  }
+}
+
+.manual-nav {
+  @include media-breakpoint-up(lg) {
+    position: sticky;
+    top: 5.5rem;
+    align-self: start;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+  }
+
+  .manual-nav-box {
+    @include site-glass;
+    border-radius: $border-radius-lg;
+    padding: 0.75rem 0.5rem;
+    line-height: 1.25;
+
+    > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.25rem 0.75rem;
+      font-weight: 700;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      span {
+        font-weight: 400;
+        color: var(--bs-secondary-color);
+      }
+
+      @include media-breakpoint-up(lg) {
+        display: none;
+      }
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .manual-nav-group {
+    margin: 1.75rem 0.75rem 0.4rem;
+    font-size: $site-font-sm;
+    color: var(--bs-secondary-color);
+
+    &:first-child {
+      margin-top: 0.5rem;
+    }
+  }
+
+  a {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    border-radius: $border-radius-sm;
+    color: var(--bs-body-color);
+    background-image: none;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--site-fill);
+    }
+
+    &.active {
+      background-color: var(--bs-emphasis-color);
+      color: var(--bs-body-bg);
+    }
+  }
+}
+
+.manual-content {
+  min-width: 0;
+  max-width: 860px;
+  font-size: $site-font-md;
+
+  h1 {
+    font-family: $font-condensed;
+    font-size: $site-page-title;
+    line-height: 1.05;
+    margin: 0 0 1.25rem;
+  }
+
+  h2 {
+    font-family: $font-condensed;
+    font-size: $site-h2;
+    margin: 3.25rem 0 0.9rem; // Разделы отделяются отступом, без линий
+  }
+
+  h3 {
+    font-family: $font-condensed;
+    font-size: $site-h4;
+    margin: 1.75rem 0 0.6rem;
+  }
+
+  .lead {
+    color: var(--bs-secondary-color);
+  }
+
+  p, ul, ol, dl, table {
+    margin-bottom: 1rem;
+  }
+
+  li {
+    margin-bottom: 0.35rem;
+  }
+
+  // Код в тексте
+  :not(pre) > code {
+    padding: 0.1em 0.4em;
+    border-radius: 0.35rem;
+    background: var(--site-fill);
+    color: var(--bs-emphasis-color);
+    font-size: 0.875em;
+    word-break: break-word;
+  }
+
+  // Определения (функция - описание)
+  dl.manual-defs {
+    dt {
+      margin-top: 1.1rem;
+      font-weight: 700;
+
+      code {
+        font-size: 0.875em;
+      }
+    }
+
+    dd {
+      margin: 0.3rem 0 0;
+      color: var(--bs-body-color);
+    }
+  }
+
+  table {
+    width: 100%;
+    font-size: $site-font-sm;
+
+    th, td {
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px solid var(--site-line);
+      vertical-align: top;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 700;
+    }
+  }
+
+  .manual-table-wrap {
+    overflow-x: auto;
+  }
+
+  // Подсказки: обычная и предупреждение
+  .manual-note {
+    margin: 1.25rem 0;
+    padding: 0.9rem 1.1rem;
+    border-radius: $border-radius;
+    border-left: 3px solid $primary;
+    background: var(--site-fill);
+    font-size: $site-font-sm;
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    &.is-warning {
+      border-left-color: $warning;
+    }
+
+  }
+
+
+  // Плитки-ссылки на разделы (главная документации)
+  .manual-cards {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+
+    @include media-breakpoint-up(sm) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    a {
+      @include site-glass;
+      display: block;
+      padding: 1rem 1.15rem;
+      border-radius: $border-radius-lg;
+      background-image: none;
+      color: var(--bs-body-color);
+      text-decoration: none;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-family: $font-condensed;
+        font-size: $site-font-lg;
+        font-weight: 400;
+      }
+
+      span {
+        color: var(--bs-secondary-color);
+        font-size: $site-font-sm;
+      }
+    }
+  }
+
+  // Схема выполнения: шаги в цепочку
+  .manual-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem;
+
+    span {
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--site-line);
+      border-radius: 50rem;
+      font-size: $site-font-sm;
+      white-space: nowrap;
+    }
+
+    i {
+      color: var(--bs-secondary-color);
+    }
+  }
+}
+
+.manual-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 4rem;
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--site-line);
+    border-radius: $border-radius-lg;
+    background-image: none;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: var(--bs-emphasis-color);
+    }
+
+    small {
+      color: var(--bs-secondary-color);
+    }
+  }
+
+  .manual-pager-next {
+    grid-column: 2;
+    text-align: right;
+  }
+}

@@ -21,6 +21,7 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
             'user_id'          => 'int',
             'access_key'       => 'string',
             'status'           => 'string',
+            'is_stock_returned' => 'bool', // Остатки по отменённому заказу уже возвращены на склад
             'total_amount'     => 'float',
             'currency'         => 'string',
             'customer_name'    => 'string',
@@ -41,6 +42,7 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
                 `user_id` INT DEFAULT NULL,
                 `access_key` VARCHAR(64) NOT NULL DEFAULT '',
                 `status` VARCHAR(20) NOT NULL DEFAULT 'new',
+                `is_stock_returned` TINYINT(1) NOT NULL DEFAULT 0,
                 `total_amount` DECIMAL(12, 2) NOT NULL DEFAULT 0,
                 `currency` VARCHAR(10) NOT NULL DEFAULT 'RUB',
                 `customer_name` VARCHAR(255) NOT NULL DEFAULT '',
@@ -88,6 +90,11 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
             throw new InvalidArgumentException('Корзина пуста');
         }
 
+        // Конструкторы моделей выполняют CREATE TABLE IF NOT EXISTS, а DDL неявно завершает транзакцию - создаём их до неё
+        new self();
+        new ShopOrderItemModel();
+        new ShopProductModel();
+
         $order = null;
         $item  = null;
         try {
@@ -109,6 +116,7 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
                     $product    = $cartItem['product'];
                     $quantity   = (int)$cartItem['quantity'];
                     $priceCents = self::toCents($product->price);
+                    self::takeFromStock((int)$product->id, $quantity, $product->name);
 
                     $item                = new ShopOrderItemModel();
                     $item->shop_order_id = $order_id;
@@ -134,6 +142,70 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
         }
 
         return $order;
+    }
+
+    // Списывает остаток (если он учитывается). Строка блокируется до конца транзакции, чтобы два заказа не купили последнюю штуку
+    private static function takeFromStock(int $product_id, int $quantity, string $name): void
+    {
+        $db  = GetDefaultDb();
+        $row = $db->selectRow("SELECT `track_stock`, `stock` FROM `shop_products` WHERE `id` = ?d FOR UPDATE", $product_id);
+        if (!$row || !(int)$row['track_stock']) {
+            return;
+        }
+        if ((int)$row['stock'] < $quantity) {
+            throw new ShopOutOfStockException(
+                (int)$row['stock'] > 0 ? "«{$name}»: в наличии только {$row['stock']} шт." : "«{$name}» закончился"
+            );
+        }
+        $db->query("UPDATE `shop_products` SET `stock` = `stock` - ?d WHERE `id` = ?d", $quantity, $product_id);
+    }
+
+    /**
+     * Смена статуса с учётом склада: при отмене остатки возвращаются (один раз), при возврате из «Отменён» - снова списываются
+     */
+    public function setStatus(string $status): void
+    {
+        if (!array_key_exists($status, self::getStatuses()) || $status === $this->status) {
+            return;
+        }
+        $db       = GetDefaultDb();
+        $isCancel = $status === self::STATUS_CANCELED && !$this->is_stock_returned;
+        $isRevive = $this->status === self::STATUS_CANCELED && $this->is_stock_returned;
+        if ($isCancel || $isRevive) {
+            foreach ($this->getItems() as $item) {
+                $db->query(
+                    "UPDATE `shop_products` SET `stock` = `stock` " . ($isCancel ? '+' : '-') . " ?d WHERE `id` = ?d AND `track_stock` = 1",
+                    $item->quantity,
+                    $item->product_id
+                );
+            }
+            $this->is_stock_returned = $isCancel;
+        }
+        if ($status === self::STATUS_PAID && !$this->paid_time) {
+            $this->paid_time = time();
+        }
+        $this->status = $status;
+        $this->flush();
+    }
+
+    /**
+     * Отменяет неоплаченные заказы старше $hours часов (остатки возвращаются на склад). Заказы, по которым банк ещё ждёт оплату, не трогаем.
+     * Возвращает номера отменённых заказов
+     */
+    public static function cancelUnpaid(int $hours): array
+    {
+        $ids = GetDefaultDb()->selectCol(
+            "SELECT o.`id` FROM `shop_orders` o
+              WHERE o.`status` = ? AND o.`create_time` < ?d
+                AND NOT EXISTS (SELECT 1 FROM `payments` p WHERE p.`shop_order_id` = o.`id` AND p.`status` = ? AND p.`is_done` = 0)",
+            self::STATUS_NEW,
+            time() - $hours * 3600,
+            PaymentModel::STATUS_WAITING
+        );
+        foreach ($ids as $id) {
+            (new self($id))->setStatus(self::STATUS_CANCELED);
+        }
+        return array_map('intval', $ids);
     }
 
     // Деньги считаем в копейках, чтобы не копить ошибки float
@@ -250,17 +322,17 @@ class ShopOrderModel extends SiteModel implements IShopOrderModel
     public static function onPaymentPaid(PaymentModel $payment): void
     {
         $order = new self($payment->shop_order_id ?: null);
-        if (!$order->isExists() || $order->status !== self::STATUS_NEW) {
+        if (!$order->isExists() || !in_array($order->status, [self::STATUS_NEW, self::STATUS_CANCELED], true)) {
             return;
         }
-        $order->status    = self::STATUS_PAID;
-        $order->paid_time = time();
-        $order->flush();
+        $wasCanceled = $order->status === self::STATUS_CANCELED; // Оплата пришла после отмены - заказ оживает, остаток списывается снова
+        $order->setStatus(self::STATUS_PAID);
 
         $order->notify(
             "Заказ №{$order->id} оплачен",
             "<p>Здравствуйте, {$order->customer_name}!</p><p>Мы получили оплату заказа №{$order->id} на сумму " . OutputFormats::amount($order->total_amount, 2, Config('shop')['currency_sign']) . ".</p>",
             "<p>Покупатель {$order->customer_name} ({$order->customer_email}, {$order->customer_phone}) оплатил заказ №{$order->id}.</p>"
+            . ($wasCanceled ? '<p><b>Внимание: заказ был отменён до оплаты</b> - проверьте наличие товара.</p>' : '')
         );
     }
 

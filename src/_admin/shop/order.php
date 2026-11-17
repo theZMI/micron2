@@ -10,14 +10,7 @@ if (!$order->isExists()) {
 $msg = '';
 switch (Post('a')) {
     case 'set_status':
-        $status = (string)Post('status');
-        if (array_key_exists($status, ShopOrderModel::getStatuses())) {
-            $order->status = $status;
-            if ($status === ShopOrderModel::STATUS_PAID && !$order->paid_time) {
-                $order->paid_time = time(); // Например, оплатили наличными
-            }
-            $order->flush();
-        }
+        $order->setStatus((string)Post('status')); // При отмене остатки вернутся на склад; «Оплачен» вручную - например, наличными
         UrlRedirect::go(GetCurUrl());
     case 'check_payments':
         foreach ($order->getPayments() as $payment) {

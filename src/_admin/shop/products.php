@@ -10,7 +10,7 @@ if (Get('a') === 'delete') {
 }
 
 $sign                  = Config('shop')['currency_sign'];
-$tableHeader           = ['ID', 'Название', 'Артикул', 'Цена', 'В продаже', 'Порядок'];
+$tableHeader           = ['ID', 'Название', 'Артикул', 'Цена', 'Остаток', 'Группа', 'В продаже', 'Порядок'];
 $tableHeaderEnd        = '<th width="1%" colspan="2">Действия</th>';
 $tableHeaderEndFilters = '<td colspan="2"></td>';
 $colWidths             = ['ID' => '50', 'Название' => 'auto'];
@@ -22,6 +22,8 @@ foreach ($list as $v) {
         $v->name,
         $v->vendor_code,
         OutputFormats::amount($v->price, 2, $sign),
+        $v->track_stock ? $v->stock : '—',
+        $v->variant_group,
         $v->is_active ? 'Да' : 'Нет',
         $v->sort,
     ];

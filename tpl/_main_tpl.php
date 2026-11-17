@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="<?= LANG ?>" dir="ltr"<?= $htmlAttrs ?>>
+<html lang="<?= LANG ?>" dir="ltr" data-bs-theme="dark"<?= $htmlAttrs ?>>
 <head>
+    <?php IncludeCom('_main_tpl/theme_init') ?>
     <?php IncludeCom('_common_head') ?>
-    <?php IncludeCom('_dev/syntaxhighlighter') ?>
 
     <!-- SEO -->
     <title><?= L('m_title') ?></title>

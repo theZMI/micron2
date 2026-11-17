@@ -1,15 +1,15 @@
 <?php
 
-// Генерирует и сохраняет одноразовый код подтверждения для пользователя (см. UserPwdRecoverModel)
+// Генерирует и сохраняет одноразовый код подтверждения для пользователя (см. UserAuthCodeModel)
 function GeneratePinCode(CommonUserModel $userModel): string
 {
-    $code_id = (new UserPwdRecoverModel())->generate($userModel->id);
-    return (new UserPwdRecoverModel($code_id))->code;
+    $code_id = (new UserAuthCodeModel())->generate($userModel->id);
+    return (new UserAuthCodeModel($code_id))->code;
 }
 
 function CheckPinCode(CommonUserModel $userModel, $userCode): bool
 {
-    return (new UserPwdRecoverModel())->isValidCode($userCode, $userModel->email);
+    return (new UserAuthCodeModel())->isValidCode($userModel->id, $userCode);
 }
 
 // Код из полей компонента _dev/pin_code_block (по одной цифре в каждом поле code[])
@@ -22,5 +22,5 @@ function GetCodeFromForm(): string
 // Сколько цифр в коде
 function PinCodeLength(): int
 {
-    return UserPwdRecoverModel::CODE_LENGTH;
+    return UserAuthCodeModel::CODE_LENGTH;
 }

@@ -1,0 +1,134 @@
+// Блок программного кода (lib/CodeHighlight.php, DocCode(), [code=язык]) и цвета подсветки highlight.js.
+// Блок тёмный в обеих темах сайта (в тёмной - чисто чёрный, как фон), цвета - палитра GitHub Dark
+.code-block {
+  margin: 1rem 0 1.4rem;
+  border-radius: $border-radius;
+  background: #0D1117;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  position: relative;
+
+  .code-block-title {
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(230, 237, 243, 0.55);
+    font-size: $site-font-xs;
+  }
+
+  pre {
+    margin: 0;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    color: #E6EDF3;
+    font-size: $site-font-xs;
+    line-height: 1.6;
+    tab-size: 4;
+  }
+
+  code {
+    color: inherit;
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  // Кнопка «Скопировать» (добавляет i/webpack/src/CodeHighlightInit.js). Фон как у блока: под ней не просвечивает код
+  .code-block-copy {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.45rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50rem;
+    background: #0D1117;
+    color: rgba(230, 237, 243, 0.6);
+    font-size: $site-font-xs;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover, &:focus-visible {
+      color: #E6EDF3;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    &.is-done {
+      color: #7EE787;
+      border-color: rgba(126, 231, 135, 0.4);
+    }
+
+    // На телефоне - только иконка
+    @include media-breakpoint-down(sm) {
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
+.hljs {
+  color: #E6EDF3;
+  background: transparent;
+}
+
+.hljs-doctag, .hljs-keyword, .hljs-meta .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ {
+  color: #FF7B72;
+}
+
+.hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_ {
+  color: #D2A8FF;
+}
+
+.hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-variable, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id {
+  color: #79C0FF;
+}
+
+.hljs-regexp, .hljs-string, .hljs-meta .hljs-string {
+  color: #A5D6FF;
+}
+
+.hljs-built_in, .hljs-symbol {
+  color: #FFA657;
+}
+
+.hljs-comment, .hljs-code, .hljs-formula {
+  color: #8B949E;
+}
+
+.hljs-name, .hljs-quote, .hljs-selector-tag, .hljs-selector-pseudo {
+  color: #7EE787;
+}
+
+.hljs-subst {
+  color: #E6EDF3;
+}
+
+.hljs-section {
+  color: #1F6FEB;
+  font-weight: bold;
+}
+
+.hljs-bullet {
+  color: #F2CC60;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+// В тёмной теме блок кода и кнопка «Скопировать» - чисто чёрные, как фон страницы (блок отделяет рамка)
+[data-bs-theme="dark"] .code-block {
+  background: #000000;
+  border-color: var(--bs-border-color);
+
+  .code-block-copy {
+    background: #000000;
+  }
+}

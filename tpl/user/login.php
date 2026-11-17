@@ -7,17 +7,17 @@
             </span>
             <?= $msg ?>
             <div class="form-floating input-with-bottom-line-only mb-4">
-                <input type="email" class="form-control" name="email" id="floatingEmail" placeholder="E-mail" value="<?= Post('email') ?>">
-                <label for="floatingEmail">E-mail</label>
+                <input type="text" class="form-control" name="login" id="floatingLogin" placeholder="Логин" value="<?= Post('login') ?>" autocomplete="username" autocapitalize="off">
+                <label for="floatingLogin">Логин (обычно это ваш e-mail)</label>
             </div>
+            <p class="text-secondary small text-center mt-n2 mb-4">Пароль не нужен - мы отправим на почту код для входа</p>
             <div class="text-center pt-3 mb-5">
                 <button type="submit" class="btn btn-primary btn-lg btn-min-width rounded-pill">
                     Войти<i class="ms-2 bi bi-arrow-right"></i>
                 </button>
             </div>
             <div class="text-center">
-                <a href="<?= SiteRoot('user/registration') ?>" class="btn btn-link text-dark">Регистрация</a><br>
-                <a href="<?= SiteRoot('user/password_forgot') ?>" class="btn btn-link text-dark">Забыли пароль?</a>
+                <a href="<?= SiteRoot('user/registration') ?>" class="btn btn-link text-dark">Регистрация</a>
             </div>
         </form>
     </div>

@@ -1,0 +1,73 @@
+// Список компонентов и примеров (/examples)
+.examples-page {
+  padding: 1rem 0 2rem;
+
+  .page-title {
+    font-family: $font-condensed;
+  }
+
+  .lead {
+    max-width: 760px;
+    margin-bottom: 2rem;
+  }
+}
+
+.examples-note {
+  margin-bottom: 2rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: $border-radius;
+  border-left: 3px solid $warning;
+  background: var(--site-fill);
+  font-size: $site-font-sm;
+}
+
+.examples-group {
+  margin-bottom: 2.5rem;
+
+  h2 {
+    font-family: $font-condensed;
+    font-size: $site-h4;
+    margin-bottom: 1rem;
+  }
+}
+
+.examples-list {
+  display: grid;
+  gap: 0.75rem;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.examples-item {
+  @include site-glass;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: $border-radius-lg;
+  background-image: none;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+
+  i {
+    color: var(--bs-secondary-color);
+    transition: transform 0.2s ease;
+  }
+
+  @at-root a#{&}:hover {
+    border-color: var(--bs-emphasis-color);
+    color: var(--bs-body-color);
+
+    i {
+      transform: translateX(3px);
+    }
+  }
+}

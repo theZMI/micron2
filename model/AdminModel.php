@@ -6,6 +6,7 @@
 class AdminModel extends SiteModel
 {
     use AuthTrait;
+    use PasswordAuthTrait;
 
     const REMEMBER_PERIOD = 604800;
 

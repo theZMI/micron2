@@ -7,9 +7,13 @@ if ($action !== '') {
     switch ($action) {
         case 'add':
             $product = new ShopProductModel($product_id ?: null);
-            if ($product->isExists() && $product->is_active) {
-                ShopCart::add($product_id, max(1, intval(Post('quantity', 1))));
+            if (!$product->isExists() || !$product->is_active || !$product->isAvailable()) {
+                if (IsAjaxRequest()) {
+                    (new ApiResponse())->error(['message' => 'Товара нет в наличии'] + ShopHeaderState());
+                }
+                break;
             }
+            ShopCart::add($product_id, max(1, intval(Post('quantity', 1))));
             break;
         case 'set':
             foreach ((array)Post('quantity', []) as $id => $quantity) {
@@ -29,7 +33,9 @@ if ($action !== '') {
     UrlRedirect::go(SiteRoot('shop/cart'));
 }
 
-$items = ShopCart::getItems();
-$total = ShopCart::total($items);
+$items      = ShopCart::getItems();
+$total      = ShopCart::total($items);
+$isAdjusted = ShopCart::$isAdjusted;
+$suggested  = ShopProductModel::boughtTogether(array_map(fn($i) => $i['product']->id, $items), 4);
 BreadCrumb::getInstance()->add(['text' => 'Каталог', 'link' => SiteRoot('shop')]);
 BreadCrumb::getInstance()->add(['text' => 'Корзина']);

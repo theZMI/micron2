@@ -1,0 +1,315 @@
+// Свои цвета сайта для светлой и тёмной темы. Стиль вдохновлён itkd: стекло, кнопки-пилюли
+:root,
+[data-bs-theme="light"] {
+  --site-surface: rgba(255, 255, 255, 0.72); // Подложка картинок товаров
+  --site-panel: rgba(255, 255, 255, 0.66); // Стеклянные панели (карточки, корзина)
+  --site-panel-solid: #FFFFFF;
+  --site-panel-border: var(--bs-border-color);
+  --site-line: rgba(15, 23, 36, 0.12);
+  --site-fill: rgba(15, 23, 36, 0.08); // Полупрозрачная заливка кнопок
+  --site-fill-hover: rgba(15, 23, 36, 0.14);
+  --site-faint: rgba(15, 23, 36, 0.28);
+  --site-header-glass: rgba(255, 255, 255, 0.55);
+  color-scheme: light;
+}
+
+[data-bs-theme="dark"] {
+  --site-surface: rgba(255, 255, 255, 0.92);
+  --site-panel: #000000; // В тёмной теме панели полностью чёрные, как фон: их отделяет рамка
+  --site-panel-solid: #000000;
+  --site-panel-border: var(--bs-border-color);
+  --site-line: rgba(255, 255, 255, 0.12);
+  --site-fill: rgba(255, 255, 255, 0.12);
+  --site-fill-hover: rgba(255, 255, 255, 0.2);
+  --site-faint: rgba(255, 255, 255, 0.3);
+  --site-header-glass: #000000; // Шапка при прокрутке в тёмной теме - сплошная чёрная (без просвечивания страницы)
+  color-scheme: dark;
+}
+
+// Стеклянная панель
+@mixin site-glass {
+  background: var(--site-panel);
+  border: 1px solid var(--site-panel-border);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+.site-glass {
+  @include site-glass;
+}
+
+// ---- Кнопки ----
+// Главная кнопка - «инверсия» текста: тёмная в светлой теме, белая в тёмной. При наведении появляется стрелка (.bi-chevron-right)
+.btn-dark,
+.btn-site-solid {
+  --bs-btn-color: var(--bs-body-bg);
+  --bs-btn-bg: var(--bs-emphasis-color);
+  --bs-btn-border-color: var(--bs-emphasis-color);
+  --bs-btn-hover-color: var(--bs-body-bg);
+  --bs-btn-hover-bg: var(--bs-emphasis-color);
+  --bs-btn-hover-border-color: var(--bs-emphasis-color);
+  --bs-btn-active-color: var(--bs-body-bg);
+  --bs-btn-active-bg: var(--bs-emphasis-color);
+  --bs-btn-active-border-color: var(--bs-emphasis-color);
+  --bs-btn-disabled-color: var(--bs-body-bg);
+  --bs-btn-disabled-bg: var(--bs-emphasis-color);
+  --bs-btn-disabled-border-color: var(--bs-emphasis-color);
+  transition: transform 0.2s ease;
+}
+
+// Вторичная кнопка - полупрозрачная, при наведении заливается цветом текста
+.btn-light,
+.btn-site {
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-bg: var(--site-fill);
+  --bs-btn-border-color: transparent;
+  --bs-btn-hover-color: var(--bs-body-bg);
+  --bs-btn-hover-bg: var(--bs-emphasis-color);
+  --bs-btn-hover-border-color: var(--bs-emphasis-color);
+  --bs-btn-active-color: var(--bs-body-bg);
+  --bs-btn-active-bg: var(--bs-emphasis-color);
+  --bs-btn-active-border-color: var(--bs-emphasis-color);
+  --bs-btn-disabled-color: var(--bs-secondary-color);
+  --bs-btn-disabled-bg: var(--site-fill);
+  --bs-btn-disabled-border-color: transparent;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-outline-dark {
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-border-color: var(--site-faint);
+  --bs-btn-hover-color: var(--bs-body-bg);
+  --bs-btn-hover-bg: var(--bs-emphasis-color);
+  --bs-btn-hover-border-color: var(--bs-emphasis-color);
+  --bs-btn-active-color: var(--bs-body-bg);
+  --bs-btn-active-bg: var(--bs-emphasis-color);
+  --bs-btn-active-border-color: var(--bs-emphasis-color);
+}
+
+// Стрелка, которая выезжает при наведении
+.btn .bi-chevron-right {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  vertical-align: middle;
+  opacity: 0;
+  transition: max-width 0.3s ease, margin-left 0.3s ease, opacity 0.3s ease;
+}
+
+.btn:hover .bi-chevron-right,
+.btn:focus-visible .bi-chevron-right {
+  max-width: 1em;
+  margin-left: 0.5em;
+  opacity: 1;
+}
+
+// У кнопок с минимальной шириной стрелка выезжает в свободное место справа, не сдвигая текст и не меняя ширину кнопки
+.btn-min-width,
+.btn-min-width-lg {
+  position: relative;
+
+  .bi-chevron-right {
+    position: absolute;
+    top: 50%;
+    right: 1.25em;
+    max-width: none;
+    margin: 0;
+    transform: translate(-0.4em, -50%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  &:hover .bi-chevron-right,
+  &:focus-visible .bi-chevron-right {
+    max-width: none;
+    margin: 0;
+    transform: translate(0, -50%);
+  }
+}
+
+.link-dark, .link-secondary {
+  color: var(--bs-body-color) !important;
+}
+
+// ---- Ссылки: линия вырастает от центра (через фон - работает и на многострочных ссылках) ----
+a:where(:not(.btn, .nav-link, .navbar-brand, .dropdown-item, .page-link, .site-logo-text, .product-card-media, .product-card-title, .cart-item-image, .variant-option, .nav-icon, :has(img))) {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition: background-size 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, a {
+    transition: none !important;
+  }
+}
+
+// ---- Переключатель темы (как в itkd): солнце на светлой дорожке, луна со звёздами - на тёмной ----
+.site-theme-switch {
+  $w: 60px;
+  $h: 32px;
+  $knob: 26px;
+
+  position: relative;
+  flex-shrink: 0;
+  width: $w;
+  height: $h;
+  padding: 0;
+  border: 1px solid #FFF;
+  border-radius: $h;
+  background: linear-gradient(180deg, #B4DEFF, #EDF7FF);
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 500ms ease; // цвет рамки не анимируем: иначе при смене темы на чёрном фоне светится светлая рамка
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
+  }
+
+  &-knob {
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    width: $knob;
+    height: $knob;
+    margin-top: -$knob * 0.5;
+    border-radius: 50%;
+    background: #FFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: transform 500ms cubic-bezier(0.68, -0.4, 0.27, 1.4), background 500ms ease;
+
+    svg {
+      position: absolute;
+      inset: 3px;
+      width: $knob - 6px;
+      height: $knob - 6px;
+      transition: transform 500ms ease, opacity 300ms ease;
+    }
+  }
+
+  &-sun {
+    fill: #F59300;
+    stroke: #F59300;
+    stroke-width: 2;
+    stroke-linecap: round;
+
+    .rays {
+      transform-origin: 12px 12px;
+      transition: transform 500ms ease;
+    }
+  }
+
+  &-moon {
+    fill: #FFF3A8;
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+
+  &-stars {
+    i {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: #FFF;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 400ms ease, transform 500ms ease;
+
+      &:nth-child(1) { left: 12px; top: 8px; }
+      &:nth-child(2) { left: 20px; top: 19px; width: 3px; height: 3px; transition-delay: 80ms; }
+      &:nth-child(3) { left: 8px; top: 21px; transition-delay: 160ms; }
+    }
+  }
+
+  &:hover &-sun .rays {
+    transform: rotate(45deg);
+  }
+
+  [data-bs-theme="dark"] & {
+    border-color: #444;
+    background: linear-gradient(180deg, #000208, #0C1230);
+
+    .site-theme-switch-knob {
+      transform: translateX($w - $knob - 6px) rotate(360deg);
+      background: #2C3560;
+    }
+
+    .site-theme-switch-sun {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.4);
+    }
+
+    .site-theme-switch-moon {
+      opacity: 1;
+      transform: rotate(0) scale(1);
+    }
+
+    .site-theme-switch-stars i {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &, * {
+      transition: none !important;
+    }
+  }
+}
+
+// Смена темы кругом (SiteToggleTheme): своё раскрытие задаёт скрипт, стандартное затухание браузера выключаем
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+// Классы bootstrap «для светлого фона» в шаблонах (text-dark, btn-primary...) на страницах сайта подстраиваем под тему,
+// чтобы не править каждый шаблон. В админке (без site-sky) они работают как обычно
+html.site-sky {
+  .text-dark, .text-black, .link-dark {
+    color: var(--bs-emphasis-color) !important;
+  }
+
+  .text-black-50 {
+    color: var(--bs-secondary-color) !important;
+  }
+
+  .bg-white, .bg-light {
+    background-color: var(--site-panel) !important;
+  }
+
+  .btn-primary {
+    --bs-btn-color: var(--bs-body-bg);
+    --bs-btn-bg: var(--bs-emphasis-color);
+    --bs-btn-border-color: var(--bs-emphasis-color);
+    --bs-btn-hover-color: var(--bs-body-bg);
+    --bs-btn-hover-bg: var(--bs-emphasis-color);
+    --bs-btn-hover-border-color: var(--bs-emphasis-color);
+    --bs-btn-active-color: var(--bs-body-bg);
+    --bs-btn-active-bg: var(--bs-emphasis-color);
+    --bs-btn-active-border-color: var(--bs-emphasis-color);
+  }
+
+  .btn-outline-primary {
+    --bs-btn-color: var(--bs-emphasis-color);
+    --bs-btn-border-color: var(--site-faint);
+    --bs-btn-hover-color: var(--bs-body-bg);
+    --bs-btn-hover-bg: var(--bs-emphasis-color);
+    --bs-btn-hover-border-color: var(--bs-emphasis-color);
+  }
+
+  .table {
+    --bs-table-bg: transparent;
+  }
+}

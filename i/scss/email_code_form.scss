@@ -1,0 +1,15 @@
+.email-code-form {
+  @include form-by-center();
+  max-width: 400px;
+
+  .form-control-lg {
+    font-size: $site-font-lg;
+    text-align: center;
+  }
+
+  .is-code-input {
+    letter-spacing: 28px;
+    text-indent: 28px; // Компенсирует отступ после последней цифры, чтобы код стоял по центру
+    padding: 0;
+  }
+}

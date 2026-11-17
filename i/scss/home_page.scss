@@ -1,28 +1,49 @@
+// Главная: крупное слово-логотип по центру, как в itkd
 .hero {
-  padding: clamp(3rem, 8vw, 6.5rem) 0 clamp(2.5rem, 6vw, 4.5rem);
-  border-bottom: 1px solid $site-border-color;
+  min-height: calc(100vh - 6rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 0 2rem;
 
-  &-eyebrow {
-    display: inline-block;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+  &-wordmark {
+    font-family: $font-regular;
+    font-weight: 700;
+    font-size: clamp(3.5rem, 13vw, 9.5rem);
+    line-height: 1;
+    letter-spacing: 0.32em;
+    margin-right: -0.32em; // Компенсация разрядки у последней буквы, чтобы слово было по центру
     text-transform: uppercase;
-    color: $secondary;
-    margin-bottom: 1.25rem;
+    color: var(--bs-emphasis-color);
+    margin-bottom: 2rem;
+  }
+
+  &-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: $site-font-sm;
+    margin-bottom: 1rem;
+  }
+
+  &-dot {
+    opacity: 0.6;
   }
 
   &-title {
-    font-size: clamp(2.25rem, 6vw, 4.25rem);
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    margin-bottom: 1.5rem;
+    font-family: $font-condensed;
+    font-size: clamp(#{$site-h4}, 3.2vw, #{$site-h2});
+    margin-bottom: 0.75rem;
   }
 
   &-lead {
-    max-width: 38rem;
-    font-size: 1.15rem;
-    color: $secondary;
+    max-width: 36rem;
+    font-size: $site-font-lg;
+    color: var(--bs-secondary-color);
     margin-bottom: 2rem;
   }
 
@@ -30,12 +51,14 @@
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-    align-items: center;
+    justify-content: center;
   }
+
 }
 
 .home-section {
   padding-top: 3.5rem;
+  scroll-margin-top: 5rem;
 }
 
 .section-head {
@@ -46,6 +69,7 @@
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-family: $font-condensed;
+  font-size: $site-h2;
   margin: 0;
 }

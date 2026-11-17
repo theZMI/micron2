@@ -1,38 +1,16 @@
+// Части страницы (шапка, разделы, футер) отделяются отступами, без линий. Линии - только внутри данных (строки списков, итог)
 #footer {
   min-height: $site-footer-height;
-  background: $site-surface;
-  margin-top: 5rem;
-  padding: 3rem 0 1.5rem;
-  font-size: 0.925rem;
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  font-size: $site-font-sm; // Весь текст футера - мелкий, одного размера
 
   a {
-    color: $body-color;
-
-    &:hover {
-      color: $secondary;
-    }
-  }
-
-  .footer-grid {
-    display: grid;
-    gap: 2rem;
-
-    @include media-breakpoint-up(md) {
-      grid-template-columns: 2fr 1fr 1fr;
-    }
-  }
-
-  .footer-links, .footer-contacts {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    color: var(--bs-emphasis-color);
   }
 
   .footer-bottom {
-    margin-top: 2.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid #e3e3df;
-    color: $secondary;
-    font-size: 0.85rem;
+    margin-top: 1.5rem;
+    color: var(--bs-secondary-color);
   }
 }

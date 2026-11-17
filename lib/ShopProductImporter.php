@@ -12,6 +12,9 @@
  *   description | Описание
  *   sort        | Порядок      - меньше - выше в каталоге
  *   is_active   | В продаже    - да/нет, 1/0 (нет колонки - товар в продаже)
+ *   variant_group | Группа вариантов - один код у одного товара в разных цветах/размерах
+ *   related     | Покупают вместе - артикулы через запятую
+ *   stock       | Остаток      - число; пусто - не учитывать
  *   P: <название>              - характеристика товара, например «P: Состав», «P: Цвет»
  * Товары, которых нет в таблице, снимаются с продажи (Config('shop')['import']['hide_missing']), но не удаляются: на них ссылаются заказы.
  *
@@ -29,7 +32,65 @@ class ShopProductImporter
         'description' => ['описание', 'desc'],
         'sort'        => ['порядок', 'сортировка'],
         'is_active'   => ['в продаже', 'активен'],
+        'variant_group' => ['группа вариантов', 'группа'],
+        'related'     => ['покупают вместе', 'сопутствующие'],
+        'stock'       => ['остаток', 'количество', 'склад'],
     ];
+
+    // Заголовки при выгрузке (и первые русские названия для импорта)
+    private const EXPORT_TITLES = [
+        'vendor_code'   => 'Артикул',
+        'name'          => 'Название',
+        'price'         => 'Цена',
+        'price_old'     => 'Старая цена',
+        'is_active'     => 'В продаже',
+        'stock'         => 'Остаток',
+        'variant_group' => 'Группа вариантов',
+        'related'       => 'Покупают вместе',
+        'sort'          => 'Порядок',
+        'description'   => 'Описание',
+    ];
+
+    /**
+     * Весь каталог в CSV в формате импорта: выгрузить -> вставить в Google-таблицу -> вести там -> импортировать обратно.
+     * С BOM, чтобы Excel правильно открыл кириллицу
+     */
+    public static function exportCsv(): string
+    {
+        $products = (new ShopProductModel())->getAll();
+        $decode   = fn($value) => html_entity_decode((string)$value, ENT_QUOTES | ENT_HTML5, 'UTF-8'); // В БД строки экранированы
+        $number   = fn(float $value) => rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
+
+        $paramNames = [];
+        foreach ($products as $product) {
+            $paramNames += array_flip(array_keys($product->getParams()));
+        }
+        $paramNames = array_keys($paramNames);
+
+        $out = fopen('php://temp', 'r+');
+        fwrite($out, "\xEF\xBB\xBF");
+        fputcsv($out, array_merge(array_values(self::EXPORT_TITLES), array_map(fn($name) => self::PARAM_PREFIX . ' ' . $decode($name), $paramNames)), ',', '"', '\\');
+        usort($products, fn($a, $b) => [$a->sort, $a->id] <=> [$b->sort, $b->id]);
+        foreach ($products as $product) {
+            $params = $product->getParams();
+            fputcsv($out, array_merge([
+                $decode($product->vendor_code),
+                $decode($product->name),
+                $number($product->price),
+                $product->price_old > 0 ? $number($product->price_old) : '',
+                $product->is_active ? 'да' : 'нет',
+                $product->track_stock ? (string)$product->stock : '',
+                $decode($product->variant_group),
+                $decode($product->related),
+                (string)$product->sort,
+                $decode($product->description),
+            ], array_map(fn($name) => $decode($params[$name] ?? ''), $paramNames)), ',', '"', '\\');
+        }
+        rewind($out);
+        $csv = stream_get_contents($out);
+        fclose($out);
+        return $csv;
+    }
 
     // ---- Источники данных ----
 
@@ -123,6 +184,7 @@ class ShopProductImporter
             throw new RuntimeException('В таблице нет ни одного правильного товара, каталог не изменён' . ($this->report['errors'] ? ': ' . implode('; ', array_slice($this->report['errors'], 0, 5)) : ''));
         }
 
+        new ShopProductModel(); // CREATE TABLE IF NOT EXISTS - до транзакции, иначе DDL её неявно завершит
         DbTransaction(function ($db) use ($items, $hideMissing) {
             foreach ($items as $item) {
                 $this->save($item);
@@ -199,6 +261,7 @@ class ShopProductImporter
             !self::isNumber($item['price'] ?? '')  => "цена «{$item['price']}» - не число",
             self::toNumber($item['price']) <= 0    => 'цена должна быть больше нуля',
             isset($item['price_old']) && $item['price_old'] !== '' && !self::isNumber($item['price_old']) => "старая цена «{$item['price_old']}» - не число",
+            isset($item['stock']) && $item['stock'] !== '' && !self::isNumber($item['stock']) => "остаток «{$item['stock']}» - не число",
             default                                => '',
         };
         if ($error !== '') {
@@ -214,6 +277,9 @@ class ShopProductImporter
             'description' => $item['description'] ?? null,
             'sort'        => isset($item['sort']) && self::isNumber($item['sort']) ? (int)self::toNumber($item['sort']) : null,
             'is_active'   => isset($item['is_active']) ? self::toBool($item['is_active']) : true,
+            'variant_group' => $item['variant_group'] ?? null,
+            'related'     => $item['related'] ?? null,
+            'stock'       => array_key_exists('stock', $item) ? ($item['stock'] === '' ? '' : max(0, (int)self::toNumber($item['stock']))) : null, // null - колонки нет, '' - не учитывать
             'params'      => $item['params'],
         ];
     }
@@ -237,6 +303,16 @@ class ShopProductImporter
         }
         if ($item['sort'] !== null) {
             $product->sort = $item['sort'];
+        }
+        if ($item['variant_group'] !== null) {
+            $product->variant_group = htmlspecialchars($item['variant_group']);
+        }
+        if ($item['related'] !== null) {
+            $product->related = htmlspecialchars(implode(', ', array_filter(array_map('trim', explode(',', $item['related'])), 'strlen')));
+        }
+        if ($item['stock'] !== null) {
+            $product->track_stock = $item['stock'] !== '';
+            $product->stock       = $item['stock'] === '' ? 0 : $item['stock'];
         }
         if ($item['params'] || $isNew) {
             $product->setParams($item['params']); // Характеристики заменяются целиком - как в таблице

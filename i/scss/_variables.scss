@@ -1,69 +1,83 @@
-// Минималистичная монохромная тема: почти чёрный акцент, тёплый серый фон блоков, мягкие скругления
+// Тема: светлая и тёмная (атрибут data-bs-theme у <html>, ставит tpl/_main_tpl/theme_init.php).
+// Цвета - переменные bootstrap 5.3: из них он сам выставляет --bs-body-bg, --bs-body-color, --bs-emphasis-color, --bs-border-color...
+// Свои цвета сайта (стекло, линии) - CSS-переменные --site-* в i/scss/components/theme.scss
 
 // Overwrite of bootstrap:
-$primary: #111111;
-$secondary: #6b6b6b;
-$danger: #d93025;
-$success: #1e8e3e;
-$warning: #f29900;
-$light: #f4f4f2;
-$dark: #111111;
-$body-bg: #ffffff;
-$body-color: #111111;
-$body-secondary-color: #6b6b6b;
-$link-color: #111111;
-$link-hover-color: #555555;
-$border-color: #e7e7e4;
-$offcanvas-border-color: transparent;
-$input-placeholder-color: #a3a3a3;
+$primary: #1F6FEB;
+$danger: #E5484D;
+$success: #2BA84A;
+$warning: #F2A100;
 
-$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-$font-weight-base: 400;
-$headings-font-weight: 600;
-$headings-letter-spacing: -0.02em;
+$body-bg: #FFFFFF;
+$body-color: #0F1724;
+$body-secondary-color: rgba(15, 23, 36, 0.5); // Второстепенный (серый) текст: .text-secondary, .text-muted, подписи
+$body-tertiary-bg: #F3F6FA;
+$border-color: rgba(15, 23, 36, 0.12);
+$link-color: $body-color;
+$link-hover-color: $body-color;
+$emphasis-color: #0B1220;
+
+$body-bg-dark: #000000;
+$body-color-dark: #EEF2F8;
+$body-secondary-color-dark: rgba(238, 242, 248, 0.45); // На чёрном фоне та же заметность достигается меньшей непрозрачностью
+$body-tertiary-bg-dark: #000000; // Тёмная тема - везде чистый чёрный
+$border-color-dark: rgba(255, 255, 255, 0.14);
+$link-color-dark: $body-color-dark;
+$link-hover-color-dark: $body-color-dark;
+$emphasis-color-dark: #FFFFFF;
+
+$font-family-sans-serif: "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$headings-font-family: "PT Sans Narrow", "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$headings-font-weight: 400;
 $line-height-base: 1.55;
 
-$border-radius: 0.625rem;
+$border-radius: 0.75rem;
 $border-radius-sm: 0.5rem;
-$border-radius-lg: 0.875rem;
-$border-radius-xl: 1.25rem;
-$btn-border-radius: 999px;
-$btn-border-radius-sm: 999px;
-$btn-border-radius-lg: 999px;
-$btn-padding-x: 1.25rem;
-$btn-padding-x-lg: 1.75rem;
-$btn-font-weight: 500;
-$input-border-color: #e1e1dd;
-$input-focus-border-color: #111111;
-$input-focus-box-shadow: 0 0 0 0.2rem rgba(17, 17, 17, 0.08);
-$form-check-input-checked-bg-color: #111111;
-$form-check-input-checked-border-color: #111111;
-$focus-ring-color: rgba(17, 17, 17, 0.15);
-$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-$box-shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.12);
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.5rem;
+// Кнопки - полностью скруглённые
+$btn-border-radius: 50rem;
+$btn-border-radius-sm: 50rem;
+$btn-border-radius-lg: 50rem;
+$btn-padding-x: 1.4rem;
+$btn-padding-x-lg: 2rem;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba(31, 111, 235, 0.2);
+$offcanvas-border-color: transparent;
+$input-placeholder-color: rgba(127, 127, 127, 0.7);
 $modal-content-border-width: 0;
-$modal-content-border-radius: 1.25rem;
-$toast-background-color: #111111;
-$toast-color: #ffffff;
+$modal-content-border-radius: 1.5rem;
 $toast-border-width: 0;
-$toast-border-radius: 0.75rem;
-$breadcrumb-divider-color: #b5b5b0;
-$breadcrumb-active-color: #6b6b6b;
-$pagination-border-radius: 999px;
-$pagination-color: #111111;
-$pagination-active-bg: #111111;
-$pagination-active-border-color: #111111;
-$dropdown-border-color: #ececea;
-$dropdown-border-radius: 0.75rem;
-$dropdown-box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+$toast-border-radius: 0.9rem;
+$dropdown-border-radius: 0.9rem;
+$tooltip-bg: #000;
+$tooltip-color: #FFF;
+$tooltip-opacity: 1;
+
+// Шкала размеров текста - как в Bootstrap 5. Других размеров для текста не заводим (иконки - отдельно)
+$site-font-xs: 0.75rem;   // Счётчики, бейджи, метки
+$site-font-sm: 0.875rem;  // Мелкий текст: футер, хлебные крошки, подписи, заметки, таблицы, код (= .small, $font-size-sm)
+$site-font-md: 1rem;      // Основной текст
+$site-font-lg: 1.25rem;   // .lead, акценты, крупные цены/итоги
+$site-h1: 2.5rem;         // Заголовки - как h1..h5 в Bootstrap
+$site-h2: 2rem;
+$site-h3: 1.75rem;
+$site-h4: 1.5rem;
+$site-h5: 1.25rem;
+$site-page-title: clamp(#{$site-h1}, 5vw, 3.5rem); // Крупный заголовок страницы (.page-title, h1 документации)
+
+$font-size-sm: $site-font-sm;
+$font-size-lg: $site-font-lg;
+$small-font-size: 0.875em;
+$lead-font-size: $site-font-lg;
+$code-font-size: 0.875em;
 
 // Site variables:
 $font-regular: $font-family-sans-serif;
-$font-condensed: $font-family-sans-serif;
-$site-min-width: 360px;
+$font-condensed: $headings-font-family;
+$site-min-width: 320px;
 $site-menu-height: 0;
 $site-footer-height: auto;
-$site-backstage-bg: #ffffff;
-$site-wrapper-bg: #ffffff;
-$site-border-color: #ececea;
-$site-surface: #f4f4f2; // Фон карточек, картинок, плашек
+$site-backstage-bg: var(--bs-body-bg);
+$site-wrapper-bg: transparent;
+$site-border-color: var(--site-line);
+$site-surface: var(--site-surface);

@@ -107,7 +107,9 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, './dist'),
-        filename: `[name].js`
+        filename: `[name].js`,
+        chunkFilename: `[name].js?v=[contenthash:8]`, // Файлы, которые грузятся по требованию (например, highlight.js)
+        publicPath: '/i/webpack/dist/',
     },
     plugins: plugins(),
     optimization: optimization(),

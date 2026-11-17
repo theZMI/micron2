@@ -73,6 +73,11 @@ if (Post('is_set')) {
         $model->description = (string)Post('description');
         $model->is_active   = (bool)Post('is_active');
         $model->sort        = intval(Post('sort'));
+        $model->variant_group = trim((string)Post('variant_group'));
+        $model->related       = implode(', ', array_filter(array_map('trim', explode(',', (string)Post('related'))), 'strlen'));
+        $stock                = trim((string)Post('stock'));
+        $model->track_stock   = $stock !== ''; // Пусто - остаток не учитываем
+        $model->stock         = $stock === '' ? 0 : max(0, (int)$stock);
         $model->setParams($paramsFromText((string)Post('params_text', '')));
         $id                 = $model->flush();
         $imageErrs          = $saveUploadedImages($model);

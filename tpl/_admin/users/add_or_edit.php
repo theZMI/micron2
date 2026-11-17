@@ -20,15 +20,9 @@
                     <input type="text" name="phone" class="form-control phone-mask" value="<?= $modelParam('phone') ?>">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Пароль:</label>
-                    <?php if ($model->isExists()): ?>
-                        <div>
-                            <button type="button" class="btn btn-secondary" onclick="$(this).hide(); $('[name=password]').show();"><i class="bi bi-lock-fill pe-2"></i>Изменить</button>
-                            <input type="text" name="password" class="form-control" style="display: none;" placeholder="Введите новый пароль">
-                        </div>
-                    <?php else: ?>
-                        <input type="text" name="password" class="form-control" placeholder="Введите новый пароль">
-                    <?php endif; ?>
+                    <label class="form-label">Логин:</label>
+                    <input type="text" name="login" class="form-control" value="<?= $modelParam('login') ?>" placeholder="Пусто - такой же, как e-mail">
+                    <div class="form-text">Паролей нет: человек входит на сайт и в приложение по логину и одноразовому коду, который приходит на e-mail</div>
                 </div>
                 <div class="text-center">
                     <a href="<?= SiteRoot('_admin/users') ?>" class="btn btn-link btn-lg"><i class="bi bi-arrow-left pe-2"></i>К списку</a>

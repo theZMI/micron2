@@ -7,26 +7,44 @@ if (IS_USER_AUTH) {
 
 $msg = '';
 if (Post('is_register')) {
-    $first_name           = Post('first_name');
-    $surname              = Post('surname');
-    $email                = Post('email');
+    $first_name           = trim((string)Post('first_name'));
+    $surname              = trim((string)Post('surname'));
+    $email                = trim((string)Post('email'));
     $phone                = PhoneFilter(Post('phone'));
     $phone                = IsValidPhone($phone) ? PhoneFilter($phone) : '';
     $im_agree_with_offers = Post('im_agree_with_offers') === 'on';
     $model                = new UserModel();
 
+    // Такой e-mail уже зарегистрирован - не ругаемся, а отправляем код для входа. Имя и телефон существующего
+    // пользователя при этом не меняем: их мог вписать кто угодно, кто знает чужой e-mail
+    $existing = $email !== '' ? $model->findOne(['email' => $email]) : null;
+    if ($existing && $existing->status === UserModel::STATUS_DELETE) {
+        $msg = MsgErr('Аккаунт с этим e-mail удалён. Если это ошибка, напишите нам: ' . SUPPORT_EMAIL);
+        return;
+    }
+    if ($existing) {
+        IncludeCom('user/_email_code', [
+            'user'    => $existing,
+            'purpose' => UserAuthCodeModel::PURPOSE_LOGIN,
+            'notice'  => Msg('Этот e-mail уже зарегистрирован - мы отправили на него код для входа'),
+        ]);
+        ExitCom();
+        return;
+    }
+
     $errs = [];
-    if (empty($first_name) || empty($surname)) {
+    if ($first_name === '' || $surname === '') {
         $errs[] = "Пожалуйста впишите ваше имя";
     }
-    if (empty($email)) {
+    if ($email === '') {
         $errs[] = "Пожалуйста укажите ваш e-mail (он будет использоваться для входа на сайт)";
+    } elseif (!IsValidEmail($email)) {
+        $errs[] = "Похоже, в e-mail опечатка";
+    } elseif ($model->isLoginBusy($email)) { // Логин = e-mail, а такой логин уже задан другому пользователю в админке
+        $errs[] = "Этот e-mail нельзя использовать для входа, напишите нам: " . SUPPORT_EMAIL;
     }
     if (!$im_agree_with_offers) {
         $errs[] = "Для работы с сайтом вам необходимо согласиться с соглашениями";
-    }
-    if ($model->isEmailBusy($email)) {
-        $errs[] = "Пользователь с таким e-mail уже зарегистрирован";
     }
 
     if (count($errs)) {
@@ -34,18 +52,15 @@ if (Post('is_register')) {
     } else {
         $model->first_name = $first_name;
         $model->surname    = $surname;
-        $model->email      = $email;
-        $model->login      = $email;
+        $model->email      = $email; // Логин станет таким же (см. CommonUserModel::__set)
         $model->phone      = $phone;
-        $model->pwd_hash   = UserModel::hashPassword(UserModel::genPassword());
         $model->status     = UserModel::STATUS_ACTIVE;
         $model->gender     = UserModel::GENDER_UNKNOWN;
 
-        $isSaved = $user_id = $model->flush();
-        if ($isSaved) {
-            $_POST['is_pwd_recover_order'] = true;
-            IncludeCom('user/password_forgot');
+        if ($model->flush()) {
+            IncludeCom('user/_email_code', ['user' => $model, 'purpose' => UserAuthCodeModel::PURPOSE_REGISTRATION]);
             ExitCom();
+            return;
         } else {
             $msg = MsgErr("Ошибка сохранения данных");
         }
