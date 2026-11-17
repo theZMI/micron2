@@ -103,6 +103,10 @@
     <dd>Звёзды рейтинга: <code>['rating' =&gt; 3, 'jsCallback' =&gt; 'onRate']</code>.</dd>
     <dt><code>_dev/bootstrap_validator</code></dt>
     <dd>Проверка форм на стороне браузера.</dd>
+    <dt><code>_dev/jqueryui</code></dt>
+    <dd>jQuery UI 1.14: календарь с русской локализацией, slider, sortable, draggable/droppable, resizable, autocomplete, accordion, tabs, dialog, эффекты. Подключён на всех страницах в <code>tpl/_common_head.php</code>, поля с классами <code>.datepicker</code> и <code>.datepicker-with-min-date</code> становятся календарями сами. Bootstrap 5 перехватывает <code>$.fn.button</code>, поэтому компонент возвращает его jQuery UI (нужен диалогам), а бутстраповский плагин доступен как <code>$.fn.bsButton</code>.</dd>
+    <dt><code>_dev/scroll_to</code></dt>
+    <dd>Плавная прокрутка окна или блока (плагин jQuery.ScrollTo). Подключается на нужной странице: <code>IncludeCom('_dev/scroll_to')</code>, дальше <code>$.scrollTo('#id', 500, {offset: -70})</code>, <code>$('.box').scrollTo('.item', 300)</code> или без JS - <code>&lt;a href="#id" data-scroll-to&gt;</code> (атрибуты <code>data-scroll-offset</code>, <code>data-scroll-duration</code>).</dd>
     <dt><code>_dev/pwa</code>, <code>_dev/network_status</code></dt>
     <dd>PWA (подключается в <code>&lt;head&gt;</code>; <code>manifest.json</code> и <code>service_worker.js</code> кладутся в корень сайта) и индикатор сети.</dd>
     <dt><code>_dev/xl_table</code>, <code>_dev/live_filter</code>, <code>_dev/ekko_lightbox</code>, <code>_dev/jcrop</code>, <code>_dev/autosize_inputs</code></dt>

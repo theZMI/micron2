@@ -52,7 +52,14 @@
     right: 5px;
   }
 
+  // Календарь всегда светлый: не даём общим правилам ниже (шрифт и цвета из Bootstrap) его перекрасить
+  &.ui-widget.ui-widget-content {
+    color: #000;
+    font-size: @ui-datepicker-font-size-1;
+  }
+
   .ui-widget-header {
+    color: inherit;
     background: transparent;
     border: none 0;
     border-bottom: 1px solid #DDD;
@@ -90,5 +97,66 @@
   .ui-state-hover {
     background: transparent;
     color: #000;
+  }
+}
+
+// Виджеты (вкладки, аккордеон, диалог, автодополнение) берут шрифт и цвета из Bootstrap, чтобы работала тёмная тема
+.ui-widget,
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.ui-widget-content {
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+
+  a {
+    color: inherit;
+  }
+}
+
+// В jQuery UI 1.12+ у .ui-widget.ui-widget-content своя серая рамка - приводим к рамкам Bootstrap (календарь остаётся светлым)
+.ui-widget.ui-widget-content:not(.ui-datepicker) {
+  border-color: var(--bs-border-color);
+}
+
+.ui-widget-header {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+// Неактивные вкладки - на чёрном фоне (.ui-state-default выше), текст белый: в базовой теме jQuery UI ссылки тёмно-серые
+.ui-tabs .ui-tabs-nav li.ui-state-default:not(.ui-state-active) a {
+  color: #FFF;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-active {
+  background: var(--bs-body-bg);
+  border-color: var(--bs-border-color);
+
+  a {
+    color: var(--bs-body-color);
+  }
+}
+
+// Слайдер: полоса и ручки видны в обеих темах (в светлой ручки остаются чёрными)
+.ui-slider.ui-widget-content {
+  background: var(--bs-secondary-bg);
+  border-color: var(--bs-border-color);
+
+  .ui-slider-range {
+    background: var(--bs-emphasis-color);
+    opacity: 0.35;
+  }
+
+  .ui-slider-handle.ui-state-default {
+    background: var(--bs-emphasis-color);
+    border-color: var(--bs-emphasis-color);
   }
 }

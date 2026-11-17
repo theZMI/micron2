@@ -127,6 +127,8 @@ Micron в данном случае:
 - `_dev/pin_code_block` - поля ввода одноразового кода (автопереход, вставка из буфера, автосабмит, таймер повторной отправки); на странице нужно Vue-приложение с `mixins: [window.pinCodeForm]`
 - `_dev/rating_stars` - звёзды рейтинга (`['rating' => 3, 'jsCallback' => 'onRate']`)
 - `_dev/bootstrap_validator` - валидация форм на клиенте
+- `_dev/jqueryui` - jQuery UI 1.14 (календарь с русской локализацией, slider, sortable, draggable, autocomplete, dialog, tabs…), подключён на всех страницах в `tpl/_common_head.php`; поля `.datepicker` становятся календарями сами; `$.fn.button` отдан jQuery UI, бутстраповский - `$.fn.bsButton`
+- `_dev/scroll_to` - плавная прокрутка (`$.scrollTo('#id', 500, {offset: -70})`, `$('.box').scrollTo(...)`, атрибут `data-scroll-to`), подключается на нужной странице
 - `_dev/pwa` (в `<head>`) и `_dev/network_status` - PWA и индикатор сети; `manifest.json` и `service_worker.js` кладутся в корень сайта и подключаются, только если они есть
 
 ### Примеры
