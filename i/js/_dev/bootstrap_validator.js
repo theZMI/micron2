@@ -344,7 +344,7 @@
     Validator.prototype.isIncomplete = function () {
         function fieldIncomplete() {
             var value = getValue($(this))
-            return !(typeof value == "string" ? $.trim(value) : value)
+            return !(typeof value == "string" ? value.trim() : value)
         }
 
         return !!this.$inputs.filter('[required]').filter(fieldIncomplete).length

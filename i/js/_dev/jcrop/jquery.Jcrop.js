@@ -1133,13 +1133,13 @@
             // Insert draggable elements {{{
             // Insert border divs for outline
 
-            if (options.dragEdges && $.isArray(options.createDragbars))
+            if (options.dragEdges && Array.isArray(options.createDragbars))
                 createDragbars(options.createDragbars);
 
-            if ($.isArray(options.createHandles))
+            if (Array.isArray(options.createHandles))
                 createHandles(options.createHandles);
 
-            if (options.drawBorders && $.isArray(options.createBorders))
+            if (options.drawBorders && Array.isArray(options.createBorders))
                 createBorders(options.createBorders);
 
             //}}}
@@ -1696,12 +1696,12 @@
                     $.Jcrop.Loader(this, function () {
                         $(this).css({display: 'block', visibility: 'hidden'});
                         api = $.Jcrop(this, options);
-                        if ($.isFunction(callback)) callback.call(api);
+                        if ((typeof callback === 'function')) callback.call(api);
                     });
                 else {
                     $(this).css({display: 'block', visibility: 'hidden'});
                     api = $.Jcrop(this, options);
-                    if ($.isFunction(callback)) callback.call(api);
+                    if ((typeof callback === 'function')) callback.call(api);
                 }
             }
         });
@@ -1718,7 +1718,7 @@
         function completeCheck() {
             if (img.complete) {
                 $img.unbind('.jcloader');
-                if ($.isFunction(success)) success.call(img);
+                if ((typeof success === 'function')) success.call(img);
             } else window.setTimeout(completeCheck, 50);
         }
 
@@ -1726,10 +1726,10 @@
             .bind('load.jcloader', completeCheck)
             .bind('error.jcloader', function (e) {
                 $img.unbind('.jcloader');
-                if ($.isFunction(error)) error.call(img);
+                if ((typeof error === 'function')) error.call(img);
             });
 
-        if (img.complete && $.isFunction(success)) {
+        if (img.complete && (typeof success === 'function')) {
             $img.unbind('.jcloader');
             success.call(img);
         }

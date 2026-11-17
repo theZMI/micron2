@@ -23,8 +23,6 @@ function _SendMail($to, $subject, $message, $additionalHeaders, $files, $priorit
         $ret  = false;
         $mail = new PHPMailer();
         try {
-            $mail->MailerDebug = false;
-
             // Устанавливает кодировку письма такую же как и кодировка на сайте
             $mail->CharSet = Config('charset');
             $mail->IsHTML(true);
@@ -32,8 +30,6 @@ function _SendMail($to, $subject, $message, $additionalHeaders, $files, $priorit
             // Устанавливаем имя отправителя (сначала дефолтное)
             $mail->SetFrom($config['sender'][0], $config['sender'][1]);
             $mail->AddReplyTo($config['replayTo'][0], $config['replayTo'][1]);
-
-            $mail->MailerDebug = false;
 
             $mail->SMTPOptions = [
                 'ssl' => [

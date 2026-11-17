@@ -11,6 +11,7 @@
     npm run analyze    # Отчёт о размере бандла
     CODE, 'bash') ?>
 <p>Результат - <code>i/webpack/dist/app.css</code> и <code>app.js</code> - подключается в <code>&lt;head&gt;</code> главного шаблона автоматически (<code>core/config/webpack.php</code>) и проходит мимо ExtraPacker. Папка <code>dist</code> не хранится в git, поэтому после обновления стилей или скриптов на сервере нужно выполнить <code>npm run build</code>.</p>
+<p><b>jQuery 4.</b> Он доступен глобально как <code>$</code> и <code>jQuery</code> (expose-loader) - для скриптов в <code>&lt;head&gt;</code> компонентов. Все импорты <code>jquery</code> направлены на один файл <code>dist/jquery.js</code> (alias в <code>webpack.config.js</code>), иначе пакеты получили бы вторую копию. В jQuery 4 удалены <code>$.isArray</code>, <code>$.isFunction</code>, <code>$.trim</code>, <code>$.type</code> и т.п. - для старых плагинов (magicsuggest, jquery-form и сторонних в <code>i/js</code>) их возвращает <code>i/webpack/src/jQueryCompat.js</code>; в своём коде используйте <code>Array.isArray</code>, <code>typeof x === 'function'</code>, <code>str.trim()</code>.</p>
 <p>Короткие пути для импорта: <code>@scss</code>, <code>@ts</code>, <code>@js</code>, <code>@css</code>, <code>@less</code>, <code>@image</code>, <code>@data</code>, <code>@webpack</code>, <code>@root</code>.</p>
 
 <h3>Добавить стили страницы</h3>

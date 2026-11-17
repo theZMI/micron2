@@ -5,6 +5,9 @@ const TerserWebpackPlugin = require('terser-webpack-plugin') // Minify js
 const { CleanWebpackPlugin } = require('clean-webpack-plugin') // Clean old compiled files
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer') // Analyze of compiled files
 
+// jQuery 4 не отдаёт dist/jquery.js через exports, поэтому путь к файлу напрямую
+const jqueryFile = path.resolve(__dirname, 'node_modules/jquery/dist/jquery.js')
+
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
 const isAnalyze = process.env.ANALYZE === '1' // Отчёт BundleAnalyzerPlugin: npm run analyze (или make analyze-assets)
@@ -69,9 +72,6 @@ const babelOptions = preset => {
             [
                 '@babel/preset-env'
             ]
-        ],
-        plugins: [
-            '@babel/plugin-proposal-class-properties'
         ]
     }
     if (preset) {
@@ -127,6 +127,9 @@ module.exports = {
             '@scss': path.resolve(__dirname, '../scss'),
             '@image': path.resolve(__dirname, '../image'),
             '@webpack': path.resolve(__dirname, '../webpack'),
+            // jQuery 4 для import отдаёт отдельную ESM-сборку, а плагины берут его через require - получаются две копии,
+            // и expose-loader (window.$) не срабатывает. Всем один файл:
+            'jquery$': jqueryFile,
         },
         roots: [__dirname, path.resolve(__dirname, '../..')],
     },
@@ -155,7 +158,7 @@ module.exports = {
                 use: jsLoaders('@babel/preset-typescript')
             },
             {
-                test: require.resolve('jquery'),
+                test: jqueryFile,
                 loader: 'expose-loader',
                 options: {
                     exposes: ['$', 'jQuery']

@@ -15,7 +15,7 @@
     <?php endif ?>
 
     <!-- View at mobile devices -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, min-width=400"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <meta name="MobileOptimized" content="400"/>
     <meta name="HandheldFriendly" content="true"/>
 

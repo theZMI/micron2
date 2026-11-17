@@ -179,7 +179,8 @@ class ExtraPacker
             $packed = self::ONLY_MERGE_JS ? $content : JSMin::minify($content);
         } else {
             try {
-                $parser = new \Less_Parser();
+                // math=always - как в less.php 4: деление считается и без скобок (в 5.x по умолчанию только в скобках)
+                $parser = new \Less_Parser(['math' => 'always']);
                 $parser->parse($content);
                 $content = $parser->getCss();
             } catch (Exception $e) {
