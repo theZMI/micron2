@@ -21,8 +21,8 @@ if (Post('is_create')) {
     $isLangWrite = 0;
     $isTplWrite  = false;
 
-    foreach (array_keys(Config('langs')) as $lang) {
-        $langFile = BASEPATH . "lang/{$lang}/{$fileName}.php";
+    foreach (array_keys(Config('langs')) as $l) {
+        $langFile = BASEPATH . "lang/{$l}/{$fileName}.php";
         if (!file_exists($langFile)) {
             $isLangWrite += FileSys::writeFile($langFile, $langContent);
         }

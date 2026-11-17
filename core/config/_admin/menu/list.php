@@ -1,6 +1,6 @@
 <?php
 
-/*
+// Раздел «Страницы»: правка текстов языковых файлов (lang/*, для HTML - CKEditor) и создание простых страниц
 $subMenu = [];
 foreach (array_keys(Config('langs')) as $lang) {
     $subMenu[] = [
@@ -22,4 +22,3 @@ Config(['admin_menu', 'PUSH'], [
     'list'  => $subMenu
 ]);
 unset($subMenu);
-*/
