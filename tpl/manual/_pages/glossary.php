@@ -65,6 +65,78 @@
 
 <h2>HMVC</h2>
 <p>HMVC - развитие паттерна MVC с возможностью иерархического вызова триад MVC друг из друга (в нашем случае - вызова одного компонента из другого). Страница - это компонент, внутри которого подключены другие компоненты, внутри которых - третьи, и так далее.</p>
+<div class="manual-figures">
+    <figure class="manual-figure">
+        <svg class="manual-diagram" viewBox="0 0 360 280" role="img" aria-label="Схема MVC: браузер, контроллер, модель, шаблон">
+            <defs>
+                <marker id="md-arrow-mvc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path class="md-arrow" d="M0,0 L10,5 L0,10 z"/>
+                </marker>
+            </defs>
+            <path class="md-edge" d="M140,42 L96,101" marker-end="url(#md-arrow-mvc)"/>
+            <path class="md-edge" d="M160,129 L197,129" marker-end="url(#md-arrow-mvc)"/>
+            <path class="md-edge" d="M264,102 L221,45" marker-end="url(#md-arrow-mvc)"/>
+            <path class="md-edge" d="M85,157 L85,217" marker-start="url(#md-arrow-mvc)" marker-end="url(#md-arrow-mvc)"/>
+            <path class="md-edge" d="M163,245 L197,245" marker-start="url(#md-arrow-mvc)" marker-end="url(#md-arrow-mvc)"/>
+            <text class="md-label" x="62" y="70">запрос</text>
+            <text class="md-label" x="252" y="70">HTML</text>
+            <text class="md-label" x="93" y="191">данные</text>
+
+            <rect class="md-node" x="120" y="8" width="120" height="34" rx="17"/>
+            <text class="md-title" x="180" y="25">Браузер</text>
+            <rect class="md-node" x="10" y="104" width="150" height="50" rx="10"/>
+            <text class="md-title" x="85" y="121">Контроллер</text>
+            <text class="md-sub" x="85" y="140">src/имя.php</text>
+            <rect class="md-node" x="200" y="104" width="150" height="50" rx="10"/>
+            <text class="md-title" x="275" y="121">Шаблон</text>
+            <text class="md-sub" x="275" y="140">tpl/имя.php</text>
+            <rect class="md-node" x="10" y="220" width="150" height="50" rx="10"/>
+            <text class="md-title" x="85" y="237">Модель</text>
+            <text class="md-sub" x="85" y="256">model/XModel.php</text>
+            <rect class="md-node" x="200" y="220" width="150" height="50" rx="10"/>
+            <text class="md-title" x="275" y="237">База данных</text>
+            <text class="md-sub" x="275" y="256">MySQL</text>
+        </svg>
+        <figcaption>MVC: контроллер принимает запрос, берёт данные через модель и передаёт их в шаблон, а шаблон отдаёт HTML.</figcaption>
+    </figure>
+    <figure class="manual-figure">
+        <svg class="manual-diagram" viewBox="0 0 470 320" role="img" aria-label="Схема HMVC: дерево компонентов страницы каталога">
+            <defs>
+                <marker id="md-arrow-hmvc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path class="md-arrow" d="M0,0 L10,5 L0,10 z"/>
+                </marker>
+            </defs>
+            <path class="md-edge" d="M235,44 V64 H79 V93" marker-end="url(#md-arrow-hmvc)"/>
+            <path class="md-edge" d="M235,44 V64 H391 V93" marker-end="url(#md-arrow-hmvc)"/>
+            <path class="md-edge" d="M235,64 V93" marker-end="url(#md-arrow-hmvc)"/>
+            <path class="md-edge" d="M79,132 V181" marker-end="url(#md-arrow-hmvc)"/>
+            <path class="md-edge" d="M235,132 V181" marker-end="url(#md-arrow-hmvc)"/>
+            <path class="md-edge" d="M235,154 H391 V181" marker-end="url(#md-arrow-hmvc)"/>
+            <path class="md-edge" d="M79,220 V269" marker-end="url(#md-arrow-hmvc)"/>
+            <text class="md-label" x="242" y="84">$content</text>
+            <text class="md-label" x="239" y="242" text-anchor="middle">× на каждый товар</text>
+
+            <rect class="md-node" x="160" y="8" width="150" height="36" rx="10"/>
+            <text class="md-code" x="235" y="26">_main_tpl</text>
+            <rect class="md-node" x="4" y="96" width="150" height="36" rx="10"/>
+            <text class="md-code" x="79" y="114">_main_tpl/menu</text>
+            <rect class="md-node is-accent" x="160" y="96" width="150" height="36" rx="10"/>
+            <text class="md-code" x="235" y="114">shop</text>
+            <rect class="md-node" x="316" y="96" width="150" height="36" rx="10"/>
+            <text class="md-code" x="391" y="114">_main_tpl/footer</text>
+            <rect class="md-node" x="4" y="184" width="150" height="36" rx="10"/>
+            <text class="md-code" x="79" y="202">_dev/menu</text>
+            <rect class="md-node" x="164" y="188" width="150" height="36" rx="10"/>
+            <rect class="md-node" x="160" y="184" width="150" height="36" rx="10"/>
+            <text class="md-code" x="235" y="202">shop/_product_card</text>
+            <rect class="md-node" x="316" y="184" width="150" height="36" rx="10"/>
+            <text class="md-code" x="391" y="202">_dev/paginator</text>
+            <rect class="md-node" x="4" y="272" width="150" height="36" rx="10"/>
+            <text class="md-code" x="79" y="290">_dev/menu/sub_menu</text>
+        </svg>
+        <figcaption>HMVC в Micron: страница каталога. Роутер вызывает компонент <code>shop</code> (выделен), его вывод попадает в главный шаблон как <code>$content</code>, а каждый компонент сам подключает вложенные через <code>IncludeCom()</code>.</figcaption>
+    </figure>
+</div>
 
 <h2>Middleware</h2>
 <p>Код, который выполняется до компонента для определённой группы адресов: проверка авторизации админа, подготовка ответа API, загрузка пользователя. Подключается в роутере <code>core/init/router.php</code>.</p>

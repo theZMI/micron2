@@ -21,6 +21,10 @@
     <dt><code>stop_on_warnings</code></dt>
     <dd>Останавливать ли скрипт на warning/notice/deprecated (по умолчанию - в debug-режиме).</dd>
 </dl>
+<figure class="manual-figure">
+    <img src="<?= Root('i/image/manual/debug/error.webp') ?>" width="1568" height="368" loading="lazy" alt="Страница ошибки в debug-режиме">
+    <figcaption>Ошибка в debug-режиме: текст, файл и строка, а по кнопке «Backtrace» - вся цепочка вызовов.</figcaption>
+</figure>
 <p>В лог не попадают пароли, токены, ключи и значения cookie - они заменяются на <code>***</code>.</p>
 
 <h2>Debug-панель</h2>
@@ -33,10 +37,22 @@
     <li>основные параметры движка: язык, режим, настройки php.ini;</li>
     <li>информацию о php.ini и модулях PHP.</li>
 </ul>
+<figure class="manual-figure">
+    <img src="<?= Root('i/image/manual/debug/panel.webp') ?>" width="706" height="29" loading="lazy" alt="Развёрнутая debug-панель">
+    <figcaption>Панель внизу страницы: время, память, SQL, переменные, подключённые файлы, параметры движка и php.ini. Свёрнутая - только значок справа.</figcaption>
+</figure>
+<figure class="manual-figure">
+    <img src="<?= Root('i/image/manual/debug/sql.webp') ?>" width="1215" height="168" loading="lazy" alt="Вкладка SQL debug-панели">
+    <figcaption>Вкладка SQL: каждый запрос к БД с временем выполнения, внизу - их количество и общее время.</figcaption>
+</figure>
 <p>В ответы без главного шаблона (JSON, AJAX, файлы) панель не добавляется.</p>
 
 <h2>Бенчмарк</h2>
 <p>Клик по времени/памяти в панели открывает бенчмарк: время и память по этапам запроса (запуск движка, роутинг, главный шаблон, пост-обработка), по каждому компоненту и каждому запросу к БД, а также итог отдельно для PHP, БД и внешних сервисов.</p>
+<figure class="manual-figure">
+    <img src="<?= Root('i/image/manual/debug/benchmark.webp') ?>" width="1197" height="881" loading="lazy" alt="Бенчмарк в debug-панели">
+    <figcaption>Бенчмарк страницы: запуск движка, роутинг, запросы к БД, каждый компонент и пост-обработка, внизу - итог по PHP, БД и внешним сервисам.</figcaption>
+</figure>
 <p>Свои замеры - <code>BM('Название')</code> в начале и ещё раз в конце участка кода:</p>
 <?= DocCode(<<<'CODE'
     BM('Services / Курс валют'); // Метки "Services / ..." попадают в итог по внешним сервисам

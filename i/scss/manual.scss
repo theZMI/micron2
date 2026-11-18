@@ -223,6 +223,225 @@
     }
   }
 
+  // Рисунки: схемы (inline SVG / HTML) и скриншоты с подписью
+  .manual-figures {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .manual-figure {
+      margin: 0;
+    }
+  }
+
+  .manual-figure {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid var(--site-line);
+    border-radius: $border-radius-lg;
+
+    > svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    // Скриншоты не растягиваем больше их размера, чтобы не мылились
+    > img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: $border-radius;
+    }
+
+    figcaption {
+      margin-top: 0.75rem;
+      color: var(--bs-secondary-color);
+      font-size: $site-font-sm;
+    }
+  }
+
+  // Схема на SVG: цвета берутся из темы, поэтому одинаково читается в светлой и тёмной
+  .manual-diagram {
+    font-size: 13px;
+
+    .md-node {
+      fill: var(--site-fill);
+      stroke: var(--site-line);
+    }
+
+    .md-node.is-accent {
+      fill: var(--bs-emphasis-color);
+      stroke: var(--bs-emphasis-color);
+    }
+
+    .md-title {
+      fill: var(--bs-emphasis-color);
+      font-weight: 700;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .md-code {
+      fill: var(--bs-emphasis-color);
+      font-family: var(--bs-font-monospace);
+      font-size: 12px;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .md-sub {
+      fill: var(--bs-secondary-color);
+      font-family: var(--bs-font-monospace);
+      font-size: 11px;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .is-accent + .md-code, .is-accent + .md-title {
+      fill: var(--bs-body-bg);
+    }
+
+    .md-edge {
+      fill: none;
+      stroke: var(--bs-secondary-color);
+      stroke-width: 1.25;
+
+      &.is-dashed {
+        stroke-dasharray: 4 4;
+      }
+    }
+
+    .md-arrow {
+      fill: var(--bs-secondary-color);
+    }
+
+    .md-label {
+      fill: var(--bs-secondary-color);
+      font-size: 11px;
+    }
+  }
+
+  // Схема запроса на HTML (а не картинкой): переносится на узком экране и читается на телефоне
+  .manual-scheme {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 1.5rem 0;
+
+    .ms-node {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--site-line);
+      border-radius: $border-radius-lg;
+      background: var(--site-fill);
+      font-size: $site-font-sm;
+
+      > strong {
+        display: block;
+        color: var(--bs-emphasis-color);
+        font-size: $site-font-md;
+      }
+
+      > p {
+        margin: 0.25rem 0 0;
+        color: var(--bs-secondary-color);
+      }
+
+      &.is-io {
+        align-self: center;
+        padding: 0.4rem 1.1rem;
+        border-radius: 50rem;
+        background: transparent;
+        text-align: center;
+      }
+
+      &.is-accent {
+        border-color: var(--bs-emphasis-color);
+      }
+    }
+
+    // Файлы/шаги внутри узла
+    .ms-parts {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+
+      > span {
+        padding: 0.2rem 0.6rem;
+        border: 1px solid var(--site-line);
+        border-radius: 50rem;
+        background: var(--bs-body-bg);
+        color: var(--bs-emphasis-color);
+        font-family: var(--bs-font-monospace);
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      > i {
+        color: var(--bs-secondary-color);
+        font-size: 0.8rem;
+      }
+    }
+
+    // Ответвления от компонента: модели и вложенные компоненты
+    .ms-branches {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--site-line);
+
+      @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      > div {
+        color: var(--bs-secondary-color);
+      }
+
+      .ms-parts {
+        margin-top: 0.35rem;
+      }
+    }
+
+    // Стрелка между узлами, с подписью справа
+    .ms-arrow {
+      position: relative;
+      align-self: center;
+      width: 1px;
+      height: 1.75rem;
+      margin: 0.25rem 0 0.4rem;
+      background: var(--bs-secondary-color);
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: -4px;
+        bottom: -1px;
+        border: 4.5px solid transparent;
+        border-top: 6px solid var(--bs-secondary-color);
+        border-bottom: 0;
+      }
+
+      > span {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--bs-secondary-color);
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+    }
+  }
+
   // Схема выполнения: шаги в цепочку
   .manual-flow {
     display: flex;

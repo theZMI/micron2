@@ -3,15 +3,68 @@
 <p>Не совсем корректно говорить, что модель входит в компонент. Модель - скорее библиотека, которую компонент использует. Модели строятся не по структуре компонентов, а по структуре БД. Примеры компонентов: контакты, постраничная навигация, поиск, меню, корзина. Примеры моделей: пользователи, заказы, товары.</p>
 
 <h2>Путь одного запроса</h2>
-<div class="manual-flow">
-    <span>index.php</span><i class="bi bi-arrow-right"></i>
-    <span>vendor + .env</span><i class="bi bi-arrow-right"></i>
-    <span>core/core.php</span><i class="bi bi-arrow-right"></i>
-    <span>роутер + middleware</span><i class="bi bi-arrow-right"></i>
-    <span>lang → src → tpl</span><i class="bi bi-arrow-right"></i>
-    <span>_main_tpl</span><i class="bi bi-arrow-right"></i>
-    <span>пост-обработка</span><i class="bi bi-arrow-right"></i>
-    <span>браузер</span>
+<p>На примере страницы каталога <code>site.ru/shop</code>:</p>
+<div class="manual-scheme">
+    <div class="ms-node is-io">Браузер: <code>GET site.ru/shop</code></div>
+    <div class="ms-arrow"></div>
+    <div class="ms-node">
+        <strong>index.php</strong>
+        <div class="ms-parts"><span>vendor/autoload.php</span><i class="bi bi-plus"></i><span>.env</span></div>
+    </div>
+    <div class="ms-arrow"></div>
+    <div class="ms-node">
+        <strong>core/core.php</strong>
+        <div class="ms-parts">
+            <span>core/func/*</span><i class="bi bi-arrow-right"></i>
+            <span>lang/LANG/_autoload/*</span><i class="bi bi-arrow-right"></i>
+            <span>core/config/*</span><i class="bi bi-arrow-right"></i>
+            <span>core/init/*</span>
+        </div>
+        <p>init: БД и миграции, перехват ошибок, сессия, редирект www, оплата, меню админки, роутер, затем ваши файлы</p>
+    </div>
+    <div class="ms-arrow"></div>
+    <div class="ms-node">
+        <strong>Роутер</strong>
+        <div class="ms-parts"><span>core/init/router.php</span><i class="bi bi-arrow-right"></i><span>middleware группы</span></div>
+        <p>/shop → компонент <code>shop</code>; для /_admin, /_cron, /api - свои маршруты и проверки доступа</p>
+    </div>
+    <div class="ms-arrow"></div>
+    <div class="ms-node is-accent">
+        <strong>IncludeCom('shop')</strong>
+        <div class="ms-parts">
+            <span>lang/DEF_LANG/shop.php</span><i class="bi bi-arrow-right"></i>
+            <span>lang/LANG/shop.php</span><i class="bi bi-arrow-right"></i>
+            <span>src/shop.php</span><i class="bi bi-arrow-right"></i>
+            <span>tpl/shop.php</span>
+        </div>
+        <div class="ms-branches">
+            <div>
+                Контроллер берёт данные из модели:
+                <div class="ms-parts"><span>ShopProductModel::search()</span></div>
+            </div>
+            <div>
+                Шаблон подключает другие компоненты:
+                <div class="ms-parts"><span>shop/_product_card</span><span>_dev/paginator</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="ms-arrow"><span>$content</span></div>
+    <div class="ms-node">
+        <strong>_main_tpl</strong>
+        <p>Главный шаблон: шапка, меню, футер, а в середине - <code>$content</code></p>
+    </div>
+    <div class="ms-arrow"></div>
+    <div class="ms-node">
+        <strong>Пост-обработка</strong>
+        <div class="ms-parts">
+            <span>подсветка кода</span><i class="bi bi-arrow-right"></i>
+            <span>сборка &lt;head&gt; и &lt;bottom&gt;</span><i class="bi bi-arrow-right"></i>
+            <span>ExtraPacker</span><i class="bi bi-arrow-right"></i>
+            <span>debug-панель</span>
+        </div>
+    </div>
+    <div class="ms-arrow"></div>
+    <div class="ms-node is-io">Браузер получает HTML</div>
 </div>
 <ol>
     <li><strong><code>index.php</code></strong> засекает время старта, подключает composer (<code>vendor/autoload.php</code>) и загружает переменные окружения из <code>.env</code> в <code>$_ENV</code>. С этого момента известен режим <code>DEBUG_MODE</code>.</li>
