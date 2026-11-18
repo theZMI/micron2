@@ -39,8 +39,8 @@ function RenderDbLog(array $log): string
 
 /**
  * Выполняет $fn($db) в транзакции: commit, а при исключении - rollback и исключение дальше.
- * Внимание: модели при первом new в процессе выполняют CREATE TABLE IF NOT EXISTS, а любой DDL в MySQL неявно
- * завершает транзакцию (дальше всё пишется сразу и rollback не сработает). Создавайте модели до DbTransaction()
+ * Внимание: модель, чьей таблицы ещё нет в DbTablesCache (первый запуск, после миграций), выполняет CREATE TABLE IF NOT EXISTS,
+ * а любой DDL в MySQL неявно завершает транзакцию (дальше всё пишется сразу и rollback не сработает). Создавайте модели до DbTransaction()
  */
 function DbTransaction(callable $fn)
 {

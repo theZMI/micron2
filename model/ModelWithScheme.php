@@ -2,6 +2,21 @@
 
 class ModelWithScheme extends \Models\ModelExtends
 {
+    // CREATE TABLE IF NOT EXISTS из createTable() выполняется только один раз за всё время, а не на каждый запрос (см. DbTablesCache)
+    public function __construct($table, $id = null)
+    {
+        $isKnown = DbTablesCache::has($table);
+        if ($isKnown) {
+            DbTablesCache::markCreatedInRequest($table);
+        }
+
+        parent::__construct($table, $id);
+
+        if (!$isKnown) {
+            DbTablesCache::add($table);
+        }
+    }
+
     public function scheme()
     {
         return [

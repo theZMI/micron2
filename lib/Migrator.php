@@ -59,6 +59,10 @@ class Migrator
             $done[] = $name;
         }
 
+        if ($done) {
+            DbTablesCache::reset(); // Миграция могла удалить или переименовать таблицу - модели проверят свои таблицы заново
+        }
+
         $all = self::all();
         FileSys::writeFile(self::markerFile(), (string)end($all));
         return $done;

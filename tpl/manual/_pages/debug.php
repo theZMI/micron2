@@ -42,7 +42,7 @@
     <figcaption>Панель внизу страницы: время, память, SQL, переменные, подключённые файлы, параметры движка и php.ini. Свёрнутая - только значок справа.</figcaption>
 </figure>
 <figure class="manual-figure">
-    <img src="<?= Root('i/image/manual/debug/sql.webp') ?>" width="1215" height="168" loading="lazy" alt="Вкладка SQL debug-панели">
+    <img src="<?= Root('i/image/manual/debug/sql.webp') ?>" width="1210" height="221" loading="lazy" alt="Вкладка SQL debug-панели">
     <figcaption>Вкладка SQL: каждый запрос к БД с временем выполнения, внизу - их количество и общее время.</figcaption>
 </figure>
 <p>В ответы без главного шаблона (JSON, AJAX, файлы) панель не добавляется.</p>
