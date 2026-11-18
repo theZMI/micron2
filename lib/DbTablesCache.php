@@ -57,17 +57,11 @@ class DbTablesCache
 
     /**
      * Говорит библиотеке моделей (\Models\ModelOptimized), что таблица в этом запросе уже создана,
-     * чтобы её конструктор не вызывал createTable(). Список у неё private static, поэтому через Reflection.
+     * чтобы её конструктор не вызывал createTable()
      */
     public static function markCreatedInRequest(string $table): void
     {
-        static $prop = null;
-        if ($prop === null) {
-            $prop = new ReflectionProperty(\Models\ModelOptimized::class, '_listCreatedTables');
-        }
-        $list         = $prop->getValue();
-        $list[$table] = true;
-        $prop->setValue(null, $list);
+        \Models\ModelOptimized::markTableCreated($table);
     }
 
     /**

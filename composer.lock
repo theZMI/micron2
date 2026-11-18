@@ -1766,12 +1766,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theZMI/components__dbSimpleModels.git",
-                "reference": "4f5ec5712c42d14559e4d87cb0f1df582aea2b57"
+                "reference": "6d13b961efc1ddd8ad70fb843a114650d2859d9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theZMI/components__dbSimpleModels/zipball/4f5ec5712c42d14559e4d87cb0f1df582aea2b57",
-                "reference": "4f5ec5712c42d14559e4d87cb0f1df582aea2b57",
+                "url": "https://api.github.com/repos/theZMI/components__dbSimpleModels/zipball/6d13b961efc1ddd8ad70fb843a114650d2859d9f",
+                "reference": "6d13b961efc1ddd8ad70fb843a114650d2859d9f",
                 "shasum": ""
             },
             "require": {
@@ -1802,8 +1802,8 @@
                 "issues": "https://github.com/theZMI/components__dbSimpleModels/issues",
                 "source": "https://github.com/theZMI/components__dbSimpleModels/tree/master"
             },
-            "time": "2026-11-16T11:29:19+00:00",
-            "published-time": "2026-11-16T11:36:33+00:00"
+            "time": "2026-11-18T10:05:27+00:00",
+            "published-time": "2026-11-18T10:06:49+00:00"
         },
         {
             "name": "thezmi/filelogger",
