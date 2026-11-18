@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="<?= Root("i/css/_dev/debug_panel.css") ?>"/>
 
-<div class="container-fluid mb-4">
+<div class="container-fluid">
     <div class="row">
         <div class="col">
             <h1 class="my-4">Лог ошибок</h1>

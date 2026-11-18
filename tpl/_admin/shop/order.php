@@ -1,5 +1,5 @@
 <?php $sign = Config('shop')['currency_sign'] ?>
-<div class="container-fluid mb-4">
+<div class="container-fluid">
     <div class="row">
         <div class="col" style="max-width: 1000px;">
             <h1 class="my-4">Заказ №<?= $order->id ?> <small class="text-muted fs-5"><?= date('d.m.Y H:i', $order->create_time) ?></small></h1>

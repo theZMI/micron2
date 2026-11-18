@@ -1,4 +1,4 @@
-<div class="container-fluid mb-4">
+<div class="container-fluid">
     <div class="row">
         <div class="col" style="max-width: 900px;">
             <h1 class="my-4">Импорт товаров</h1>

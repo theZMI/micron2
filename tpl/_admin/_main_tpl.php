@@ -30,9 +30,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="pt-4 pb-4">
-                        Вы авторизованы как: <strong><?= $g_admin->login ?></strong>
-                    </div>
+                    Вы авторизованы как: <strong><?= $g_admin->login ?></strong>
                 </div>
             </div>
         </div>

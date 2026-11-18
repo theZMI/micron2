@@ -1,4 +1,4 @@
-<div class="container-fluid mb-4">
+<div class="container-fluid">
     <div class="row">
         <div class="col" style="max-width: 800px;">
             <h1 class="my-4"><?= $model->isExists() ? $model->name : 'Новый товар' ?></h1>

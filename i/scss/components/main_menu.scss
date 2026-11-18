@@ -59,6 +59,13 @@
     align-items: center;
     gap: 0.4rem;
 
+    // В развёрнутом меню без вертикальных отступов: высоту шапки задаёт логотип, как и в свёрнутом,
+    // иначе на десктопе шапка выше, чем на телефоне
+    @include media-breakpoint-up(lg) {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
     &:hover, &:focus {
       color: var(--bs-emphasis-color);
     }
@@ -113,7 +120,16 @@
       padding: 0.5rem 0;
       border: 0;
       text-align: left;
+
+      @include media-breakpoint-up(lg) {
+        padding: 0; // Как у остальных пунктов (см. .nav-link выше)
+      }
     }
+  }
+
+  // Блок после правого меню (переключатель темы) - на том же расстоянии, что и иконки между собой
+  .navbar-after-right {
+    margin-left: 1.75rem;
   }
 
   .nav-icon-label {

@@ -1,4 +1,4 @@
-<div class="container-fluid mb-4">
+<div class="container-fluid">
     <h1 class="mt-4 mb-4">Миграции БД</h1>
     <?php if ($applied): ?>
         <?= MsgOk('Применены: ' . implode(', ', $applied)) ?>

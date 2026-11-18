@@ -74,6 +74,7 @@
                         <?php IncludeCom('shop/_product_card', ['product' => $product]) ?>
                     <?php endforeach ?>
                 </div>
+                <?php if ($result['total'] > $perPage): // Пустая обёртка с mt-5 давала лишний отступ перед футером ?>
                 <div class="mt-5">
                     <?php
                     IncludeCom('_dev/paginator', [
@@ -86,6 +87,7 @@
                     ]);
                     ?>
                 </div>
+                <?php endif ?>
             <?php endif ?>
         </div>
     </div>

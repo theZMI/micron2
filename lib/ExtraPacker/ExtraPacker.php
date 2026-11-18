@@ -216,6 +216,32 @@ class ExtraPacker
         ));
     }
 
+    // Время изменения less-файла с учётом всех его @import (рекурсивно): иначе правка в импортируемом файле
+    // (например _main_menu.less внутри main.less) не меняет время главного файла и склейка не пересобирается
+    private static function lessMtime(string $path, array &$visited = []): int
+    {
+        $real = realpath($path);
+        if ($real === false || isset($visited[$real])) {
+            return 0;
+        }
+        $visited[$real] = true;
+
+        $time = (int)filemtime($real);
+        preg_match_all('~@import\s*(?:\([^)]*\)\s*)?[\'"]([^\'"]+)[\'"]~', (string)file_get_contents($real), $m);
+        foreach ($m[1] as $import) {
+            if (preg_match('~^(https?:)?//~i', $import) || str_ends_with($import, '.css')) {
+                continue;
+            }
+            $importPath = dirname($real) . '/' . $import;
+            if (!pathinfo($import, PATHINFO_EXTENSION)) {
+                $importPath .= '.less';
+            }
+            $time = max($time, self::lessMtime($importPath, $visited));
+        }
+
+        return $time;
+    }
+
     private static function canUseGZIP(): bool
     {
         return str_contains($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') && extension_loaded('zlib');
@@ -336,7 +362,7 @@ class ExtraPacker
             if (!is_readable($url)) {
                 trigger_error('Not found file for pack: ' . $url, E_USER_ERROR);
             }
-            $files[] = ['time' => filemtime($url), 'addr' => $url];
+            $files[] = ['time' => $ext === 'less' ? self::lessMtime($url) : filemtime($url), 'addr' => $url];
         }
         $html = strtr($html, $replaces);
 
