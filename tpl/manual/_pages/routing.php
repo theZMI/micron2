@@ -28,11 +28,11 @@
 <p><code>CommonMiddleware</code> выполняется для всех страниц: загружает текущего пользователя и админа в <code>$g_user</code> / <code>$g_admin</code>, задаёт константы <code>IS_USER_AUTH</code>, <code>IS_ADMIN_AUTH</code> и др., отклоняет изменяющие запросы с чужих сайтов (CSRF).</p>
 
 <h2>Свой маршрут</h2>
-<p>Например, красивый адрес товара <code>site.ru/product/15</code>. Добавьте маршрут в <code>core/init/router.php</code> перед стандартным правилом:</p>
+<p>Например, красивый адрес статьи <code>site.ru/article/15</code>. Добавьте маршрут в <code>core/init/router.php</code> перед стандартным правилом. Параметры из второго аргумента <code>IncludeCom()</code> становятся переменными компонента. Так сделаны адреса магазина <code>/shop/c/&lt;категория&gt;</code> и <code>/shop/p/&lt;id&gt;-&lt;название&gt;</code>.</p>
 <?= DocCode(<<<'CODE'
     SimpleRouter::group(['middleware' => [CommonMiddleware::class]], function () {
-        SimpleRouter::get('/product/{id}', function ($id) {
-            IncludeCom('shop/product&id=' . (int)$id); // Контроллер товара берёт id через Get('id')
+        SimpleRouter::get('/article/{id}', function ($id) {
+            IncludeCom('article', ['articleId' => (int)$id]); // В src/article.php доступна $articleId
         })->where(['id' => '[0-9]+']);
     });
     CODE) ?>

@@ -10,6 +10,7 @@
     <tr><td><code>DEBUG_MODE</code></td><td><code>1</code> - режим разработки (ошибки на экране, debug-панель, письма в файл), <code>0</code> - боевой режим</td></tr>
     <tr><td><code>ERROR_LOG_FILE</code></td><td>Имя лог-файла ошибок PHP в <code>tmp/</code></td></tr>
     <tr><td><code>SITE_ROOT_URL</code></td><td>Адрес сайта со слешем в конце: <code>https://site.ru/</code>. От него строит ссылки <code>SiteRoot()</code></td></tr>
+    <tr><td><code>SITE_DOMAIN</code></td><td>Полный домен боевого сайта без слеша в конце: <code>https://site.ru</code>. Для <code>robots.txt</code> (строка <code>Sitemap:</code>); пусто - берётся <code>SITE_ROOT_URL</code></td></tr>
     <tr><td><code>DOMAIN_COOKIE</code></td><td>Домен для cookie (пусто - текущий)</td></tr>
     <tr><td><code>CORS_ALLOWED_ORIGINS</code></td><td>Домены, которым разрешены кросс-доменные запросы (через запятую)</td></tr>
     <tr><td><code>TRUSTED_PROXIES</code></td><td>IP прокси перед сайтом (nginx, балансировщик) - только от них принимается <code>X-Forwarded-For</code></td></tr>
@@ -20,7 +21,7 @@
     <tr><td><code>EMAIL_*</code></td><td>Почтовый ящик для отправки писем (SMTP)</td></tr>
     <tr><td><code>TELEGRAM_*</code>, <code>PUSH_ONESIGNAL_*</code>, <code>SMSC_*</code>, <code>SMSRU_*</code></td><td>Уведомления: Telegram-бот, push, SMS</td></tr>
     <tr><td><code>PAY_SYSTEM_*</code></td><td>Ключи ЮKassa и Сбера</td></tr>
-    <tr><td><code>SHOP_MANAGER_EMAILS</code>, <code>SHOP_IMPORT_GOOGLE_SHEET_URL</code></td><td>Кому писать об оплаченных заказах; Google-таблица для импорта товаров</td></tr>
+    <tr><td><code>SHOP_MANAGER_EMAILS</code>, <code>SHOP_IMPORT_GOOGLE_SHEET_URL</code>, <code>SHOP_IMPORT_IMAGES_SOURCE</code></td><td>Кому писать о заказах и отзывах; Google-таблица для импорта товаров (лист - по <code>gid</code> в ссылке); откуда брать картинки по именам файлов (публичная папка Яндекс Диска, начало ссылки или папка на сервере)</td></tr>
     <tr><td><code>RECAPTCHA_*</code></td><td>Ключи Google reCAPTCHA</td></tr>
     <tr><td><code>API_CLIENT_*</code></td><td>Клиент внешнего API (<code>ApiClient</code>, <code>ApiModel</code>)</td></tr>
     <tr><td><code>APP_DOWNLOAD_KEY</code></td><td>Если задан - apk-приложение скачивается только по ссылке с ключом</td></tr>

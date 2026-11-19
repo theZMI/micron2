@@ -12,8 +12,8 @@
     <dd>Библиотеки, установленные composer-ом: DbSimple и модели, роутер, PHPMailer, клиенты платёжных систем, PhpSpreadsheet и др.</dd>
     <dt><code>Makefile</code></dt>
     <dd>Команды для сборки фронтенда (<code>make build-assets</code>) и анализа бандла.</dd>
-    <dt><code>robots.txt</code>, <code>favicon.ico</code></dt>
-    <dd>Для поисковых систем и иконка сайта (замените на свои).</dd>
+    <dt><code>favicon.ico</code></dt>
+    <dd>Иконка сайта (замените на свою). <code>robots.txt</code> файлом не лежит - его отдаёт движок (<code>src/robots.php</code>, правила - <code>core/config/robots.php</code>).</dd>
     <dt><code>README.md</code></dt>
     <dd>Краткая справка по движку.</dd>
 </dl>

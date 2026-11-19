@@ -35,10 +35,9 @@
         location ^~ /tmp/qrcodes/                  { access_log off; }
         location ^~ /i/webpack/dist/               { access_log off; expires 1y; }
         location ^~ /lib/CKEditor/                 { access_log off; }
-        location = /robots.txt                     { access_log off; log_not_found off; }
         location = /favicon.ico                    { access_log off; log_not_found off; }
 
-        # Всё остальное (страницы, а также картинки из i/ и upl/) - через движок
+        # Всё остальное (страницы, robots.txt и sitemap.xml, а также картинки из i/ и upl/) - через движок
         location / {
             rewrite ^/(.*)$ /index.php?micron_query=$1 last;
         }

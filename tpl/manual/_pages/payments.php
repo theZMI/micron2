@@ -9,7 +9,7 @@
             Config('pay_system', Config('pay_system_yookassa')); // или Config('pay_system_sber')
             CODE) ?>
     </li>
-    <li>Параметры чека (НДС, система налогообложения, признак предмета расчёта) - в <code>core/config/pay_systems/*.php</code>.</li>
+    <li>Параметры чека (НДС, система налогообложения, признак предмета расчёта, мера количества по ФФД 1.2 - <code>send_measure</code> у ЮKassa) - в <code>core/config/pay_systems/*.php</code>. Количество бывает дробным (2.5 м), мера берётся из единицы товара, доставка идёт отдельной позицией-услугой.</li>
     <li>Укажите адрес уведомлений в личном кабинете банка: <code>https://site.ru/pay_system/notify</code>. В ЮKassa - «HTTP-уведомления», события <code>payment.succeeded</code> и <code>payment.canceled</code>; в Сбере - callback-уведомления.</li>
     <li>Добавьте в расписание сервера проверку зависших платежей: <code>/_cron/pay_system_check?key=CRON_SECRET</code>.</li>
 </ol>
@@ -49,9 +49,9 @@
     interface IShopOrderModel
     {
         public function getId(): int;
-        public function getTotalAmount(): float;
+        public function getTotalAmount(): int;   // В копейках
         public function getCurrency(): string;  // RUB, USD...
-        public function getPayItems(): array;   // Позиции для чека
+        public function getPayItems(): array;   // Позиции для чека (price и amount - в копейках)
         public function getCustomer(): array;   // Почта/телефон покупателя для чека
         public function getPayBackUrl(): string; // Куда вернуть покупателя после оплаты
     }
