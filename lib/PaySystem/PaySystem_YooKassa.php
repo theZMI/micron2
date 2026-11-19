@@ -37,17 +37,22 @@ class PaySystem_YooKassa extends PaySystem_Base
         }
 
         foreach ($order->getPayItems() as $item) {
-            $receipt['items'][] = [
+            $receiptItem = [
                 'description'     => $this->plainText($item['name']),
-                'quantity'        => (string)$item['quantity'],
+                'quantity'        => (string)(float)$item['quantity'], // Бывает дробным: 2.5 м
                 'amount'          => [
                     'value'    => $this->amountToBankFormat($item['price']), // Цена за единицу
                     'currency' => $order->getCurrency(),
                 ],
                 'vat_code'        => $this->config['receipt']['vat_code'],
                 'payment_mode'    => 'full_prepayment',
-                'payment_subject' => $this->config['receipt']['payment_subject'],
+                'payment_subject' => !empty($item['is_service']) ? 'service' : $this->config['receipt']['payment_subject'], // Доставка - услуга
             ];
+            // Мера количества (ФФД 1.2): piece, meter, kilogram... - из Config('shop')['units'][...]['measure']
+            if (!empty($this->config['receipt']['send_measure'])) {
+                $receiptItem['measure'] = $item['measure'] ?? 'piece';
+            }
+            $receipt['items'][] = $receiptItem;
         }
         return $receipt;
     }

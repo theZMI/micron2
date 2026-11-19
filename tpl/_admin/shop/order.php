@@ -10,6 +10,9 @@
                         <dt class="col-sm-4">Покупатель</dt><dd class="col-sm-8"><?= $order->customer_name ?><?= $order->user_id ? " <a href=\"" . SiteRoot("_admin/users/add_or_edit&id={$order->user_id}") . "\">(пользователь #{$order->user_id})</a>" : ' (гость)' ?></dd>
                         <dt class="col-sm-4">E-mail</dt><dd class="col-sm-8"><a href="mailto:<?= $order->customer_email ?>"><?= $order->customer_email ?></a></dd>
                         <dt class="col-sm-4">Телефон</dt><dd class="col-sm-8"><?= $order->customer_phone ? OutputFormats::mobilePhone($order->customer_phone) : '—' ?></dd>
+                        <dt class="col-sm-4">Доставка</dt><dd class="col-sm-8"><?= $order->delivery_name ?: '—' ?><?= $order->delivery_address ? '<br>' . nl2br($order->delivery_address) : '' ?></dd>
+                        <dt class="col-sm-4">Оплата</dt><dd class="col-sm-8"><?= ShopDelivery::paymentMethods()[$order->payment_method] ?? $order->payment_method ?></dd>
+                        <?php if ($order->promo_code): ?><dt class="col-sm-4">Промокод</dt><dd class="col-sm-8"><?= $order->promo_code ?></dd><?php endif ?>
                         <dt class="col-sm-4">Комментарий</dt><dd class="col-sm-8"><?= $order->comment ? nl2br($order->comment) : '—' ?></dd>
                         <dt class="col-sm-4">Оплачен</dt><dd class="col-sm-8"><?= $order->paid_time ? date('d.m.Y H:i', $order->paid_time) : '—' ?></dd>
                         <dt class="col-sm-4">Ссылка покупателя</dt><dd class="col-sm-8"><a href="<?= $order->url() ?>" target="_blank">открыть</a></dd>
@@ -22,10 +25,14 @@
                         <div class="input-group">
                             <select name="status" class="form-select">
                                 <?php foreach (ShopOrderModel::getStatuses() as $k => $name): ?>
-                                    <option value="<?= $k ?>" <?= $k === $order->status ? 'selected' : '' ?>><?= $name ?></option>
+                                    <option value="<?= $k ?>" <?= $k === $order->status ? 'selected' : '' ?>><?= $k === ShopOrderModel::STATUS_NEW && $order->isPayOnDelivery() ? 'Принят (оплата при получении)' : $name ?></option>
                                 <?php endforeach ?>
                             </select>
                             <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
+                        <div class="form-check mt-2">
+                            <input type="checkbox" name="notify" value="1" class="form-check-input" id="i-notify" checked>
+                            <label class="form-check-label small" for="i-notify">Написать покупателю (оплачен, выполнен, отменён)</label>
                         </div>
                     </form>
                 </div>
@@ -53,7 +60,7 @@
                             <td><?= $payment->id ?></td>
                             <td><?= date('d.m.Y H:i', $payment->pay_time) ?></td>
                             <td><code><?= htmlspecialchars($payment->transfer_id) ?></code></td>
-                            <td class="text-end"><?= OutputFormats::amount($payment->amount, 2, $sign) ?></td>
+                            <td class="text-end"><?= ShopPrice((int)$payment->amount) ?></td>
                             <td><?= PaymentModel::getStatuses()[$payment->status] ?? $payment->status ?></td>
                         </tr>
                     <?php endforeach ?>

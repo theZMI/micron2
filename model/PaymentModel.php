@@ -17,7 +17,7 @@ class PaymentModel extends SiteModel implements IPaymentModel
             'id'               => 'int',
             'user_id'          => 'int',
             'shop_order_id'    => 'int',
-            'amount'           => 'float',
+            'amount'           => 'int', // В копейках
             'currency'         => 'string',
             'transfer_id'      => 'string',
             'status'           => 'string',
@@ -36,7 +36,7 @@ class PaymentModel extends SiteModel implements IPaymentModel
                 `id` INT NOT NULL AUTO_INCREMENT,
                 `user_id` INT DEFAULT NULL,
                 `shop_order_id` INT DEFAULT NULL,
-                `amount` DECIMAL(12, 2) DEFAULT NULL,
+                `amount` BIGINT DEFAULT NULL,
                 `currency` VARCHAR(10) DEFAULT NULL,
                 `transfer_id` VARCHAR(255) DEFAULT NULL,
                 `status` VARCHAR(20) DEFAULT NULL,

@@ -20,9 +20,10 @@ abstract class PaySystem_Base
     public abstract function getTransferIdFromNotification(array $get, string $body): ?string;
 
     // Сумма в формате банка
-    protected function amountToBankFormat(float $amount): string
+    // Копейки -> рубли строкой с двумя знаками («1464.86») - без float
+    protected function amountToBankFormat(int $amount): string
     {
-        return number_format($amount, 2, '.', '');
+        return ($amount < 0 ? '-' : '') . intdiv(abs($amount), 100) . '.' . str_pad((string)(abs($amount) % 100), 2, '0', STR_PAD_LEFT);
     }
 
     // В БД строки хранятся с экранированным HTML (см. Input::clean), а банку нужен чистый текст

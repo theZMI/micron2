@@ -10,7 +10,7 @@
                 <tr>
                     <td><?= $order->id ?></td>
                     <td><?= date('d.m.Y H:i', $order->create_time) ?></td>
-                    <td class="text-end"><?= OutputFormats::amount($order->total_amount, 2, Config('shop')['currency_sign']) ?></td>
+                    <td class="text-end"><?= ShopPrice($order->total_amount) ?></td>
                     <td><?= $order->statusName() ?></td>
                     <td class="text-end"><a href="<?= $order->url() ?>" class="btn btn-sm btn-outline-primary rounded-pill">Открыть</a></td>
                 </tr>

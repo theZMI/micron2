@@ -27,9 +27,9 @@ class PaySystem_Sber extends PaySystem_Base
     }
 
     // Сбер принимает суммы в копейках
-    protected function amountToBankFormat(float $amount): string
+    protected function amountToBankFormat(int $amount): string
     {
-        return (string)\ShopOrderModel::toCents($amount);
+        return (string)$amount; // Суммы у нас уже в копейках
     }
 
     private function makeOrderBundle(IShopOrderModel $order): array
@@ -40,8 +40,8 @@ class PaySystem_Sber extends PaySystem_Base
                 'positionId' => (string)($pos + 1),
                 'name'       => $this->plainText($item['name'], 100),
                 'quantity'   => [
-                    'value'   => (int)$item['quantity'],
-                    'measure' => 'шт.',
+                    'value'   => (float)$item['quantity'], // Бывает дробным: 2.5 м
+                    'measure' => $item['unit'] ?? 'шт.',
                 ],
                 'itemAmount' => (int)$this->amountToBankFormat($item['amount']),
                 'itemCode'   => $this->plainText($item['vendor_code'] ?: "item-{$pos}", 100),

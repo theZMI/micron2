@@ -10,7 +10,11 @@ if (!$order->isExists()) {
 $msg = '';
 switch (Post('a')) {
     case 'set_status':
+        $oldStatus = $order->status;
         $order->setStatus((string)Post('status')); // При отмене остатки вернутся на склад; «Оплачен» вручную - например, наличными
+        if (Post('notify') && $order->status !== $oldStatus) {
+            $order->notifyCustomerAboutStatus();
+        }
         UrlRedirect::go(GetCurUrl());
     case 'check_payments':
         foreach ($order->getPayments() as $payment) {
