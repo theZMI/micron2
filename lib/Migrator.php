@@ -72,11 +72,32 @@ class Migrator
     {
         $all    = self::all();
         $last   = (string)end($all);
-        $marker = is_readable(self::markerFile()) ? trim((string)file_get_contents(self::markerFile())) : '';
+        $marker = self::readMarker();
         if ($last === '' || $marker === $last) {
             return;
         }
-        self::run();
+
+        // Блокировка: миграции нельзя применять параллельно (DDL в MySQL не транзакционен, а CREATE TABLE от двух запросов
+        // даст ошибку или наполовину применённую схему). Пока ждём - другой запрос мог всё применить, поэтому маркер перечитываем
+        $lock = @fopen(BASEPATH . 'tmp/migrations.lock', 'c');
+        if ($lock) {
+            flock($lock, LOCK_EX);
+        }
+        try {
+            if (self::readMarker() !== $last) {
+                self::run();
+            }
+        } finally {
+            if ($lock) {
+                flock($lock, LOCK_UN);
+                fclose($lock);
+            }
+        }
+    }
+
+    private static function readMarker(): string
+    {
+        return is_readable(self::markerFile()) ? trim((string)file_get_contents(self::markerFile())) : '';
     }
 
     public static function tableExists($db, string $table): bool

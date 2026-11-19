@@ -14,7 +14,7 @@ $tableHeaderEnd        = $tableHeaderEnd ?? '';
 $tableHeaderEndFilters = $tableHeaderEndFilters ?? '';
 $colWidths             = $colWidths ?? [];
 if (!isset($tableData)) throw new RuntimeException("tableData must be set");
-$tableDataEnd          = $tableDataEnd ?? '';
+$tableDataEnd          = $tableDataEnd ?? [];
 $defaultTableValues    = $defaultTableValues ?? [];
 $tableFilters          = $tableFilters ?? [];
 $divID                 = uniqid('');

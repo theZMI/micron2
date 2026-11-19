@@ -151,7 +151,7 @@ class ExtraPacker
         }
 
         $packInfoAboutFiles = serialize($files);
-        FileSys::writeFile($type == 'js' ? $this->jsInfoFile : $this->cssInfoFile, $packInfoAboutFiles);
+        self::writeFileAtomic($type == 'js' ? $this->jsInfoFile : $this->cssInfoFile, $packInfoAboutFiles);
 
         foreach ($exceptions as $k => $v) {
             $exceptions[$k] = call_user_func($type == 'js' ? $this->urlToPathForJsFunc : $this->urlToPathForCssFunc, $v);
@@ -196,8 +196,8 @@ class ExtraPacker
             : $this->prepareCssContent($exceptionContent . $packed);
 
         $compressFile = $type == 'js' ? $this->jsCompressFile : $this->cssCompressFile;
-        FileSys::writeFile($compressFile, $packed);
-        FileSys::writeFile($compressFile . $this->gzipExt, gzencode($packed, self::COMPRESS_LEVEL));
+        self::writeFileAtomic($compressFile, $packed);
+        self::writeFileAtomic($compressFile . $this->gzipExt, (string)gzencode($packed, self::COMPRESS_LEVEL));
 
         if ($this->postWriteCacheMiddleware) {
             call_user_func($this->postWriteCacheMiddleware);
@@ -210,10 +210,25 @@ class ExtraPacker
             return true;
         }
 
-        return !empty(array_diff(
-            array_map(fn($v) => "{$v['time']}__{$v['addr']}", $now),
-            array_map(fn($v) => "{$v['time']}__{$v['addr']}", $storage)
-        ));
+        // Сравниваем в обе стороны: если файл убрали из шаблона, его больше нет в $now, и односторонняя разница
+        // ничего бы не заметила - старый JS/CSS продолжал бы отдаваться и выполняться
+        $nowKeys     = array_map(fn($v) => "{$v['time']}__{$v['addr']}", $now);
+        $storageKeys = array_map(fn($v) => "{$v['time']}__{$v['addr']}", $storage);
+        return !empty(array_diff($nowKeys, $storageKeys)) || !empty(array_diff($storageKeys, $nowKeys));
+    }
+
+    /**
+     * Атомарная запись файла сборки: пишем во временный файл рядом и переименовываем.
+     * Иначе параллельный запрос может прочитать недописанный бандл или info-файл (FileSys::writeFile делает unlink + fopen)
+     */
+    private static function writeFileAtomic(string $file, string $content): void
+    {
+        $tmp = "{$file}." . getmypid() . '.tmp';
+        if (@file_put_contents($tmp, $content, LOCK_EX) !== false && @rename($tmp, $file)) {
+            return;
+        }
+        @unlink($tmp);
+        FileSys::writeFile($file, $content); // Не получилось атомарно - пишем как раньше
     }
 
     // Время изменения less-файла с учётом всех его @import (рекурсивно): иначе правка в импортируемом файле

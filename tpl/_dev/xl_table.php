@@ -73,11 +73,11 @@
                             <select class="form-control input-for-live-search live-filter-input-<?= $i ?>" data-searchers-group="g_searchers_<?= $divID ?>">
                                 <option value="">Неважно</option>
                                 <?php foreach ($cells as $cell): ?>
-                                    <option value="begin_<?= $smartStripTags($cell, true) ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
+                                    <option value="begin_<?= htmlspecialchars($smartStripTags($cell, true), ENT_QUOTES) ?>_end"<?= isset($defaultTableValues[$v]) && (strip_tags($defaultTableValues[$v]) == $cell) ? ' selected="selected"' : '' ?>><?= $cell ?></option>
                                 <?php endforeach; ?>
                             </select>
                         <?php else: ?>
-                            <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= $defaultTableValues[$v] ?? '' ?>"  data-searchers-group="g_searchers_<?= $divID ?>" />
+                            <input type="text" class="form-control input-for-live-search live-filter-input-<?= $i ?>" placeholder="" value="<?= htmlspecialchars((string)($defaultTableValues[$v] ?? ''), ENT_QUOTES) ?>"  data-searchers-group="g_searchers_<?= $divID ?>" />
                         <?php endif; ?>
                     </td>
                     <?php $i++; endforeach; ?>
@@ -94,7 +94,7 @@
                             <div class="hidden d-none live-filter-data-block-filterinfo-<?= $i ?>">begin_<?= $smartStripTags($cell, true) ?>_end</div>
                         </td>
                         <?php $i++; endforeach; ?>
-                    <?= $tableDataEnd[$id] ?>
+                    <?= $tableDataEnd[$id] ?? '' ?>
                 </tr>
             <?php endforeach; ?>
             </tbody>
