@@ -20,7 +20,7 @@ RewriteEngine on
 RewriteBase /
 # Напрямую (без index.php) отдаём только склеенные css/js, qr-коды, файлы CKEditor и сборку webpack.
 # Остальное содержимое tmp/ (логи и пр.) и lib/ (php-классы) снаружи недоступно
-RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|tmp/(_auto_merge_css_js|_admin_auto_merge_css_js|qrcodes)/|lib/CKEditor/|i/webpack/)
+RewriteCond $1 !^(index\.php|favicon\.ico|tmp/(_auto_merge_css_js|_admin_auto_merge_css_js|qrcodes)/|lib/CKEditor/|i/webpack/)
 RewriteRule ^(.*)$ /index.php?micron_query=$1 [L,QSA]
 
 # Максимальный размер файла для загрузки - 50Мб

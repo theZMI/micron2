@@ -35,6 +35,10 @@ Config(['admin_menu_right', 'PUSH'], [
             'name' => 'Отменить брошенные неоплаченные заказы',
         ],
         [
+            'link' => SiteRoot('_cron/shop_stock_notify'),
+            'name' => 'Разослать «Товар снова в наличии»',
+        ],
+        [
             'link' => SiteRoot('_admin/extrapacker_info'),
             'name' => 'Информация по склеенным extraPacker-ом файлам',
         ],
