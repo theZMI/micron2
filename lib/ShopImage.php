@@ -11,6 +11,8 @@ class ShopImage
     const THUMB_SIZE = 600;
     const QUALITY    = 82;
     const MAX_FILE   = 30 * 1024 * 1024;
+    const MAX_PIXELS = 40000000; // 40 Мпикс: больше - это уже «бомба» из заголовков, а не фотография товара
+    const MAX_MEMORY = 536870912; // Потолок, до которого поднимаем memory_limit на время обработки
 
     public static function dir(int $product_id): string
     {
@@ -34,9 +36,17 @@ class ShopImage
         if (filesize($path) > self::MAX_FILE) {
             throw new InvalidArgumentException('Картинка больше ' . (self::MAX_FILE >> 20) . ' МБ');
         }
+        // Размеры из заголовка не должны уводить процесс в гигабайты памяти (PNG на 30 МБ бывает 50 000 × 50 000)
+        if ($info[0] * $info[1] > self::MAX_PIXELS) {
+            throw new InvalidArgumentException(
+                'Картинка слишком большая: ' . $info[0] . '×' . $info[1] . ' пикселей (максимум ' . (self::MAX_PIXELS / 1000000) . ' Мпикс)'
+            );
+        }
 
-        // GD держит картинку в памяти несжатой (~5 байт на пиксель): фото 4000x3000 - это ~60 МБ, а на сайте лимит 32M (core/config/php_ini.php)
-        $needBytes = (int)($info[0] * $info[1] * 5 * 1.6) + 32 * 1024 * 1024;
+        // GD держит картинку в памяти несжатой (~5 байт на пиксель): фото 4000x3000 - это ~60 МБ, а на сайте лимит 32M (core/config/php_ini.php).
+        // Повёрнутое по EXIF фото на время поворота лежит в памяти дважды
+        $isRotated = $info[2] === IMAGETYPE_JPEG && self::orientation($path) !== 1;
+        $needBytes = min(self::MAX_MEMORY, (int)($info[0] * $info[1] * 5 * ($isRotated ? 2.6 : 1.6)) + 32 * 1024 * 1024);
         if (self::bytes(ini_get('memory_limit')) !== -1 && self::bytes(ini_get('memory_limit')) < $needBytes) {
             ini_set('memory_limit', (string)$needBytes);
         }
@@ -95,8 +105,12 @@ class ShopImage
         imagefill($dst, 0, 0, imagecolorallocate($dst, 255, 255, 255));
         imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
         imageinterlace($dst, true); // Прогрессивный JPEG
-        imagejpeg($dst, $file, self::QUALITY);
+        $isSaved = imagejpeg($dst, $file, self::QUALITY);
         imagedestroy($dst);
+        if (!$isSaved) {
+            @unlink($file); // Иначе в товар запишется имя несуществующего файла
+            throw new RuntimeException('Не удалось сохранить картинку');
+        }
     }
 
     private static function bytes(string $value): int
@@ -115,14 +129,24 @@ class ShopImage
     }
 
     // Фото с телефона хранят поворот в EXIF
+    private static function orientation(string $path): int
+    {
+        return function_exists('exif_read_data') ? (int)(@exif_read_data($path)['Orientation'] ?? 1) : 1;
+    }
+
     private static function fixOrientation($img, string $path)
     {
-        $orientation = function_exists('exif_read_data') ? (int)(@exif_read_data($path)['Orientation'] ?? 1) : 1;
-        return match ($orientation) {
-            3       => imagerotate($img, 180, 0),
-            6       => imagerotate($img, -90, 0),
-            8       => imagerotate($img, 90, 0),
-            default => $img,
+        $angle = match (self::orientation($path)) {
+            3       => 180,
+            6       => -90,
+            8       => 90,
+            default => 0,
         };
+        if ($angle === 0) {
+            return $img;
+        }
+        $rotated = imagerotate($img, $angle, 0);
+        imagedestroy($img); // Исходник больше не нужен - освобождаем память сразу
+        return $rotated ?: throw new RuntimeException('Не удалось повернуть картинку');
     }
 }

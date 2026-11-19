@@ -8,6 +8,11 @@ try {
         ShopProductImporter::parseCsv(ShopProductImporter::downloadGoogleSheet(Config('shop')['import']['google_sheet_url']))
     );
     echo "Created: {$report['created']}, updated: {$report['updated']}, hidden: {$report['hidden']}<br>";
+    $images = ShopProductImporter::syncImages(200, 'крон'); // Картинки - сколько успеем (лимит запроса 300 с); остальные докачает следующий запуск
+    echo "Images downloaded: {$images['downloaded']}, products left: {$images['left']}<br>";
+    foreach ($images['errors'] as $error) {
+        echo 'Image: ' . htmlspecialchars($error) . '<br>';
+    }
     foreach ($report['errors'] as $error) {
         echo htmlspecialchars($error) . '<br>';
     }
