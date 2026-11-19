@@ -1,18 +1,71 @@
 <?php
 
-// Магазин (model/Shop*Model.php, lib/ShopCart.php, src/shop/*, src/_admin/shop/*)
+// Магазин (model/Shop*Model.php, lib/Shop*.php, src/shop/*, src/_admin/shop/*)
 Config('shop', [
     'currency'        => 'RUB', // Валюта цен и заказов (её же получает платёжная система)
     'currency_sign'   => '₽',
-    'max_quantity'    => 999, // Максимум одного товара в корзине
-    'manager_emails'  => array_filter(array_map('trim', explode(',', (string)Env('SHOP_MANAGER_EMAILS', '')))), // Кому писать об оплаченных заказах
+    'max_quantity'    => 999, // Максимум одного товара в корзине (в его единицах: штуках, метрах...)
+    'manager_emails'  => array_filter(array_map('trim', explode(',', (string)Env('SHOP_MANAGER_EMAILS', '')))), // Кому писать о заказах и отзывах
     'catalog_per_page' => 24,
     'unpaid_order_ttl_hours' => 72, // Через сколько часов неоплаченный заказ отменяется (_cron/shop_cancel_unpaid) и товар возвращается на склад
     'low_stock'        => 5, // «Осталось N шт.» при остатке не больше этого (если остаток учитывается)
     'variant_image_params' => ['Цвет', 'Color', 'Вариант'], // Характеристики вариантов, которые переключаются картинками; остальные (размер...) - кнопками
     'filter_params'    => null, // Характеристики для фильтров каталога, например ['Цвет', 'Размер']. null - все, у которых от 2 до 20 разных значений
+
+    // Единицы измерения: цена указывается за единицу, количество в корзине - в ней же (с шагом qty_step у товара).
+    // Ключ - как хранится у товара, name - подпись после числа, price - подпись после цены («₽/м»; пусто - без подписи),
+    // min_step - минимальный шаг количества: шаг товара не бывает меньше (1 - продаём только целыми метрами/килограммами,
+    // 0.1 - можно и 2.7 м); он же - шаг товара по умолчанию. measure - код меры для чека (ФФД 1.2)
+    'units'            => [
+        'шт'  => ['name' => 'шт.', 'price' => '', 'min_step' => 1, 'measure' => 'piece'],
+        'м'   => ['name' => 'м', 'price' => 'м', 'min_step' => 1, 'measure' => 'meter'],
+        'м²'  => ['name' => 'м²', 'price' => 'м²', 'min_step' => 1, 'measure' => 'square_meter'],
+        'кг'  => ['name' => 'кг', 'price' => 'кг', 'min_step' => 1, 'measure' => 'kilogram'],
+        'г'   => ['name' => 'г', 'price' => 'г', 'min_step' => 1, 'measure' => 'gram'],
+        'л'   => ['name' => 'л', 'price' => 'л', 'min_step' => 1, 'measure' => 'liter'],
+        'уп'  => ['name' => 'уп.', 'price' => 'уп.', 'min_step' => 1, 'measure' => 'piece'],
+    ],
+    'default_unit'     => 'шт',
+
+    // Способы доставки. price - стоимость, free_from - бесплатно от этой суммы товаров (0 - никогда),
+    // need_address - спрашивать адрес. Порядок - как в форме заказа, первый выбран по умолчанию
+    'delivery'         => [
+        'pickup'  => ['name' => 'Самовывоз', 'price' => 0, 'free_from' => 0, 'need_address' => false, 'description' => 'Из пункта выдачи, адрес пришлём в письме'],
+        'courier' => ['name' => 'Курьером', 'price' => 400, 'free_from' => 5000, 'need_address' => true, 'description' => 'По городу, 1-2 дня'],
+        'post'    => ['name' => 'Почтой России', 'price' => 350, 'free_from' => 0, 'need_address' => true, 'description' => 'По всей России, 5-14 дней'],
+    ],
+    // Способы оплаты: online - сразу через платёжную систему, on_delivery - при получении (заказ принимается без оплаты)
+    'payment_methods'  => [
+        'online'      => 'Онлайн картой или по СБП',
+        'on_delivery' => 'При получении',
+    ],
+
+    // Доп. товары/услуги к товару (ShopAddonModel): цена в процентах от цены товара округляется вверх до percent_round
+    // (1 - до рубля, 0.01 - до копейки). У штучных товаров доп. услуга - на каждую штуку, у метражных/весовых - одна на позицию
+    'addons'           => [
+        'percent_round' => 1,
+    ],
+    // Пропорция картинок товаров (ширина, высота): так их обрезает админка при загрузке и так показывают каталог, карточка, корзина
+    'image_ratio'      => [3, 4],
+
+    // Отзывы о товарах: оставляют только вошедшие пользователи, по одному на товар
+    'reviews'          => [
+        'is_enabled'   => true,
+        'moderation'   => true, // Показывать отзыв только после одобрения в админке (иначе - сразу)
+    ],
+
+    // Человекопонятные адреса: /shop/c/<категория>, /shop/p/<id>-<название> (маршруты - core/init/router.php)
+    'seo'              => [
+        'yml_company'  => 'Micron', // Для YML-фида (Яндекс Товары/Маркет): /shop/feed_yml
+        'yml_name'     => 'Micron',
+    ],
+
     'import'           => [ // Импорт товаров из таблицы (lib/ShopProductImporter.php, _admin/shop/import, _cron/shop_import)
         'google_sheet_url' => (string)Env('SHOP_IMPORT_GOOGLE_SHEET_URL', ''), // Ссылка на Google-таблицу с доступом «Все, у кого есть ссылка»
         'hide_missing'     => true, // Снимать с продажи товары, которых нет в таблице
+        // Откуда брать картинки из колонки «Картинки», если там имена файлов (121-1.jpeg), а не полные ссылки:
+        // публичная папка Яндекс Диска (https://disk.yandex.ru/d/...), начало ссылки (https://cdn.site.ru/photos/)
+        // или папка на сервере (абсолютный путь или от корня сайта: tmp/import_images) - быстрее всего, если фото уже есть локально
+        'images_source'    => (string)Env('SHOP_IMPORT_IMAGES_SOURCE', ''),
     ],
 ]);

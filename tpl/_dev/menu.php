@@ -14,10 +14,10 @@
         <div class="collapse navbar-collapse" id="navbarMainMenuContent">
             <?php IncludeCom('_dev/menu/sub_menu', ['menu' => $menu, 'css' => 'me-auto menu-left-part']) ?>
             <?php if ($incSearch): ?>
-                <form class="d-none search-panel" action="<?= $searchUrl ?>" method="get" role="search">
+                <form class="d-none search-panel" action="<?= $searchUrl ?>" method="get" role="search"<?= !empty($searchSuggestUrl) ? ' data-search-suggest="' . $searchSuggestUrl . '"' : '' ?>>
                     <div class="d-block d-lg-none mt-5"></div>
                     <div class="input-group">
-                        <input type="search" name="q" class="form-control" placeholder="Что хотите найти?" value="<?= Get('q', '') ?>" aria-label="Поиск"/>
+                        <input type="search" name="q" class="form-control" placeholder="Что хотите найти?" value="<?= Get('q', '') ?>" aria-label="Поиск" autocomplete="off"/>
                         <span class="input-group-text search-panel-button-toggle rounded-pill"><i class="bi bi-x-lg"></i></span>
                     </div>
                     <div class="d-block d-lg-none mt-5"></div>

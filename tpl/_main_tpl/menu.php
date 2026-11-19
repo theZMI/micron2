@@ -17,7 +17,7 @@
     </div>
 <?php endif ?>
 <?php ob_start(); IncludeCom('_main_tpl/theme_switch'); $themeSwitch = ob_get_clean() ?>
-<?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => $menu, 'rightMenu' => $rightMenu, 'incSearch' => true, 'mobileIcons' => $mobileIcons, 'afterRight' => $themeSwitch]) ?>
+<?php IncludeCom('_dev/menu', ['logo' => $logo, 'menu' => $menu, 'rightMenu' => $rightMenu, 'incSearch' => true, 'searchSuggestUrl' => SiteRoot('shop/suggest'), 'mobileIcons' => $mobileIcons, 'afterRight' => $themeSwitch]) ?>
 
 <!-- Быстрый просмотр товара (заполняется из JS, см. i/webpack/src/shop.js) -->
 <div class="modal fade" id="quickViewModal" data-url="<?= SiteRoot('shop/quick_view') ?>" tabindex="-1" aria-label="Быстрый просмотр" aria-hidden="true">
@@ -28,4 +28,4 @@
         </div>
     </div>
 </div>
-<div class="toast-container position-fixed bottom-0 end-0 p-3" data-toasts data-cart-url="<?= SiteRoot('shop/cart') ?>" data-favorites-url="<?= SiteRoot('shop/favorites') ?>"></div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" data-toasts data-cart-url="<?= SiteRoot('shop/cart') ?>" data-favorites-url="<?= SiteRoot('shop/favorites') ?>" data-compare-url="<?= SiteRoot('shop/compare') ?>"></div>

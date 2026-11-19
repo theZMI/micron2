@@ -20,6 +20,10 @@
     <meta name="HandheldFriendly" content="true"/>
 
     <?php IncludeCom('_seo') ?>
+
+    <!-- Пропорция картинок товаров (Config('shop')['image_ratio']) - для каталога, карточки, корзины (i/scss/shop.scss) -->
+    <?php [$shopImageW, $shopImageH] = Config('shop')['image_ratio'] ?>
+    <style>:root { --shop-image-w: <?= (int)$shopImageW ?>; --shop-image-h: <?= (int)$shopImageH ?>; }</style>
 </head>
 <body class="d-flex flex-column">
 <div id="wrapper" class="d-flex flex-column flex-grow-1">

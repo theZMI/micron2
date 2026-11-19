@@ -1,4 +1,5 @@
-// Магазин: корзина и избранное без перезагрузки, быстрый просмотр, галерея, количество, фильтры каталога.
+// Магазин: корзина, избранное и сравнение без перезагрузки, быстрый просмотр, галерея, количество (в т.ч. дробное),
+// фильтры каталога, доставка в оформлении заказа, подсказки поиска.
 // Разметка - tpl/shop/*. Без JS всё работает обычными формами и ссылками
 import $ from "jquery";
 
@@ -25,7 +26,21 @@ function updateHeader(state) {
         el.textContent = state.favorites_count;
         el.classList.toggle('d-none', !state.favorites_count);
     });
+    if (state.compare_count !== undefined) {
+        document.querySelectorAll('[data-compare-count]').forEach(el => {
+            el.textContent = state.compare_count;
+            el.classList.toggle('d-none', !state.compare_count);
+        });
+        document.querySelectorAll('[data-compare-link]').forEach(el => el.closest('li')?.classList.toggle('d-none', !state.compare_count));
+    }
 }
+
+// Сумма в копейках как в PHP (ShopPrice): 162000 -> «1 620 ₽», копейки - только если есть. Деньги везде - целые копейки
+const formatPrice = (kopecks, sign) => {
+    const hasCents = kopecks % 100 !== 0;
+    const [int, cents] = (kopecks / 100).toFixed(hasCents ? 2 : 0).split('.');
+    return int.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + (cents ? '.' + cents : '') + ' ' + sign;
+};
 
 function toast(html) {
     const box = document.querySelector('[data-toasts]');
@@ -106,13 +121,44 @@ $(document).on('click', '[data-gallery-thumb]', function () {
     gallery.querySelectorAll('[data-gallery-thumb]').forEach(btn => btn.classList.toggle('is-active', btn === this));
 });
 
-// Кнопки −/+ у количества. В корзине (data-autosubmit) пересчитываем с небольшой задержкой
+// Сравнение (кнопки data-compare="id"; data-compare-reload - на странице сравнения, перезагрузить её)
+$(document).on('click', '[data-compare]', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = this.dataset.compare;
+    const reload = this.hasAttribute('data-compare-reload');
+    const url = document.querySelector('[data-toasts]')?.dataset.compareUrl;
+    const data = new FormData();
+    data.append('a', 'toggle');
+    data.append('product_id', id);
+    ajaxPost(url, data).then(state => {
+        if (reload) {
+            location.reload();
+            return;
+        }
+        updateHeader(state);
+        document.querySelectorAll(`[data-compare="${id}"]`).forEach(btn => btn.classList.toggle('is-active', state.is_compare));
+        toast(state.is_compare
+            ? `<i class="bi bi-bar-chart-fill me-2"></i>Добавлено в сравнение <a href="${url}" class="ms-2 fw-semibold">Сравнить</a>`
+            : 'Убрано из сравнения');
+    });
+});
+
+// Кнопки −/+ у количества: шаг и минимум - из step/min (бывают дробные: 0.1 м). В корзине ниже минимума товара (data-min) - 0, то есть удалить.
+// В корзине (data-autosubmit) пересчитываем с небольшой задержкой
 let autosubmitTimer = null;
+const round3 = v => Math.round(v * 1000) / 1000;
 $(document).on('click', '.qty-input [data-qty]', function () {
     const input = this.closest('.qty-input').querySelector('input');
-    const min = parseInt(input.min || '0', 10);
-    const max = parseInt(input.max || '999', 10);
-    input.value = Math.min(max, Math.max(min, (parseInt(input.value, 10) || 0) + parseInt(this.dataset.qty, 10)));
+    const step = parseFloat(input.step) || 1;
+    const min = parseFloat(input.min || '0');
+    const max = parseFloat(input.max || '999');
+    const itemMin = parseFloat(input.dataset.min || '0');
+    let value = round3((parseFloat(String(input.value).replace(',', '.')) || 0) + step * parseInt(this.dataset.qty, 10));
+    if (itemMin && value > 0 && value < itemMin) {
+        value = this.dataset.qty > 0 ? itemMin : 0;
+    }
+    input.value = round3(Math.min(max, Math.max(min, value)));
     $(input).trigger('change');
 });
 $(document).on('change', 'input[data-autosubmit]', function () {
@@ -123,4 +169,129 @@ $(document).on('change', 'input[data-autosubmit]', function () {
 // Каталог: фильтры и сортировка применяются сразу
 $(document).on('change', 'form[data-catalog-filter] input[type=checkbox], select[data-catalog-sort]', function () {
     this.form.submit(); // У select сортировки форма задана атрибутом form="shopFilters"
+});
+
+// Оформление заказа: адрес - только для доставки, которой он нужен; стоимость доставки и итог - сразу; текст кнопки - по способу оплаты
+$(document).on('change', 'form[data-checkout] input[name=delivery_method], form[data-checkout] input[name=payment_method]', function () {
+    const form = this.form;
+    const delivery = form.querySelector('input[name=delivery_method]:checked');
+    if (delivery) {
+        const needAddress = delivery.dataset.needAddress === '1';
+        const addressBlock = form.querySelector('[data-address-block]');
+        addressBlock.hidden = !needAddress;
+        addressBlock.querySelector('textarea').required = needAddress;
+        const price = parseInt(delivery.dataset.price, 10) || 0;
+        document.querySelectorAll('[data-delivery-price]').forEach(el => el.textContent = delivery.dataset.priceText);
+        document.querySelectorAll('[data-total]').forEach(el => {
+            el.textContent = formatPrice(parseInt(el.dataset.totalWithoutDelivery, 10) + price, form.dataset.currencySign);
+        });
+    }
+    const payment = form.querySelector('input[name=payment_method]:checked');
+    const button = form.querySelector('[data-submit-online]');
+    if (payment && button) {
+        button.textContent = payment.dataset.online === '1' ? button.dataset.submitOnline : button.dataset.submitOffline;
+    }
+});
+
+// Подсказки в строке поиска в шапке: товары и категории по мере ввода (скрипт может загрузиться раньше меню - ждём DOM)
+const initSearchSuggest = () => {
+    const form = document.querySelector('form[data-search-suggest]');
+    const input = form?.querySelector('input[name=q]');
+    if (!form || !input) {
+        return;
+    }
+    const box = document.createElement('div');
+    box.className = 'search-suggest d-none';
+    box.setAttribute('role', 'listbox');
+    form.querySelector('.input-group').appendChild(box);
+
+    let timer = null;
+    let lastQuery = '';
+    let controller = null;
+    const hide = () => box.classList.add('d-none');
+    const render = data => {
+        if (!data.items.length && !data.categories.length) {
+            box.innerHTML = `<div class="search-suggest-empty">Ничего не нашлось</div>`;
+        } else {
+            const fixed = data.query.toLowerCase() !== input.value.trim().toLowerCase()
+                ? `<div class="search-suggest-note">Результаты по запросу «${escapeHtml(data.query)}»</div>` : '';
+            const categories = data.categories.map(c => `<a href="${c.url}" class="search-suggest-category"><i class="bi bi-folder2"></i>${escapeHtml(c.name)}</a>`).join('');
+            const items = data.items.map(i => `<a href="${i.url}" class="search-suggest-item">
+                ${i.image ? `<img src="${i.image}" alt="" loading="lazy">` : '<span class="search-suggest-noimage"><i class="bi bi-image"></i></span>'}
+                <span class="search-suggest-name">${escapeHtml(i.name)}</span><span class="search-suggest-price">${escapeHtml(i.price)}</span></a>`).join('');
+            const all = data.total > data.items.length ? `<a href="${data.all_url}" class="search-suggest-all">Все результаты: ${data.total} <i class="bi bi-arrow-right"></i></a>` : '';
+            box.innerHTML = fixed + categories + items + all;
+        }
+        box.classList.remove('d-none');
+    };
+    input.addEventListener('input', () => {
+        clearTimeout(timer);
+        const q = input.value.trim();
+        if (q.length < 2) {
+            hide();
+            lastQuery = '';
+            return;
+        }
+        timer = setTimeout(() => {
+            if (q === lastQuery) {
+                box.classList.remove('d-none');
+                return;
+            }
+            lastQuery = q;
+            controller?.abort();
+            controller = new AbortController();
+            // Тот же домен, что у страницы (SiteRoot даёт абсолютный адрес, а сайт могли открыть с www или по другому имени)
+            const url = new URL(form.dataset.searchSuggest, location.href);
+            url.searchParams.set('q', q);
+            fetch(url.pathname + url.search, {headers: {'X-Requested-With': 'XMLHttpRequest'}, credentials: 'same-origin', signal: controller.signal})
+                .then(r => r.json())
+                .then(json => json.is_success && input.value.trim() === q && render(json.data))
+                .catch(() => {});
+        }, 200);
+    });
+    input.addEventListener('focus', () => input.value.trim().length >= 2 && lastQuery && box.classList.remove('d-none'));
+    document.addEventListener('click', e => !form.contains(e.target) && hide());
+    input.addEventListener('keydown', e => {
+        const links = [...box.querySelectorAll('a')];
+        if (e.key === 'Escape') {
+            hide();
+        } else if (e.key === 'ArrowDown' && links.length && !box.classList.contains('d-none')) {
+            e.preventDefault();
+            links[0].focus();
+        }
+    });
+    box.addEventListener('keydown', e => {
+        const links = [...box.querySelectorAll('a')];
+        const i = links.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown' && i < links.length - 1) {
+            e.preventDefault();
+            links[i + 1].focus();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            i > 0 ? links[i - 1].focus() : input.focus();
+        } else if (e.key === 'Escape') {
+            hide();
+            input.focus();
+        }
+    });
+};
+document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', initSearchSuggest) : initSearchSuggest();
+
+// Доп. товары/услуги на карточке: цена товара сразу показывается с выбранными доп. услугами
+$(document).on('change', '.product-addons input[data-addon-price]', function () {
+    const info = this.closest('.product-info');
+    const priceBox = info?.querySelector('.product-price[data-base-price]');
+    if (!priceBox) {
+        return;
+    }
+    let addons = 0;
+    info.querySelectorAll('.product-addons input[data-addon-price]:checked').forEach(input => addons += parseInt(input.dataset.addonPrice, 10) || 0);
+    const sign = priceBox.dataset.currencySign;
+    if (priceBox.dataset.addonsPerUnit === '1') { // Штучный товар: доп. услуги - к цене за штуку
+        priceBox.querySelector('[data-price-amount]').textContent = formatPrice(parseInt(priceBox.dataset.basePrice, 10) + addons, sign);
+    } else { // Метражный/весовой: доп. услуги - одна на позицию, отдельной строкой
+        const sum = priceBox.querySelector('[data-addons-sum]');
+        sum.hidden = !addons;
+        sum.textContent = `+ ${formatPrice(addons, sign)} за доп. услуги`;
+    }
 });

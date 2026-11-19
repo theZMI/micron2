@@ -34,6 +34,15 @@ $avatarUrl     = IS_USER_AUTH && (string)$g_user->avatar !== '' ? $g_user->avata
 $avatarImg     = '<img src="' . $avatarUrl . '" class="nav-avatar" width="28" height="28" alt="">';
 $rightMenu     = [
     [
+        // Сравнение - только когда в нём что-то есть (JS показывает/прячет пункт, см. i/webpack/src/shop.js)
+        'link'    => SiteRoot('shop/compare'),
+        'name'    => '<i class="bi bi-bar-chart"></i><span class="nav-icon-label">Сравнение</span>' . $badge($shopState['compare_count'], 'data-compare-count'),
+        'linkCss' => 'nav-icon',
+        'css'     => $shopState['compare_count'] ? '' : 'd-none',
+        'html'    => 'data-compare-link',
+        'label'   => 'Сравнение',
+    ],
+    [
         'link'    => SiteRoot('shop/favorites'),
         'name'    => '<i class="bi bi-heart"></i><span class="nav-icon-label">Избранное</span>' . $badge($shopState['favorites_count'], 'data-favorites-count'),
         'linkCss' => 'nav-icon',

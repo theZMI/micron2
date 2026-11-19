@@ -108,6 +108,16 @@ foreach ($getLangs() as $lang => $langUri) {
     SimpleRouter::group(['middleware' => [
         CommonMiddleware::class
     ]], function () use ($langUri, $includePublicCom) {
+        // Магазин: категория /shop/c/<slug> и товар /shop/p/<id>-<название> (см. ShopCategoryModel::url(), ShopProductModel::url())
+        SimpleRouter::all("/{$langUri}shop/c/{slug}", function ($slug) use ($langUri) {
+            TryIncludeCom("{$langUri}shop", ['categorySlug' => FileSys::filenameSecurity($slug)]);
+        })->where(['slug' => '[a-z0-9_-]+']); // TextToUrl() оставляет и подчёркивания
+        SimpleRouter::all("/{$langUri}shop/p/{product}", function ($product) use ($langUri) {
+            TryIncludeCom("{$langUri}shop/product", ['productId' => intval($product), 'productSlug' => (string)substr($product, strlen((string)intval($product)) + 1)]);
+        })->where(['product' => '[0-9]+(-[a-z0-9_-]*)?']);
+        SimpleRouter::get("/{$langUri}sitemap.xml", fn() => IncludeCom('sitemap'));
+        SimpleRouter::get("/{$langUri}robots.txt", fn() => IncludeCom('robots'));
+
         SimpleRouter::all("/{$langUri}{end_uri}", function ($end_uri) use ($langUri, $includePublicCom) {
             $end_uri = FileSys::filenameSecurity($end_uri);
             if (in_array($end_uri, ['index.php', 'index.html', 'index.htm'])) {
