@@ -93,8 +93,8 @@ class ApiClient
         $curlParams = [
             CURLOPT_CUSTOMREQUEST  => $method,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS      => 5,
+            // Редиректы не проходим: иначе чужой API увёл бы запрос (вместе с токеном API-User-Auth-Token) на другой хост
+            CURLOPT_FOLLOWLOCATION => false,
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_TIMEOUT        => (int)$this->config['timeout'],
             CURLOPT_SSL_VERIFYPEER => (bool)$this->config['ssl_verify'],
@@ -108,7 +108,7 @@ class ApiClient
         } else {
             $headers[]                      = 'Content-Type: application/json';
             $curlParams[CURLOPT_POSTFIELDS] = json_encode($data, JSON_UNESCAPED_UNICODE);
-            $this->log("{$method} {$url}\n" . print_r($data, true));
+            $this->log("{$method} {$url}"); // Тела запросов не пишем: там бывают коды, пароли и персональные данные
         }
 
         $ch = curl_init($url);

@@ -37,6 +37,34 @@ function IsCrossSiteRequest(): bool
     return $origin !== SiteOrigin() && !in_array($origin, Config('cors_allowed_origins'), true);
 }
 
+/**
+ * Кнопка изменяющего действия (удалить, очистить, включить...) - формой POST вместо ссылки.
+ * Ссылку-действие может дёрнуть кто угодно: prefetch браузера, расширение, сканер, чужой сайт через <img>.
+ * POST так не вызвать, а от чужих сайтов его защищает проверка Sec-Fetch-Site в CommonMiddleware
+ *
+ * @param string $action  значение поля a
+ * @param array  $params  остальные поля формы (id и т.п.)
+ * @param string $confirm текст подтверждения ('' - без подтверждения)
+ * @param string $class   классы кнопки
+ * @param string $inner   содержимое кнопки (иконка или текст)
+ */
+function PostActionButton(string $action, array $params = [], string $confirm = '', string $class = 'btn btn-sm btn-danger rounded-pill', string $inner = '<i class="bi bi-trash3-fill"></i>', string $title = 'Удалить'): string
+{
+    $hidden = '<input type="hidden" name="a" value="' . htmlspecialchars($action, ENT_QUOTES) . '">';
+    foreach ($params as $name => $value) {
+        $hidden .= '<input type="hidden" name="' . htmlspecialchars((string)$name, ENT_QUOTES)
+            . '" value="' . htmlspecialchars((string)$value, ENT_QUOTES) . '">';
+    }
+    $onSubmit = $confirm !== ''
+        ? ' onsubmit="return confirm(' . htmlspecialchars(json_encode($confirm, JSON_UNESCAPED_UNICODE), ENT_QUOTES) . ')"'
+        : '';
+
+    return '<form action="' . htmlspecialchars(GetCurUrl(), ENT_QUOTES) . '" method="post" class="d-inline"' . $onSubmit . '>'
+        . $hidden
+        . '<button type="submit" class="' . $class . '" title="' . htmlspecialchars($title, ENT_QUOTES) . '">' . $inner . '</button>'
+        . '</form>';
+}
+
 function IsUnsafeHttpMethod(): bool
 {
     return !in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD', 'OPTIONS'], true);

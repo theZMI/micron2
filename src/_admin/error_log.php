@@ -1,7 +1,8 @@
 <?php
 
-$action = Get('a', 'list');
-$id     = intval(Get('id'));
+$action = (string)Post('a');
+$action = $action === '' ? 'list' : $action; // Действия (удалить/очистить) - только POST: ссылку-действие может дёрнуть кто угодно
+$id     = intval(Post('id', Get('id')));
 $print  = function ($data) {
     try {
         echo __($data);

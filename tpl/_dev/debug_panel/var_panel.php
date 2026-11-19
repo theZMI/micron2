@@ -13,7 +13,7 @@
             foreach ($arr as $k => $v): ?>
                 <tr>
                     <td class="num"><?= ++$i ?></td>
-                    <td><?= $k ?></td>
+                    <td><?= htmlspecialchars((string)$k) ?></td>
                     <td><?= VarDump($v) ?></td>
                 </tr>
             <?php

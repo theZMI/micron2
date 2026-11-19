@@ -31,9 +31,12 @@ class Request
     {
         $langs   = array_keys(Config('langs'));
         $defPage = Config('default_component');
-        $q       = is_null($q)
-            ? (empty($_GET['micron_query']) ? $defPage : trim($_GET['micron_query'], "/"))
-            : $q;
+        // Текущий путь берём из REQUEST_URI (его переписал .htaccess), а не из $_GET['micron_query']:
+        // этот параметр может прислать кто угодно, а по нему проверяются права админки и кабинета
+        $q       = is_null($q) ? $this->pathFromRequestUri() : $q;
+        if ($q === '' || $q === 'index.php') {
+            $q = $defPage; // Запрос к корню или к index.php - главная страница
+        }
         $q       = _StrReplaceFirst('&', '?', $q);
         $parse   = parse_url($q);
         $q       = FileSys::filenameSecurity($parse['path']);
@@ -77,6 +80,14 @@ class Request
 
         // Путь берём из getQuery() (без языкового префикса), язык добавит SiteRoot
         return SiteRoot($this->getQuery() . ($newQuery ? "&{$newQuery}" : ''));
+    }
+
+    // Путь текущего запроса без ведущего слэша (для запросов из консоли REQUEST_URI нет - пустая строка).
+    // Декодируем, как это раньше делал разбор $_GET: имена компонентов бывают с %20 и кириллицей
+    private function pathFromRequestUri(): string
+    {
+        $path = (string)parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH);
+        return trim(rawurldecode($path), '/');
     }
 
     public function getLastLang()

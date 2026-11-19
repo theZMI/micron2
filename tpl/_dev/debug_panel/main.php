@@ -186,10 +186,10 @@
                                 foreach ($_FILES as $k => $v): ?>
                                     <tr>
                                         <td class="num"><?= ++$i ?></td>
-                                        <td><?= $k ?></td>
-                                        <td><?= $v['name'] ?></td>
-                                        <td><?= $v['type'] ?></td>
-                                        <td><?= $v['tmp_name'] ?></td>
+                                        <td><?= htmlspecialchars((string)$k) ?></td>
+                                        <td><?= htmlspecialchars((string)$v['name']) ?></td>
+                                        <td><?= htmlspecialchars((string)$v['type']) ?></td>
+                                        <td><?= htmlspecialchars((string)$v['tmp_name']) ?></td>
                                         <td><?= $v['error'] ?></td>
                                         <td><?= $v['size'] ?></td>
                                     </tr>
@@ -239,7 +239,7 @@
                 </tr>
                 <tr>
                     <td>Current url</td>
-                    <td><?= GetCurUrl() ?></td>
+                    <td><?= htmlspecialchars(GetCurUrl()) ?></td>
                 </tr>
                 <tr>
                     <td>Query</td>

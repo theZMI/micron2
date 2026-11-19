@@ -59,6 +59,7 @@ class InputClean
     private function _clean_input_keys($str)
     {
         if (!preg_match("/^[a-z0-9:_\/-]+$/i", $str)) {
+            http_response_code(400); // Неверный ключ массива в запросе - это ошибка клиента, а не успешный ответ
             exit('Disallowed Key Characters.');
         }
 
@@ -113,8 +114,8 @@ class InputClean
         *
         */
         if (is_array($str)) {
-            while (list($key) = each($str)) {
-                $str[$key] = $this->xss_clean($str[$key]);
+            foreach ($str as $key => $value) { // each() удалён в PHP 8: старый код падал фатальной ошибкой
+                $str[$key] = $this->xss_clean($value);
             }
 
             return $str;

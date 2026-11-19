@@ -114,7 +114,7 @@
                                     </div>
                                 </td>
                                 <td width="1%" class="text-center">
-                                    <a href="<?= GetCurUrl('a=delete&id=' . $log->id) ?>" onclick="return confirm('Удалить эту запись?')" class="btn btn-sm btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                                    <?= PostActionButton('delete', ['id' => $log->id], 'Удалить эту запись?', 'btn btn-sm btn-danger') ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
@@ -136,9 +136,7 @@
                 ) ?>
             </div>
             <div class="text-center">
-                <a href="<?= GetCurUrl('a=clear') ?>" class="btn btn-danger btn-lg rounded-pill" onclick="return confirm('Очистить весь лог ошибок?')">
-                    <i class="bi bi-trash3-fill me-2"></i>Удалить всё
-                </a>
+                <?= PostActionButton('clear', [], 'Очистить весь лог ошибок?', 'btn btn-danger btn-lg rounded-pill', '<i class="bi bi-trash3-fill me-2"></i>Удалить всё', 'Очистить лог') ?>
             </div>
 
         </div>

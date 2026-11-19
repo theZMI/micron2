@@ -4,15 +4,9 @@
             <h1 class="my-4"><?= $isLocked ? 'Открыть сайт' : 'Закрыть сайт' ?></h1>
             <div class="text-start">
                 <?php if ($isLocked): ?>
-                    <a href="<?= GetCurUrl('a=open') ?>" class="btn btn-primary btn-lg rounded-pill">
-                        <i class="bi bi-unlock-fill me-2"></i>
-                        Открыть
-                    </a>
+                    <?= PostActionButton('open', [], '', 'btn btn-primary btn-lg rounded-pill', '<i class="bi bi-unlock-fill me-2"></i> Открыть', 'Открыть сайт') ?>
                 <?php else: ?>
-                    <a href="<?= GetCurUrl('a=close') ?>" class="btn btn-primary btn-lg rounded-pill">
-                        <i class="bi bi-lock-fill me-2"></i>
-                        Закрыть
-                    </a>
+                    <?= PostActionButton('close', [], 'Закрыть сайт? Посетители увидят заглушку', 'btn btn-primary btn-lg rounded-pill', '<i class="bi bi-lock-fill me-2"></i> Закрыть', 'Закрыть сайт') ?>
                 <?php endif ?>
             </div>
         </div>

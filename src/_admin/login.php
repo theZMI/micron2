@@ -60,6 +60,7 @@ if (Post('is_login')) {
     $pwd        = Post('password');
     $errs       = [];
     $loginError = '';
+    $login      = ''; // Логин, вычисленный по введённой строке (ФИО или логин)
 
     try {
         $login = $tryGetLoginByManyWays();
@@ -76,15 +77,26 @@ if (Post('is_login')) {
 
     $attempts   = new LoginAttemptModel();
     $typedLogin = (string)Post('login_or_name');
-    if (!count($errs) && $attempts->isBlocked('admin', $typedLogin)) {
+    // Считаем попытки и по введённой строке, и по вычисленному логину: вход идёт по логину, найденному по ФИО,
+    // поэтому без второго ключа лимит обходится вариантами «Иванов», «Иванов Иван», « Иванов»
+    $attemptKeys = array_values(array_unique(array_filter([$typedLogin, (string)$login], 'strlen')));
+    $isBlocked   = false;
+    foreach ($attemptKeys as $attemptKey) {
+        $isBlocked = $isBlocked || $attempts->isBlocked('admin', $attemptKey);
+    }
+    if (!count($errs) && $isBlocked) {
         $errs[] = "Слишком много неудачных попыток входа. Попробуйте через 15 минут";
     }
     if (!count($errs)) {
         if ($g_admin->login($login, $pwd)) {
-            $attempts->clear('admin', $typedLogin);
+            foreach ($attemptKeys as $attemptKey) {
+                $attempts->clear('admin', $attemptKey);
+            }
             UrlRedirect::go(SiteRoot('_admin/home'));
         }
-        $attempts->registerFail('admin', $typedLogin);
+        foreach ($attemptKeys as $attemptKey) {
+            $attempts->registerFail('admin', $attemptKey);
+        }
         $errs[] = "Неверный логин или пароль";
     }
 

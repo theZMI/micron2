@@ -1,6 +1,6 @@
 <?php
 
-$action   = Get('a');
+$action   = (string)Post('a'); // Открыть/закрыть сайт - только POST: ссылку может дёрнуть prefetch или сканер
 $lockFile = BASEPATH . 'tmp/site_stopper.txt';
 $isLocked = file_exists($lockFile);
 
