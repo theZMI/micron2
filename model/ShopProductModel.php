@@ -734,11 +734,11 @@ class ShopProductModel extends SiteModel
     private static function sortSql(string $sort, string $avail): string
     {
         return match ($sort) {
-            'price_asc'  => "{$avail} ASC, `price` ASC, `id` DESC",
-            'price_desc' => "{$avail} ASC, `price` DESC, `id` DESC",
-            'new'        => "{$avail} ASC, `create_time` DESC, `id` DESC",
-            'rating'     => "{$avail} ASC, `rating` DESC, `reviews_count` DESC, `sort` ASC",
-            default      => "{$avail} ASC, `sort` ASC, `id` DESC",
+            'price_asc'  => "{$avail} DESC, `price` ASC, `id` DESC",
+            'price_desc' => "{$avail} DESC, `price` DESC, `id` DESC",
+            'new'        => "{$avail} DESC, `create_time` DESC, `id` DESC",
+            'rating'     => "{$avail} DESC, `rating` DESC, `reviews_count` DESC, `sort` ASC",
+            default      => "{$avail} DESC, `sort` ASC, `id` DESC",
         };
     }
 
