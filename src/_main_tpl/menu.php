@@ -4,16 +4,12 @@ $logo = [
     'logo'  => '<span class="site-logo-text">Micron</span>',
     'link'  => SiteRoot(),
     'title' => 'Micron',
-    'css'   => 'site-logo me-5'
+    'css'   => 'site-logo me-3 me-lg-5' // На телефоне отступ меньше: иначе кнопка меню переносится на вторую строку
 ];
 
 $menu = [
     [
-        'link' => SiteRoot('shop'),
-        'name' => 'Каталог',
-    ],
-    [
-        'link' => SiteRoot('examples'), // Список - core/config/examples.php
+        'link' => SiteRoot('examples'), // Список - core/config/examples.php (там же ссылка на каталог магазина)
         'name' => 'Компоненты',
     ],
     [

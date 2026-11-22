@@ -20,6 +20,13 @@ RewriteEngine on
 RewriteBase /
 # Напрямую (без index.php) отдаём только склеенные css/js, qr-коды, файлы CKEditor и сборку webpack.
 # Остальное содержимое tmp/ (логи и пр.) и lib/ (php-классы) снаружи недоступно
+# Существующие картинки, шрифты и css/js из i/ и картинки из upl/ отдаёт сам Apache: без запуска PHP и подключения к БД
+# на каждую картинку каталога. Остальные файлы (документы из upl/ и пр.) по-прежнему идут через PHP (BrowserDataCache)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^i/.+\.(jpe?g|png|gif|webp|svg|ico|css|js|map|woff2?|ttf|otf|eot)$ - [L,NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^upl/.+\.(jpe?g|png|gif|webp)$ - [L,NC]
+
 RewriteCond $1 !^(index\.php|favicon\.ico|tmp/(_auto_merge_css_js|_admin_auto_merge_css_js|qrcodes)/|lib/CKEditor/|i/webpack/)
 RewriteRule ^(.*)$ /index.php?micron_query=$1 [L,QSA]
 

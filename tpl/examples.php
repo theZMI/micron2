@@ -11,7 +11,9 @@
             <h2><?= $groupName ?></h2>
             <div class="examples-list">
                 <?php foreach ($items as $uri => $name): ?>
-                    <?php if ($isAvailable): ?>
+                    <?php if (str_starts_with($uri, '/')): ?>
+                        <a href="<?= SiteRoot(ltrim($uri, '/')) ?>" class="examples-item"><span><?= $name ?></span><i class="bi bi-arrow-right"></i></a>
+                    <?php elseif ($isAvailable): ?>
                         <a href="<?= SiteRoot("examples/{$uri}") ?>" class="examples-item"><span><?= $name ?></span><i class="bi bi-arrow-right"></i></a>
                     <?php else: ?>
                         <div class="examples-item"><span><?= $name ?></span></div>
