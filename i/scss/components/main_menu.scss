@@ -176,9 +176,15 @@
   .navbar-mobile-icons {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin-right: 1.25rem;
+    gap: 1.1rem;
+    margin-right: 0.75rem;
     font-size: 1.25rem;
+
+    // Узкие телефоны (320-360px): логотип, иконки и кнопка меню должны помещаться в одну строку
+    @media (max-width: 374.98px) {
+      gap: 0.85rem;
+      margin-right: 0.5rem;
+    }
 
     .nav-icon {
       position: relative;
@@ -207,6 +213,11 @@
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--bs-emphasis-color);
+
+  // Самые узкие телефоны (320px): чуть плотнее, чтобы шапка уместилась в одну строку
+  @media (max-width: 374.98px) {
+    letter-spacing: 0.2em;
+  }
 }
 
 // Поиск, открывается вместо пунктов меню

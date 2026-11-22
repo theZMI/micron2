@@ -85,9 +85,9 @@
                     <?php if (!$product->isPieceUnit()): ?><span class="qty-unit"><?= $product->unitName() ?></span><?php endif ?>
                     <button type="button" data-qty="1" aria-label="Больше"><i class="bi bi-plus"></i></button>
                 </div>
-                <button type="submit" class="btn btn-dark btn-lg flex-grow-1">В корзину</button>
+                <button type="submit" class="btn btn-dark btn-lg flex-grow-1 product-buy-main">В корзину</button>
             <?php else: ?>
-                <button type="button" class="btn btn-light btn-lg flex-grow-1" disabled>Нет в наличии</button>
+                <button type="button" class="btn btn-light btn-lg flex-grow-1 product-buy-main" disabled>Нет в наличии</button>
             <?php endif ?>
             <button type="button" class="btn btn-outline-dark btn-lg btn-favorite-lg<?= $isFav ? ' is-active' : '' ?>" data-favorite="<?= $product->id ?>" aria-label="В избранное" title="В избранное">
                 <i class="bi bi-heart"></i><i class="bi bi-heart-fill"></i>

@@ -53,9 +53,12 @@
 .shop-layout {
   display: grid;
   gap: 2.5rem;
+  // minmax(0, 1fr), а не auto/1fr: иначе колонка растягивается по содержимому (селект сортировки, карточки)
+  // и на телефоне каталог вылезает за экран
+  grid-template-columns: minmax(0, 1fr);
 
   @include media-breakpoint-up(lg) {
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 240px minmax(0, 1fr);
   }
 }
 
@@ -194,10 +197,13 @@
 
   &-quick {
     position: absolute;
-    left: 0.75rem;
-    right: 0.75rem;
-    top: calc(0.6rem + (100cqw - 1.2rem) * var(--shop-image-h, 3) / var(--shop-image-w, 4) - 3.1rem); // Низ картинки (cqw - ширина карточки), не зависит от высоты текста под ней
-    padding: 0.55rem;
+    // Отступы от краёв картинки - как у кнопок «Избранное»/«Сравнить» (1.25rem от карточки = 0.65rem от картинки).
+    // 100cqw - ширина содержимого карточки, то есть ширина картинки: низ картинки не зависит от высоты текста под ней
+    left: 1.25rem;
+    right: 1.25rem;
+    height: 2.4rem;
+    top: calc(0.6rem + 100cqw * var(--shop-image-h, 4) / var(--shop-image-w, 3) - 0.65rem - 2.4rem);
+    padding: 0 0.75rem;
     border: none;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.94);
@@ -346,6 +352,7 @@
 .product-details {
   display: grid;
   gap: 2rem;
+  grid-template-columns: minmax(0, 1fr); // Иначе полоса миниатюр растягивает колонку шире экрана телефона
 
   @include media-breakpoint-up(lg) {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
@@ -426,6 +433,21 @@
   display: flex;
   gap: 0.75rem;
   margin-bottom: 2rem;
+
+  // На телефоне всё в одну строку не помещается: количество, «Избранное» и «Сравнить» - сверху,
+  // главная кнопка («В корзину» / «Нет в наличии») - во всю ширину под ними
+  @include media-breakpoint-down(sm) {
+    flex-wrap: wrap;
+
+    .qty-input {
+      margin-right: auto;
+    }
+
+    .product-buy-main {
+      order: 1;
+      flex-basis: 100%;
+    }
+  }
 }
 
 .qty-input {

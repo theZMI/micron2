@@ -11,7 +11,7 @@
   &-wordmark {
     font-family: $font-regular;
     font-weight: 700;
-    font-size: clamp(3.5rem, 13vw, 9.5rem);
+    font-size: clamp(2.6rem, 13vw, 9.5rem); // Нижняя граница - чтобы слово с разрядкой влезало в экран 320px
     line-height: 1;
     letter-spacing: 0.32em;
     margin-right: -0.32em; // Компенсация разрядки у последней буквы, чтобы слово было по центру
