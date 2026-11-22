@@ -5,7 +5,7 @@
 <p>Что делает корневой <code>.htaccess</code>:</p>
 <ul>
     <li>все запросы, кроме исключений, отправляет на <code>/index.php?micron_query=адрес</code>;</li>
-    <li>напрямую отдаёт только склеенные css/js (<code>tmp/_auto_merge_css_js</code>, <code>tmp/_admin_auto_merge_css_js</code>), qr-коды, сборку webpack (<code>i/webpack/</code>) и файлы CKEditor. Остальные файлы (картинки из <code>i/</code> и <code>upl/</code>) отдаёт сам движок через <code>BrowserDataCache</code> - с проверкой папки и типа файла и с кешированием в браузере;</li>
+    <li>напрямую (без PHP) отдаёт склеенные css/js (<code>tmp/_auto_merge_css_js</code>, <code>tmp/_admin_auto_merge_css_js</code>), qr-коды, сборку webpack (<code>i/webpack/</code>), файлы CKEditor, существующие картинки/шрифты/css/js из <code>i/</code> и картинки из <code>upl/</code>. Остальные файлы (документы из <code>upl/</code> и пр.) отдаёт сам движок через <code>BrowserDataCache</code> - с проверкой папки и типа файла и с кешированием в браузере;</li>
     <li>запрещает доступ к <code>.env</code>, <code>composer.json</code>, <code>Makefile</code>, <code>README.md</code>;</li>
     <li>выставляет заголовки безопасности и кеширование статики на год;</li>
     <li>задаёт максимальный размер загрузки (50 МБ).</li>
